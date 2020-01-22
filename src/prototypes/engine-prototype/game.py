@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 from model import *
+from view import *
 
 DEFAULT_MAP = "model/map/map_files/map_00.txt"
 
 class Game:
     def __init__(self, map_name=DEFAULT_MAP):
-        self.game_model = Game_model(map_filename=map_name)
+        self._model = Game_model(map_filename=map_name)
+        self._view = Game_view(self._model)
 
     def game_loop(self):
-        pass
+        while True:
+            self._view.display()
 
 if __name__ == '__main__':
     print("Hello !")

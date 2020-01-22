@@ -5,4 +5,6 @@ class Game_model:
     def __init__(self, map_filename):
         self._map = Map(filename=map_filename)
 
-        print(self._map)
+
+    def get_map(self):
+        return self._map

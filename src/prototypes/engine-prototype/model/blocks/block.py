@@ -3,5 +3,10 @@ class Block:
         self._transparancy = transparancy
         self._solid = solid
 
+        self._color = (0, 0, 0, 255)
+
+    def get_color(self):
+        return self._color
+
 
 

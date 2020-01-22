@@ -32,6 +32,15 @@ class Map:
 
                     self._map[y][x] = eval(blocks[lines[y][x]])
 
+    def get_width(self):
+        return self._width
+    
+    def get_height(self):
+        return self._height
+
+    def get_tile(self, x, y):
+        return self._map[y][x]
+
     def __repr__(self):
         return "Map({})".format(filename)
         

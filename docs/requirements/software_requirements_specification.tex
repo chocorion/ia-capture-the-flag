@@ -1,19 +1,138 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 
 \title{Analyse des besoins}
 \author{Robin Navarro, Adrien Boitelle, Yann Blanchet\\Alexis Perignon, Alexis Flazinska}
 
 \begin{document}
-    \maketitle
-    \section{Description du projet}
-    \section{Analyse de l'existant}
-    \section{Description des besoins}
-        \subsection{Besoins fonctionnels}
-        \subsection{Besoins non fonctionnels}
-        \subsection{Justifications}
-    \section{Diagramme de Gantt}
-    \section{Bibliographie}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Description du projet}
+
+Ce projet a pour but la réalisation d'un framework pour un jeu de capture de drapeaux, et la réalisation d'IA pour y jouer.
+Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bot. Le but est donc de prendre le drapeau et le ramener dans sa base.\newline
+
+Les IA devront piloter des bots en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
+
+
+\section{Analyse de l'existant}
+    
+Il y a un existant codé en Java pour le moteur physique mais la manière dont il est implémenté ne convient pas au client car il est difficile d'ajouter de nouvelles fonctionnalités. Ainsi, le client a débuté la conception d'un moteur de jeu en Python, mais ne l'a pas fini.
+
+\section{Description des besoins}
+
+\subsection{Besoins fonctionnels}
+\subsubsection{Besoins utilisateur}
+    \begin{itemize}
+        \item Fournir une API pour que les IA communiquent avec le moteur de jeu. \\
+                Priorité : Essentiel.\\
+
+        \item Afficher une carte en deux dimensions. \\
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item Afficher les blocs de la map.
+                \item Afficher les zones de chaque équipe
+                \item Afficher les objets dynamiques (bots, drapeau)
+            \end{itemize}
+
+    \end{itemize}
+
+\subsubsection{Besoins système}
+    
+    \begin{itemize}
+
+        \item Charger une carte en mémoire depuis un fichier texte. \\
+                Priorité : Conditionnel.\\
+                Quantificateur : \\
+                Faisabilité : \\
+                Contrainte, difficulté technique : \\
+                Risques et parades : \\
+                Spécification de tests de validation et de contrôle : \\
+
+        \item Les IA doivent gérer des équipes de 5 bots. \\
+                Priorité : Essentiel.\\
+                Quantificateur : \\
+                Faisabilité : \\
+                Contrainte, difficulté technique : \\
+                Risques et parades : \\
+                Spécification de tests de validation et de contrôle : \\
+
+        \item Gérer les collisions entre les bots et les murs. \\
+                Priorité : Essentiel.\\
+                Quantificateur : \\
+                Faisabilité : \\
+                Contrainte, difficulté technique : \\
+                Risques et parades : \\
+                Spécification de tests de validation et de contrôle : \\
+
+        \item Déplacer les bots à l'aide d'un vecteur \\
+                Priorité : Essentiel.\\
+                Quantificateur : \\
+                Faisabilité : \\
+                Contrainte, difficulté technique : \\
+                Risques et parades : \\
+                Spécification de tests de validation et de contrôle : \\
+                
+        \item Détecter les objets dans le champ de vision des bots.
+        \begin{itemize}
+            \item Transmettre cette information aux ia.
+        \end{itemize}
+        
+        \item Permettre aux bots de pouvoir tirer.
+        \begin{itemize}
+            \item Respecter la cadence de tir.
+            \item Détecter lorsque qu'un bot est touché.
+            \item Faire réaparaitre les bots une fois qu'ils sont touchés.
+            \item Dire au bot qu'il s'est fait toucher
+        \end{itemize}
+
+        \item Permettre au bot de récupérer le drapeau.
+        \begin{itemize}
+            \item Donner au bot le drapeau
+            \item Lacher le drapeau en cas de mort du bot
+            \item Victoire en cas de drapeau ramené dans la zone du bot.
+        \end{itemize}
+    \end{itemize}
+
+
+\subsection{Besoins non fonctionnels}
+\subsubsection{Besoins utilisateur}
+    \begin{itemize}
+        \item L'api doit être bien documentée car possiblement destinée à des étudiants\\
+            Quantificateur : Doit être compréhensible par un étudiant qui découvre le projet.\\
+            Faisabilité : \\
+            Contrainte, difficulté technique : \\
+            Risques et parades : \\
+            Spécification de tests de validation et de contrôle : \\
+
+        \item L'affichage doit être fluide.\\
+            Quantificateur : Le jeu doit pouvoir tourner à 30fps, en utilisant la bibliothèque pygame.\\
+            Faisabilité : \\
+            Contrainte, difficulté technique : \\
+            Risques et parades : \\
+            Spécification de tests de validation et de contrôle : \\
+
+    \end{itemize}
+\subsubsection{Besoins système}
+    \begin{itemize}
+
+        \item Les IA doivent répondre rapidement.\\
+            Quantificateur : Les réponses doivent être apportées à chaque frame.\\
+            Faisabilité : \\
+            Contrainte, difficulté technique : Le code étant en python, il est compliqué d'avoir des performances élevées.\\
+            Risques et parades : Le risque est que l'IA ne réponde pas à temps. Dans ce cas, l'IA se fait disqualifier ou doit passer son tour.\\
+            Spécification de tests de validation et de contrôle : \\
+
+    \end{itemize}
+
+\subsection{Justifications}
+
+\section{Diagramme de Gantt}
+
+\section{Bibliographie}
     
 
 \end{document}

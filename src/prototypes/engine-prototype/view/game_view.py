@@ -19,7 +19,7 @@ class Game_view:
         current_map = model.get_map()
         self._sprite_size = min(WIDTH//current_map.get_width(), HEIGHT//current_map.get_height())
 
-        self._bot_radius = self._sprite_size//5
+        self._bot_radius = self._sprite_size//2
 
 
     def display(self):
@@ -51,10 +51,14 @@ class Game_view:
         for bot in bots:
             (r, g, b, a) = bot.get_color()
 
+            print(bot.get_coord_int())
+            print(self._bot_radius)
+            
             pygame.draw.circle(
                 self._window,
                 pygame.Color(r, g, b),
-                slef._bot_radius
+                bot.get_coord_int(),
+                self._bot_radius
             )
 
             

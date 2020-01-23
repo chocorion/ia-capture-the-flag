@@ -33,6 +33,29 @@ class Map:
                     self._map[y][x] = eval(blocks[lines[y][x]])
 
 
+    def get_spawn_zones(self):
+        zones = {
+            1 : [],
+            2 : []
+        }
+
+        for y in range(self._height):
+            for x in range(self._width):
+                if self._map[y][x].get_name() == 'spawn':
+                    team = self._map[y][x].get_team()
+
+                    if zones[team] == []:
+                        zones[team] = [x, y, 1, 1]
+                    else:
+                        zones[team] = [
+                            zones[team][0],
+                            zones[team][1],
+                            zones[team][2] + 1 if x > zones[team][0] + zones[team][2] - 1 else zones[team][2],
+                            zones[team][3] + 1 if y > zones[team][1] + zones[team][3] - 1 else zones[team][3]
+                        ]
+        return zones
+
+
     def get_width(self):
         return self._width
 

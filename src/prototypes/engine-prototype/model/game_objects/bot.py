@@ -1,7 +1,7 @@
 from model.game_objects.game_objet import Game_object
 
-RED = (255, 0, 0, 255)
-BLUE = (0, 0, 255, 255)
+RED = (197, 60, 38, 255)
+BLUE = (125, 132, 174, 255)
 
 class Bot(Game_object):
     def __init__(self, team, x=0., y=0.):
@@ -17,5 +17,8 @@ class Bot(Game_object):
         self._x = x
         self._y = y
 
-    def get_team_color(self):
+    def get_coord_int(self):
+        return (int(self._x), int(self._y))
+
+    def get_color(self):
         return self._color

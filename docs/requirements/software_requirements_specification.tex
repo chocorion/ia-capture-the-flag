@@ -1,26 +1,60 @@
-\documentclass{article}
+\documentclass[french]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{babel}
+\usepackage{tocloft}
+\usepackage{biblatex}
+\addbibresource{biblio.bib}
 
-\title{Analyse des besoins}
-\author{Robin Navarro, Adrien Boitelle, Yann Blanchet\\Alexis Perignon, Alexis Flazinska}
+\cftsetindents{section}{0em}{2em}
+\cftsetindents{subsection}{0em}{2em}
 
+\renewcommand\cfttoctitlefont{\hfill\Large\bfseries}
+\renewcommand\cftaftertoctitle{\hfill\mbox{}}
 \begin{document}
-\maketitle
+
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\center
+\textsc{\LARGE
+Université de bordeaux
+} \\[1cm]
+
+\HRule \\[0.2cm]
+{ \huge \bfseries Analyse des besoins \\[0.15cm] }
+{ \bfseries IA pour un jeu de Capture the Flag temps réel en Python\\[0.15cm] }
+\HRule \\[1.5cm]
+Robin Navarro, Adrien Boitelle, Yann Blanchet\\Alexis Perignon, Alexis Flazinska
+\\[1cm]
+\today \\ [1cm]
+\end{titlepage}
+
 \newpage
+\Large
 \tableofcontents
+
+
+\normalsize
 \newpage
 \section{Description du projet}
 
 Ce projet a pour but la réalisation d'un framework pour un jeu de capture de drapeaux, et la réalisation d'IA pour y jouer.
-Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bot. Le but est donc de prendre le drapeau et le ramener dans sa base.\newline
+Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bot.
+\newline
 
-Les IA devront piloter des bots en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
+Chaque équipe évolue sur une carte symétrique dont elles ont connaissance dès le départ. Tous les membres d'une même équipe commençent dans une zone, la zone de départ, afin d'y ramener le drapeau de couleur adverse.
+\newline
+
+Chaque joueur dispose d'un champ de vision, qui lui permet de communiquer à son équipe des éléments comme par exemple la position d'un ennemi. Les joueurs peuvent attaquer les membres de l'équipe adverse afin de ralentir leur progression. Si un joueur meurt avec le drapeau, il le pose à terre.
+\newline
+
+Les IA devront piloter ces joueurs en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
 
 
 \section{Analyse de l'existant}
     
-Il y a un existant codé en Java pour le moteur physique mais la manière dont il est implémenté ne convient pas au client car il est difficile d'ajouter de nouvelles fonctionnalités. Ainsi, le client a débuté la conception d'un moteur de jeu en Python, mais ne l'a pas fini.
+Il y a un existant codé en Java pour le moteur physique mais la manière dont il est implémenté ne convient pas au client car il est difficile d'ajouter de nouvelles fonctionnalités. Ainsi, le client a débuté la conception d'un moteur de jeu en Python, mais ne l'a pas fini à ce jour. \newline
+(Comme il était prévu que le jeu soit fonctionnel lorsque nous commençions le projet, nous pouvons en partie compter là dessus. Nous devons cependant prévoir la conception totale et partielle du moteur de jeu car dans tous les cas il y aura des additions à réaliser, notamment à l'aide de librairies externes.)
 
 \section{Description des besoins}
 
@@ -34,8 +68,9 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
             Priorité : Essentiel.
             \begin{itemize}
                 \item Afficher les blocs de la map.
-                \item Afficher les zones de chaque équipe
-                \item Afficher les objets dynamiques (bots, drapeau)
+                \item Afficher les zones de chaque équipe.
+                \item Afficher les objets dynamiques (bots, drapeau).
+                \item Afficher le champ de vision des bots.
             \end{itemize}
 
     \end{itemize}
@@ -46,39 +81,27 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 
         \item Charger une carte en mémoire depuis un fichier texte. \\
                 Priorité : Conditionnel.\\
-                Quantificateur : \\
-                Faisabilité : \\
-                Contrainte, difficulté technique : \\
-                Risques et parades : \\
-                Spécification de tests de validation et de contrôle : \\
+
 
         \item Les IA doivent gérer des équipes de 5 bots. \\
                 Priorité : Essentiel.\\
-                Quantificateur : \\
-                Faisabilité : \\
-                Contrainte, difficulté technique : \\
-                Risques et parades : \\
-                Spécification de tests de validation et de contrôle : \\
 
-        \item Gérer les collisions entre les bots et les murs. \\
-                Priorité : Essentiel.\\
-                Quantificateur : \\
-                Faisabilité : \\
-                Contrainte, difficulté technique : \\
-                Risques et parades : \\
-                Spécification de tests de validation et de contrôle : \\
 
-        \item Déplacer les bots à l'aide d'un vecteur \\
+        \item Gérer les collisions. \\
+                Priorité : Essentiel.
+                \begin{itemize}
+                    \item Entre les bots et les éléments de la map.
+                    \item Entre les projectiles des bots et les objets du jeu.\\
+                \end{itemize}
+
+
+        \item Déplacer les bots à l'aide d'un vecteur et d'une vitesse.\\
                 Priorité : Essentiel.\\
-                Quantificateur : \\
-                Faisabilité : \\
-                Contrainte, difficulté technique : \\
-                Risques et parades : \\
-                Spécification de tests de validation et de contrôle : \\
+
                 
         \item Détecter les objets dans le champ de vision des bots.
         \begin{itemize}
-            \item Transmettre cette information aux ia.
+            \item Transmettre cette information aux ia.\\
         \end{itemize}
         
         \item Permettre aux bots de pouvoir tirer.
@@ -86,13 +109,14 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
             \item Respecter la cadence de tir.
             \item Détecter lorsque qu'un bot est touché.
             \item Faire réaparaitre les bots une fois qu'ils sont touchés.
-            \item Dire au bot qu'il s'est fait toucher
+            \item Dire au bot qu'il s'est fait toucher.\\
         \end{itemize}
+
 
         \item Permettre au bot de récupérer le drapeau.
         \begin{itemize}
-            \item Donner au bot le drapeau
-            \item Lacher le drapeau en cas de mort du bot
+            \item Donner au bot le drapeau.
+            \item Lacher le drapeau en cas de mort du bot.
             \item Victoire en cas de drapeau ramené dans la zone du bot.
         \end{itemize}
     \end{itemize}
@@ -101,19 +125,13 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 \subsection{Besoins non fonctionnels}
 \subsubsection{Besoins utilisateur}
     \begin{itemize}
-        \item L'api doit être bien documentée car possiblement destinée à des étudiants\\
-            Quantificateur : Doit être compréhensible par un étudiant qui découvre le projet.\\
-            Faisabilité : \\
-            Contrainte, difficulté technique : \\
-            Risques et parades : \\
-            Spécification de tests de validation et de contrôle : \\
+        \item L'api doit être bien documentée car possiblement destinée à des étudiants.\\
+            Quantificateur : Doit être compréhensible par un étudiant qui découvre le projet. \\
 
         \item L'affichage doit être fluide.\\
             Quantificateur : Le jeu doit pouvoir tourner à 30fps, en utilisant la bibliothèque pygame.\\
             Faisabilité : \\
-            Contrainte, difficulté technique : \\
-            Risques et parades : \\
-            Spécification de tests de validation et de contrôle : \\
+
 
     \end{itemize}
 \subsubsection{Besoins système}
@@ -124,8 +142,6 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
             Faisabilité : \\
             Contrainte, difficulté technique : Le code étant en python, il est compliqué d'avoir des performances élevées.\\
             Risques et parades : Le risque est que l'IA ne réponde pas à temps. Dans ce cas, l'IA se fait disqualifier ou doit passer son tour.\\
-            Spécification de tests de validation et de contrôle : \\
-
     \end{itemize}
 
 \subsection{Justifications}
@@ -133,6 +149,8 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 \section{Diagramme de Gantt}
 
 \section{Bibliographie}
-    
+
+% Les items de la bibliographie n'apparaissent que si ils sont cités
+\printbibliography[title={}]
 
 \end{document}

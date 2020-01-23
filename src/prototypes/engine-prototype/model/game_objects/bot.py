@@ -18,7 +18,10 @@ class Bot(Game_object):
         self._y = y
 
     def get_coord_int(self):
-        return (int(self._x), int(self._y))
+        return (self._x, self._y)
 
     def get_color(self):
         return self._color
+
+    def __repr__(self):
+        return "Bot({}, {}, {})".format(self._team, self._x, self._y)

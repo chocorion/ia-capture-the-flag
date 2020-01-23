@@ -10,6 +10,9 @@ class Game:
         self._model = Game_model(map_filename=map_name)
         self._view = Game_view(self._model)
 
+        # Ugly, we need the view to get cell size
+        self._model.generate_bots(5)
+
     def game_loop(self):
         while True:
             self._view.display()

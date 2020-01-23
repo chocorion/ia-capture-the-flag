@@ -1,10 +1,27 @@
 from model.map import *
 from model.blocks import *
+from model.game_objects import *
 
+DEFAULT_BOOT_PER_SQUAD = 5
 class Game_model:
     def __init__(self, map_filename):
         self._map = Map(filename=map_filename)
+        self._generate_bots(DEFAULT_BOOT_PER_SQUAD)
+
+
+    def _generate_bots(self, bots_per_squad):
+        self._bots = [[], []]
+
+        for i in range(bots_per_squad):
+            self._bots[0] = Bot(team=1)
+            self._bots[1] = Bot(team=2)
+
 
 
     def get_map(self):
         return self._map
+
+    
+    def get_bots(self):
+        # TODO
+        return []

@@ -6,6 +6,10 @@ class Spawn(Block):
         self._team_number = team_number
 
         self._color = (228, 85, 61, 255) if team_number == 1 else (125, 174, 159, 255)
+        self._name = 'spawn'
+
+    def get_team(self):
+        return self._team_number
 
     def __str__(self):
         return str(self._team_number)

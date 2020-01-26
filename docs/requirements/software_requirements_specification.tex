@@ -39,10 +39,10 @@ Robin Navarro, Adrien Boitelle, Yann Blanchet\\Alexis Perignon, Alexis Flazinska
 \section{Description du projet}
 
 Ce projet a pour but la réalisation d'un framework pour un jeu de capture de drapeaux, et la réalisation d'IA pour y jouer.
-Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bot.
+Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bots.
 \newline
 
-Chaque équipe évolue sur une carte symétrique dont elles ont connaissance dès le départ. Tous les membres d'une même équipe commençent dans une zone, la zone de départ, afin d'y ramener le drapeau de couleur adverse.
+Chaque équipe évolue sur une carte symétrique dont elle a connaissance dès le départ. Tous les bots d'une même équipe commençent dans une zone commune, la zone de départ, afin d'y ramener le drapeau de couleur adverse.
 \newline
 
 Chaque joueur dispose d'un champ de vision, qui lui permet de communiquer à son équipe des éléments comme par exemple la position d'un ennemi. Les joueurs peuvent attaquer les membres de l'équipe adverse afin de ralentir leur progression. Si un joueur meurt avec le drapeau, il le pose à terre.
@@ -100,25 +100,28 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 
                 
         \item Détecter les objets dans le champ de vision des bots.
-        \begin{itemize}
-            \item Transmettre cette information aux ia.\\
-        \end{itemize}
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item Transmettre cette information aux ia.\\
+            \end{itemize}
         
         \item Permettre aux bots de pouvoir tirer.
-        \begin{itemize}
-            \item Respecter la cadence de tir.
-            \item Détecter lorsque qu'un bot est touché.
-            \item Faire réaparaitre les bots une fois qu'ils sont touchés.
-            \item Dire au bot qu'il s'est fait toucher.\\
-        \end{itemize}
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item Respecter la cadence de tir.
+                \item Détecter lorsque qu'un bot est touché.
+                \item Faire réaparaitre les bots une fois qu'ils sont touchés.
+                \item Dire au bot qu'il s'est fait toucher.\\
+            \end{itemize}
 
 
         \item Permettre au bot de récupérer le drapeau.
-        \begin{itemize}
-            \item Donner au bot le drapeau.
-            \item Lacher le drapeau en cas de mort du bot.
-            \item Victoire en cas de drapeau ramené dans la zone du bot.
-        \end{itemize}
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item Donner au bot le drapeau.
+                \item Lacher le drapeau en cas de mort du bot.
+                \item Victoire en cas de drapeau ramené dans la zone du bot.
+            \end{itemize}
     \end{itemize}
 
 
@@ -130,7 +133,7 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 
         \item L'affichage doit être fluide.\\
             Quantificateur : Le jeu doit pouvoir tourner à 30fps, en utilisant la bibliothèque pygame.\\
-            Faisabilité : \\
+            Faisabilité : \\ % Prototype ?
 
 
     \end{itemize}
@@ -150,7 +153,7 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
 
 \section{Bibliographie}
 
-% Les items de la bibliographie n'apparaissent que si ils sont cités
-\printbibliography[title={}]
 
+\printbibliography[title={}]
+\nocite{*}
 \end{document}

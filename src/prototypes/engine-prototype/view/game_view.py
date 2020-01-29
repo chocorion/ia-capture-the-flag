@@ -5,7 +5,7 @@ from pygame.locals import *
 from model.map import *
 from model.blocks import *
 
-from math import (ceil, floor)
+from math import (ceil, floor, radians, cos, sin)
 import sys
 
 # Faire attention à comment gérer la taille des bots dans le modèle qui peut être différente de celle
@@ -72,4 +72,14 @@ class Game_view:
                 int(y),
                 bot_radius,
                 pygame.Color(r, g, b)
+            )
+
+            pygame.draw.line(
+                self._window,
+                pygame.Color(r, g, b),
+                (int(x), int(y)),
+                (
+                    int(x + cos(radians(bot.get_angle())) * 1.5 * bot_radius),
+                    int(y + sin(radians(bot.get_angle())) * 1.5 * bot_radius)
+                )
             )

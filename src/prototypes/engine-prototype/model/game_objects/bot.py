@@ -8,7 +8,7 @@ class Bot(Game_object):
         super().__init__(x, y)
 
         self._team = team
-        self._angle = 0
+        self._angle = 0.
         self._speed = 0.
         self._color = BLUE if team == 2 else RED
         self._radius = radius
@@ -26,6 +26,9 @@ class Bot(Game_object):
 
     def get_color(self):
         return self._color
+
+    def get_angle(self):
+        return self._angle
 
     def __repr__(self):
         return "Bot({}, {}, {}, {})".format(self._team, self._x, self._y, self._radius)

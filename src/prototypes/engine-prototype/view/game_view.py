@@ -1,4 +1,5 @@
 import pygame
+import pygame.gfxdraw
 from pygame.locals import *
 
 from model.map import *
@@ -10,8 +11,8 @@ import sys
 # Faire attention à comment gérer la taille des bots dans le modèle qui peut être différente de celle
 # de la vue.
 
-WIDTH = 1200
-HEIGHT = 800
+WIDTH = 1800
+HEIGHT = 1000
 
 class Game_view:
     def __init__(self, model):
@@ -36,6 +37,7 @@ class Game_view:
 
 
     def _display_map(self):
+        pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, WIDTH, HEIGHT))
         current_map = self._model.get_map()
 
         for y in range(current_map.get_height()):
@@ -49,7 +51,7 @@ class Game_view:
 
                 (r, g, b, a) = current_map.get_tile(x, y).get_color()
 
-                pygame.draw.rect(self._window, pygame.Color(r, g, b), current_rect)
+                pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
 
 
     def _display_bots(self):
@@ -64,9 +66,10 @@ class Game_view:
             x *= self._mult_factor
             y *= self._mult_factor
 
-            pygame.draw.circle(
+            pygame.gfxdraw.aacircle(
                 self._window,
-                pygame.Color(r, g, b),
-                (int(x), int(y)),
-                bot_radius
+                int(x),
+                int(y),
+                bot_radius,
+                pygame.Color(r, g, b)
             )

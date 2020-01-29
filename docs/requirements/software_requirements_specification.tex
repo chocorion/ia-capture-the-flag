@@ -42,19 +42,64 @@ Ce projet a pour but la réalisation d'un framework pour un jeu de capture de dr
 Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bots.
 \newline
 
-Chaque équipe évolue sur une carte symétrique dont elle a connaissance dès le départ. Tous les bots d'une même équipe commençent dans une zone commune, la zone de départ, afin d'y ramener le drapeau de couleur adverse.
+Chaque équipe évolue sur une carte symétrique dont elle a connaissance dès le départ. Tous les bots d'une même équipe commencent dans une zone commune, la zone de départ, afin d'y ramener le drapeau de couleur adverse.
 \newline
 
-Chaque joueur dispose d'un champ de vision, qui lui permet de communiquer à son équipe des éléments comme par exemple la position d'un ennemi. Les joueurs peuvent attaquer les membres de l'équipe adverse afin de ralentir leur progression. Si un joueur meurt avec le drapeau, il le pose à terre.
+Chaque bot dispose d'un champ de vision, qui lui permet de détecter des éléments positionnés dans la map (en particulier les bots adverses). Le champ de vision des bots d'une même équipe est partagé. Les bots peuvent attaquer les membres de l'équipe adverse afin de ralentir leur progression. Si un bot meurt avec le drapeau, il le pose à terre.
 \newline
 
-Les IA devront piloter ces joueurs en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
+Les IA devront piloter ces bots en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
 
 
 \section{Analyse de l'existant}
     
-Il y a un existant codé en Java pour le moteur physique mais la manière dont il est implémenté ne convient pas au client car il est difficile d'ajouter de nouvelles fonctionnalités. Ainsi, le client a débuté la conception d'un moteur de jeu en Python, mais ne l'a pas fini à ce jour. \newline
-(Comme il était prévu que le jeu soit fonctionnel lorsque nous commençions le projet, nous pouvons en partie compter là dessus. Nous devons cependant prévoir la conception totale et partielle du moteur de jeu car dans tous les cas il y aura des additions à réaliser, notamment à l'aide de librairies externes.)
+Il y a un existant codé en Java pour le moteur physique mais la manière dont il est implémenté ne convient pas au client car il est difficile d'ajouter de nouvelles fonctionnalités. De plus, cette existant fonctionnait pour la physique avec une version basé sur les polygones mais cela était coûteux. Ainsi, le client a débuté la conception d'un moteur de jeu en Python non-vectorielle ( basé sur un système de tuiles ), mais ne l'a pas fini à ce jour. \newline
+
+La plupart des projets similaires sont des ajouts à deux jeux déjà existant. Par exemple, nous avons trouvé un exemple de DeepMind\cite{Jaderberg859}, qui utilise le jeu Quake. Nous ne pouvons utiliser un jeu existant, car le projet doit pouvoir être lancé facilement par des étudiants pour un possible projet. \newline
+
+Suite à nos recherches, nous avons découvert l'existence d'un challenge en ligne datant de 2012 nommé iasandbox.com. Le but de ce challenge était de réaliser une Intelligence Artificielle distribuée pour un moteur de jeu déjà fourni et relié par un serveur. \\Les participants devait respecter une interface, et implémenter un ou plusieurs bots afin de les faire collaborer et affronter d'autres challengers. Malheureusement, ce site n'est plus accessible suite à un abandon. Nous avons pu trouver des archives web du site, mais le moteur de jeu n'était plus accessible. 
+
+\\
+(Comme il était prévu que le jeu soit fonctionnel lorsque nous commencions le projet, nous pouvons en partie compter là dessus. Nous devons cependant prévoir la conception totale et partielle du moteur de jeu car dans tous les cas il y aura des additions à réaliser, notamment à l'aide de librairies externes.)
+
+
+\section{Description des termes techniques}
+
+\begin{itemize}
+    \item Framework: Traduit littéralement, signifie "cadre de travail". Désigne un ensemble cohérent de composants éprouvés et réutilisables (bibliothèques, classes, helpers…) ainsi qu'un ensemble de préconisations pour la conception et le développement d'applications.
+    \newline
+    \item IA: Intelligence artificielle, consiste à mettre en œuvre un certain nombre de techniques visant à permettre aux machines ou programmes d'imiter une forme d'intelligence réelle.
+    \newline
+    \item Bot: Un programme autonome, qui peut interagir avec des systèmes ou utilisateurs. Très souvent, on parle d'un programme qui se comporte comme un humain dans les jeux vidéos.
+    \newline
+    \item Moteur de jeu: collection de code sous forme de bibliothèques et de frameworks afin de réaliser un jeu.
+    \newline
+    \item Librairie/Bibliothèque/API: un ensemble de fonctions utilitaires, regroupées et mises à disposition afin de pouvoir être utilisées sans avoir à les réécrire.
+    \newline
+    \item Behavior Tree: Arbre (structure de données) permettant de contrôler le comportement d'une intelligence artificielle, chaque noeud représente une tâche, décision en réponse aux données fournies. Permet de réaliser des comportements très complexes et cela en parcourant depuis la racine de l'arbre tout en suivant les branches adéquates en évaluant différentes conditions jusqu'à la décision finale à adopter.
+    \newline
+    \item Pathfinding: désigne la recherche de chemin entre deux points , noeuds...
+    \newline
+    \item A*(A star): Algorithme de pathfinding réputé et peu coûteux permettant de rechercher un chemin entre une position initiale et une position finale. La première solution trouvée par l'algorithme fait partie de l'un des meilleurs chemins possibles.
+    \newline
+    
+    \item Frame: Une image affichée à l'écran.\newline
+    
+    \item FPS(Frames per second): Fréquence en hertz à laquelle les images sont calculées.
+    \newline
+    \item Pygame: Bibliothèque libre multiplateforme qui permet de faciliter le développement de jeux vidéos en langage de programmation Python.
+    \newline
+    \item Heuristique: Une heuristique est un raisonnement formalisé de résolution de problèmes (représentable par une computation connue) dont on tient pour plausible mais non pour certain qu’il conduira à la détermination d’une solution satisfaisante du problème.
+    \newline
+    \item Alpha beta: Algorithme de recherche qui sert à réduire le nombre de noeuds calculés par l'algorithme Minimax dans les jeux. L'algorithme Minimax cherche à trouver la meilleure valeur possible d'un plateau de jeu tout en minimisant la meilleure valeur possible d'un plateau de jeu adverse.
+    \newline
+    \item Graphe/Arbre: différentes structure de données permettant de stocker des informations en programmation.
+    \newline
+    \item Complexité: Évaluation du temps, ressources, et stockage nécessaires à la réalisation d'un algorithme.
+    
+
+\end{itemize}{}
+
 
 \section{Description des besoins}
 
@@ -67,24 +112,53 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
         \item Afficher une carte en deux dimensions. \\
             Priorité : Essentiel.
             \begin{itemize}
-                \item Afficher les blocs de la map.
+                \item Afficher les blocs de la carte. Il y a deux blocs de base. Les murs, qui sont solide et bloquent la vue des bots, et des murs transparents. Ils bloquent les bots, mais pas leur champ de visions.
                 \item Afficher les zones de chaque équipe.
                 \item Afficher les objets dynamiques (bots, drapeau).
-                \item Afficher le champ de vision des bots.
+                \item Afficher le champ de vision des bots. C'est un cône ayant pour base chaque bot, et ayant une taille pouvant varier. \\
             \end{itemize}
+            
+        \item Fournir un mode de jeu sans affichage graphique.
+            Priorité : Conditionnelle.\\
+
+        \item Implémenter des IA utilisant l'API du jeu. \\
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item .\\
+            \end{itemize}
+
+        \item Avoir accès à au moins une IA de base à affronter. \\
+            Priorité : Essentiel.
+            \begin{itemize}
+                \item Utiliser un behavior tree.
+                \item Demander des traitements au moteur de jeu (pathfinding).\\
+            \end{itemize}
+            
+        \item Proposer une interface pour qu'un humain puisse jouer contre une ia.
+            Priorité : Conditionnel \\
 
     \end{itemize}
 
 \subsubsection{Besoins système}
     
     \begin{itemize}
-
+        
+        \item Implémenter les règles du jeu. \\
+                Priorité : Essentiel.\\
+        
         \item Charger une carte en mémoire depuis un fichier texte. \\
-                Priorité : Conditionnel.\\
+                Priorité : Conditionnel.
+                \begin{itemize}
+                    \item Différentes tailles de carte possibles. \\
+                \end{itemize}
 
 
         \item Les IA doivent gérer des équipes de 5 bots. \\
-                Priorité : Essentiel.\\
+                Priorité : Essentiel.
+                \begin{itemize}
+                    \item Une première version des bots doit se baser sur les behavior trees. 
+                    \item Les bots doivent pouvoir réaliser des actions communes, attaquer ensemble, défendre celui qui a le drapeau, défendre le drapeau ...\\
+                \end{itemize}
 
 
         \item Gérer les collisions. \\
@@ -93,34 +167,60 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
                     \item Entre les bots et les éléments de la map.
                     \item Entre les projectiles des bots et les objets du jeu.\\
                 \end{itemize}
-
-
+                
+        
         \item Déplacer les bots à l'aide d'un vecteur et d'une vitesse.\\
                 Priorité : Essentiel.\\
+                
+        \item Proposer des files de calcul aux joueurs pour les traitements.\\
+            Priorité: Essentiel.\\
 
                 
-        \item Détecter les objets dans le champ de vision des bots.
+        \item Détecter les objets dans le champ de vision des bots. \\
             Priorité : Essentiel.
             \begin{itemize}
-                \item Transmettre cette information aux ia.\\
+                \item Transmettre cette information aux ia de la même équipe.\\
             \end{itemize}
         
-        \item Permettre aux bots de pouvoir tirer.
+        \item Permettre aux bots de pouvoir tirer. \\
             Priorité : Essentiel.
             \begin{itemize}
                 \item Respecter la cadence de tir.
                 \item Détecter lorsque qu'un bot est touché.
-                \item Faire réaparaitre les bots une fois qu'ils sont touchés.
-                \item Dire au bot qu'il s'est fait toucher.\\
+                \item Dire au bot qu'il s'est fait toucher. \\
             \end{itemize}
 
+        \item Gérer la santé des bots.
+            Priorité : Conditionnel (?)
+            \begin{itemize}
+                \item Permettre à un bot d'encaisser des dégâts.
+                \item Faire réapparaître les bots lorsque leur santé tombe à zéro. \\
+            \end{itemize}
+        
 
-        \item Permettre au bot de récupérer le drapeau.
+        \item Permettre au bot de récupérer le drapeau. \\
             Priorité : Essentiel.
             \begin{itemize}
                 \item Donner au bot le drapeau.
-                \item Lacher le drapeau en cas de mort du bot.
-                \item Victoire en cas de drapeau ramené dans la zone du bot.
+                \item Lâcher le drapeau en cas de mort du bot.
+                \item Victoire en cas de drapeau ramené dans la zone du bot. \\
+            \end{itemize}
+        
+        \item Permettre au bot de récupérer des items spéciaux \\
+            Priorité : Optionnel.
+            \begin{itemize}
+                \item Différentes armes.
+                \item Des bonus tel vitesse, gains de vie , téléportation \\
+            \end{itemize}
+            
+        \item Permettre d'ajouter différents types de bots \\
+            Priorité : Optionnel. \\
+        
+        \item Modification interactive de la carte \\
+            Priorité: Optionnel.
+             \begin{itemize}
+                \item Casser les murs.
+                \item Différents types de murs \\
             \end{itemize}
     \end{itemize}
 
@@ -134,20 +234,32 @@ Il y a un existant codé en Java pour le moteur physique mais la manière dont i
         \item L'affichage doit être fluide.\\
             Quantificateur : Le jeu doit pouvoir tourner à 30fps, en utilisant la bibliothèque pygame.\\
             Faisabilité : \\ % Prototype ?
-
+            
 
     \end{itemize}
 \subsubsection{Besoins système}
     \begin{itemize}
+        \item Le moteur de jeu doit être robuste. \\
+            Contrainte, difficulté technique : Le moteur doit continuer à tourner avec des entrés erronés. \\
+            Risques et parades : En cas de problème de robustesse, si le moteur est utilisé pour une évaluation automatique, les résultat seront faussés. Il faut donc une gestion des erreurs efficace.\\
 
         \item Les IA doivent répondre rapidement.\\
             Quantificateur : Les réponses doivent être apportées à chaque frame.\\
-            Faisabilité : \\
             Contrainte, difficulté technique : Le code étant en python, il est compliqué d'avoir des performances élevées.\\
             Risques et parades : Le risque est que l'IA ne réponde pas à temps. Dans ce cas, l'IA se fait disqualifier ou doit passer son tour.\\
+        
+        \item Le moteur de jeu doit être capable de traiter efficacement les réponses des IA.\\
+            Contrainte, difficulté technique :  La mise à jour de l'état du jeu selon les réponses doit permettre un affichage à 30fps.\\
+            Risques et parades : L'affichage peut perdre de sa fluidité.\\
+        
     \end{itemize}
 
 \subsection{Justifications}
+Le langage de programmation utilisé est python car le projet est potentiellement destiné à un cours dans lequel les étudiants devront travailler avec python. \newline
+
+Pour l'algorithme de pathfinding, nous avons choisi Astar car nous l'avons déjà étudié en cours, il possède une bonne complexité, $\mathcal{O}(n + m\ log(n))$, $n$ étant le nombre de sommet et $m$ le nombre d'arête du graphe représentant le terrain de jeu. De plus, on peut changer l'heuristique pour que les bots puissent s'adapter aux différentes situations (éviter des zones de danger, aller au plus vite vers le drapeaux, etc.). \newline
+
+Une première version des bots doit utiliser les behavior trees, car c'est un moyen rapide de prendre des décisions, (par rapport par exemple à un élagage alpha béta en parcourant toutes les possibilités). \newline
 
 \section{Diagramme de Gantt}
 

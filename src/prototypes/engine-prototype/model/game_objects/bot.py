@@ -4,24 +4,28 @@ RED = (197, 60, 38, 255)
 BLUE = (125, 132, 174, 255)
 
 class Bot(Game_object):
-    def __init__(self, team, x=0., y=0.):
+    def __init__(self, team, x=0., y=0., radius=0.):
         super().__init__(x, y)
 
         self._team = team
         self._angle = 0
         self._speed = 0.
         self._color = BLUE if team == 2 else RED
+        self._radius = radius
 
 
     def teleport(self, x, y):
         self._x = x
         self._y = y
 
-    def get_coord_int(self):
+    def get_coord(self):
         return (self._x, self._y)
+
+    def get_radius(self):
+        return self._radius
 
     def get_color(self):
         return self._color
 
     def __repr__(self):
-        return "Bot({}, {}, {})".format(self._team, self._x, self._y)
+        return "Bot({}, {}, {}, {})".format(self._team, self._x, self._y, self._radius)

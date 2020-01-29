@@ -13,13 +13,8 @@ import sys
 WIDTH = 1200
 HEIGHT = 800
 
-# Ugly
-CELL_SIZE = 0
-BOT_RADIUS = 0
-
 class Game_view:
     def __init__(self, model):
-        global CELL_SIZE
 
         pygame.init()
         self._window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -28,10 +23,9 @@ class Game_view:
         current_map = model.get_map()
 
         self._cell_size = min(WIDTH//current_map.get_width(), HEIGHT//current_map.get_height())
-        self._bot_radius = ceil(self._cell_size/3)
 
-        CELL_SIZE = self._cell_size
-        BOT_RADIUS = self._bot_radius
+        self._mult_factor = self._cell_size/model.get_cell_size() # may find a better name latter
+
 
 
     def display(self):
@@ -39,6 +33,7 @@ class Game_view:
         self._display_bots()
         
         pygame.display.flip()
+
 
     def _display_map(self):
         current_map = self._model.get_map()
@@ -62,22 +57,16 @@ class Game_view:
 
         for bot in bots:
             (r, g, b, a) = bot.get_color()
-
-            print(bot.get_coord_int())
-            print(self._bot_radius)
             
+            bot_radius = int(bot.get_radius() * self._mult_factor)
+            (x, y) = bot.get_coord()
+
+            x *= self._mult_factor
+            y *= self._mult_factor
+
             pygame.draw.circle(
                 self._window,
                 pygame.Color(r, g, b),
-                bot.get_coord_int(),
-                self._bot_radius
+                (int(x), int(y)),
+                bot_radius
             )
-
-    @staticmethod
-    def get_cell_size():
-        return CELL_SIZE
-
-    @staticmethod
-    def get_bot_radius():
-        return BOT_RADIUS
-            

@@ -10,16 +10,24 @@ REAL_SPEED = 10
 
 # http://files.magusgeek.com/csb/csb.html
 
+DISPLAY = False
+
 class Physic_engine:
     def __init__(self, model):
         self._model = model
 
 
     def tick(self, bots_movement):
+        global DISPLAY
         for team in bots_movement.keys():
             bots = self._model.get_bots(team=team)
 
             for i in range(len(bots)):
+                # if team == 1 and i == 1:
+                #     DISPLAY = True
+                # else:
+                #     DISPLAY = False
+
                 (dest_x, dest_y, speed) = bots_movement[team][i]
 
                 speed = MAX_SPEED if speed > MAX_SPEED else speed
@@ -54,7 +62,12 @@ class Physic_engine:
         else:
             new_angle = self._get_angle(x, y, dest_x, dest_y)
 
-        diff = angle + new_angle
+        diff = round(new_angle - angle, 2)
+
+        if DISPLAY:
+            print("({}, {}) -> ({}, {})".format(x, y, dest_x, dest_y))
+            print("Angle -> {} | new angle -> {} | DIFF -> {}".format(angle, new_angle, diff))
+
 
 
         if diff > MAX_ANGLE:
@@ -65,12 +78,14 @@ class Physic_engine:
 
         angle += diff
 
+        if DISPLAY:
+            print("Diff -> ", diff)
+
         if angle > 180:
-            angle = angle - 180
+            angle = angle - 360
 
         elif angle < -180:
-            angle = angle + 180
+            angle = 360 + angle
 
-        print("Result -> ", angle)
 
         return angle

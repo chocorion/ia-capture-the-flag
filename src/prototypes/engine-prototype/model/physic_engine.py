@@ -68,7 +68,11 @@ class Physic_engine:
             print("({}, {}) -> ({}, {})".format(x, y, dest_x, dest_y))
             print("Angle -> {} | new angle -> {} | DIFF -> {}".format(angle, new_angle, diff))
 
+        if diff > 180:
+            diff = diff - 360
 
+        elif diff < -180:
+            diff = 360 + diff
 
         if diff > MAX_ANGLE:
             diff = MAX_ANGLE

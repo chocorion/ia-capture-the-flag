@@ -3,6 +3,8 @@ from model.blocks import *
 from model.game_objects import *
 from view import *
 
+from ai import *
+
 from random import (randrange, uniform)
 import sys
 
@@ -17,8 +19,15 @@ class Game_model:
         self._cell_size = 100
         self._default_bot_radius = 40
 
+        # 1 and 2 are team number (refactor later)
+        self._ai = {
+            1: None,
+            2: None
+        }
+
         self._map = Map(filename=map_filename)
         self._generate_bots(bots_per_squad=DEFAULT_BOOT_PER_SQUAD)
+
 
     def _generate_bots(self, bots_per_squad):
         self._bots = [[], []]
@@ -33,8 +42,6 @@ class Game_model:
         )
 
         margin = self._default_bot_radius/self._cell_size
-        print(margin)
-
 
         for i in range(bots_per_squad):
             for (team, x, y, w, h) in infos:
@@ -46,6 +53,30 @@ class Game_model:
                         radius=self._default_bot_radius
                     )
                 )
+    
+    def tick(self):
+        result = {
+            1: None,
+            2: None
+        }
+
+        for team in self._ai.keys():
+            datas = []
+
+            for bot in self._bots[team - 1]:
+                (x, y) = bot.get_coord()
+                angle = bot.get_angle
+
+                datas.append((x, y, angle))
+
+            result[team] = self._ai[team].tick(datas)
+
+
+    def set_ai(self, team, ai):
+        if team not in self._ai.keys():
+            raise TypeError("{} is not a team number !".format(team))
+
+        self._ai[team] = ai
 
 
     def get_map(self):

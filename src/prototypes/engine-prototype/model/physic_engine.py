@@ -1,10 +1,12 @@
 from model import *
 
-import math
+import math, sys
 
 # Bots can't rotate more from 18°
 MAX_ANGLE = 18
-MAX_SPEED = 20
+MAX_SPEED = 100
+
+REAL_SPEED = 10
 
 # http://files.magusgeek.com/csb/csb.html
 
@@ -21,15 +23,18 @@ class Physic_engine:
                 (dest_x, dest_y, speed) = bots_movement[team][i]
 
                 speed = MAX_SPEED if speed > MAX_SPEED else speed
+                speed = (speed * REAL_SPEED)/MAX_SPEED
+
 
                 (x, y) = bots[i].get_coord()
                 angle = bots[i].get_angle()
 
                 new_angle = self._rotate(x, y, angle, dest_x, dest_y)
 
-                new_x = x + math.cos(new_angle) * speed
-                new_y = y + math.sin(new_angle) * speed
+                new_x = x + math.cos(math.radians(new_angle)) * float(speed)
+                new_y = y + math.sin(math.radians(new_angle)) * float(speed)
 
+                
                 bots[i].move(new_x, new_y, new_angle)
 
 
@@ -38,17 +43,8 @@ class Physic_engine:
 
 
     def _get_angle(self, x, y, dest_x, dest_y):
-        distance = self._distance(x, y, dest_x, dest_y)
+        angle = float(math.degrees(math.atan2(dest_y - y, dest_x - x)))
         
-
-        dx = (dest_x - x)/distance
-        dy = (dest_y - y)/distance
-
-        angle = math.acos(dx) * 180. / math.pi
-
-        # if dy < 0:
-        #     a = 360. - a
-
         return angle
 
 
@@ -58,13 +54,23 @@ class Physic_engine:
         else:
             new_angle = self._get_angle(x, y, dest_x, dest_y)
 
-        if new_angle > MAX_ANGLE:
-            new_angle = MAX_ANGLE
+        diff = angle + new_angle
 
-        elif new_angle < -MAX_ANGLE:
-            new_angle = -MAX_ANGLE
 
-        angle += new_angle
-        angle %= 360.
+        if diff > MAX_ANGLE:
+            diff = MAX_ANGLE
+
+        elif diff < -MAX_ANGLE:
+            diff = -MAX_ANGLE
+
+        angle += diff
+
+        if angle > 180:
+            angle = angle - 180
+
+        elif angle < -180:
+            angle = angle + 180
+
+        print("Result -> ", angle)
 
         return angle

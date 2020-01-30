@@ -1,6 +1,7 @@
 from model.map import *
 from model.blocks import *
 from model.game_objects import *
+from model.physic_engine import Physic_engine
 from view import *
 
 from ai import *
@@ -26,6 +27,7 @@ class Game_model:
         }
 
         self._map = Map(filename=map_filename)
+        self._physic_engine = Physic_engine(self)
         self._generate_bots(bots_per_squad=DEFAULT_BOOT_PER_SQUAD)
 
 
@@ -71,6 +73,8 @@ class Game_model:
 
             result[team] = self._ai[team].tick(datas)
 
+        self._physic_engine.tick(result)
+
 
     def set_ai(self, team, ai):
         if team not in self._ai.keys():
@@ -83,8 +87,12 @@ class Game_model:
         return self._map
 
     
-    def get_bots(self):
-        return self._bots[0] + self._bots[1]
+    def get_bots(self, team=-1):
+        if team == -1:
+            return self._bots[0] + self._bots[1]
+
+        # Must verify index
+        return self._bots[team - 1]
 
     def get_cell_size(self):
         return self._cell_size

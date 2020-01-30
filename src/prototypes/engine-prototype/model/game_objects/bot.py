@@ -30,5 +30,10 @@ class Bot(Game_object):
     def get_angle(self):
         return self._angle
 
+    def move(self, new_x, new_y, new_angle):
+        self._x = new_x
+        self._y = new_y
+        self._angle = new_angle
+
     def __repr__(self):
         return "Bot({}, {}, {}, {})".format(self._team, self._x, self._y, self._radius)

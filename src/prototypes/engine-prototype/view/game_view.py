@@ -27,12 +27,13 @@ class Game_view:
 
         self._mult_factor = self._cell_size/model.get_cell_size() # may find a better name latter
 
+        self._display_map()
+
 
     def tick(self, dt):
         self._display()
 
     def _display(self):
-        self._display_map()
         self._display_bots()
         
         pygame.display.flip()
@@ -40,10 +41,17 @@ class Game_view:
 
     def _display_map(self):
         pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, WIDTH, HEIGHT))
-        current_map = self._model.get_map()
 
-        for y in range(current_map.get_height()):
-            for x in range(current_map.get_width()):
+        current_map = self._model.get_map()
+        
+        self._display_tiles(0,0,current_map.get_width() - 1,current_map.get_height() - 1)
+
+
+    def _display_tiles(self, start_x, start_y, end_x, end_y):
+        current_map = self._model.get_map() # Store it as attribute ?
+
+        for y in range(start_y, end_y + 1):
+            for x in range(start_x, end_x + 1):
                 current_rect = pygame.Rect(
                     x * self._cell_size,
                     y * self._cell_size,
@@ -58,6 +66,38 @@ class Game_view:
 
     def _display_bots(self):
         bots = self._model.get_bots()
+        current_map = self._model.get_map()
+
+        tiles_to_refresh = dict()
+
+        for bot in bots:
+            (x, y) = bot.get_coord()
+
+            x_tile = int(x // self._model.get_cell_size())
+            y_tile = int(y // self._model.get_cell_size())
+
+            if not x_tile in tiles_to_refresh.keys():
+                tiles_to_refresh[x_tile] = dict()
+            tiles_to_refresh[x_tile][y_tile] = 1
+
+        for x_tile in tiles_to_refresh.keys():
+            for y_tile in tiles_to_refresh[x_tile].keys():
+
+                start_x = x_tile - 1
+                start_y = y_tile - 1
+                end_x = x_tile + 1
+                end_y = y_tile + 1
+
+                if(start_x < 0):
+                    start_x = 0
+                if(start_y < 0):
+                    start_y = 0
+                if(end_x >= current_map._width):
+                    end_x = current_map._width - 1
+                if(end_y >= current_map._height):
+                    end_y = current_map._height - 1
+
+                self._display_tiles(start_x,start_y,end_x,end_y)
 
         for bot in bots:
             (r, g, b, a) = bot.get_color()
@@ -85,3 +125,5 @@ class Game_view:
                     int(y + sin(radians(bot.get_angle())) * 1.5 * bot_radius)
                 )
             )
+
+

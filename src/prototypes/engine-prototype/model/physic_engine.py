@@ -6,7 +6,7 @@ import math, sys
 MAX_ANGLE = 18
 MAX_SPEED = 100
 
-REAL_SPEED = 100
+REAL_SPEED = 600
 
 # http://files.magusgeek.com/csb/csb.html
 
@@ -39,8 +39,8 @@ class Physic_engine:
 
                 new_angle = self._rotate(x, y, angle, dest_x, dest_y)
 
-                new_x = x + math.cos(math.radians(new_angle)) * float(speed) * 1/float(dt)
-                new_y = y + math.sin(math.radians(new_angle)) * float(speed) * 1/float(dt)
+                new_x = x + math.cos(math.radians(new_angle)) * float(speed) * dt/1000
+                new_y = y + math.sin(math.radians(new_angle)) * float(speed) * dt/1000
 
                 
                 bots[i].move(new_x, new_y, new_angle)

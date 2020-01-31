@@ -11,7 +11,7 @@ blocks = {
 
 class Map:
     def __init__(self, filename):
-        self.filename = filename
+        self._filename = filename
         self._load_from_file(filename)
         
 
@@ -64,12 +64,15 @@ class Map:
         return self._height
 
 
+    def is_solid(self, x, y):
+        return self._map[y][x].is_solid()
+
     def get_tile(self, x, y):
         return self._map[y][x]
 
 
     def __repr__(self):
-        return "Map({})".format(filename)
+        return "Map({})".format(self._filename)
         
         
     def __str__(self):

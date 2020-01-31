@@ -6,7 +6,7 @@ import math, sys
 MAX_ANGLE = 18
 MAX_SPEED = 100
 
-REAL_SPEED = 10
+REAL_SPEED = 100
 
 # http://files.magusgeek.com/csb/csb.html
 
@@ -17,7 +17,7 @@ class Physic_engine:
         self._model = model
 
 
-    def tick(self, bots_movement):
+    def tick(self, bots_movement, dt):
         global DISPLAY
         for team in bots_movement.keys():
             bots = self._model.get_bots(team=team)
@@ -39,12 +39,23 @@ class Physic_engine:
 
                 new_angle = self._rotate(x, y, angle, dest_x, dest_y)
 
-                new_x = x + math.cos(math.radians(new_angle)) * float(speed)
-                new_y = y + math.sin(math.radians(new_angle)) * float(speed)
+                new_x = x + math.cos(math.radians(new_angle)) * float(speed) * 1/float(dt)
+                new_y = y + math.sin(math.radians(new_angle)) * float(speed) * 1/float(dt)
 
                 
                 bots[i].move(new_x, new_y, new_angle)
 
+
+    def _check_collision_map(self, x, y, dest_x, dest_y):
+        cell_size = self._model.get_cell_size()
+
+        first_cell_x = x//cell_size
+        first_cell_y = y//cell_size
+
+        second_cell_x = dest_x//cell_size
+        second_cell_y = dest_y//cell_size
+
+        
 
     def _distance(self, x1, y1, x2, y2):
         return math.sqrt((x2 - x1)**2 + (y2 - y2)**2)

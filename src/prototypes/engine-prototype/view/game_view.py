@@ -28,8 +28,10 @@ class Game_view:
         self._mult_factor = self._cell_size/model.get_cell_size() # may find a better name latter
 
 
+    def tick(self, dt):
+        self._display()
 
-    def display(self):
+    def _display(self):
         self._display_map()
         self._display_bots()
         

@@ -9,6 +9,9 @@ class Block:
     def get_color(self):
         return self._color
 
+    def is_solid(self):
+        return self._solid
+
     def get_name(self):
         return self._name
 

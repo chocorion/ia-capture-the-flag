@@ -56,7 +56,7 @@ class Game_model:
                     )
                 )
     
-    def tick(self):
+    def tick(self, dt):
         result = {
             1: None,
             2: None
@@ -73,7 +73,7 @@ class Game_model:
 
             result[team] = self._ai[team].tick(datas)
 
-        self._physic_engine.tick(result)
+        self._physic_engine.tick(result, dt)
 
 
     def set_ai(self, team, ai):

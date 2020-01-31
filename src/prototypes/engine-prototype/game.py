@@ -15,6 +15,9 @@ DEFAULT_MAP = "model/map/map_files/map_00.txt"
 class Game:
     def __init__(self, map_name=DEFAULT_MAP):
 
+        self._clock = pygame.time.Clock()
+        self._fps = TARGET_FPS
+
         self._model = Game_model(map_filename=map_name)
         self._view = Game_view(self._model)
 
@@ -27,23 +30,22 @@ class Game:
 
 
     def game_loop(self):
-        prev_time = time.time()
 
         while True:
+            self._show_fps()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
+
+            dt = self._clock.tick(self._fps)
+
+            self._model.tick(dt)
+            self._view.tick(dt)
+
+    def _show_fps(self):
+        print("{:6s}".format(str((self._clock.get_fps()))), end="\r")
             
-            self._model.tick()
-            self._view.display()
-            
-            curr_time = time.time()
-            diff = curr_time - prev_time
-            delay = max(1.0/TARGET_FPS - diff, 0)
-            time.sleep(delay)
-            fps = 1.0/(delay + diff)
-            prev_time = curr_time
-            print("FPS -> {:4s}".format(str(round(fps, 2))), end='\r')
 
 
 if __name__ == '__main__':

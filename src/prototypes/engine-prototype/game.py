@@ -31,6 +31,9 @@ class Game:
 
     def game_loop(self):
 
+        # Initp pygame clock
+        dt = self._clock.tick(self._fps)
+
         while True:
             # self._show_fps()
 

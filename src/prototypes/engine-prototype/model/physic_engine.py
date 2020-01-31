@@ -42,18 +42,60 @@ class Physic_engine:
                 new_x = x + math.cos(math.radians(new_angle)) * float(speed) * dt/1000
                 new_y = y + math.sin(math.radians(new_angle)) * float(speed) * dt/1000
 
+                collision = self._check_collision_map(x,y,new_x,new_y)
                 
+                new_x = new_x if collision[0] == -1 else collision[0]
+                new_y = new_y if collision[1] == -1 else collision[1]
+                print(new_x, new_y)
                 bots[i].move(new_x, new_y, new_angle)
 
 
     def _check_collision_map(self, x, y, dest_x, dest_y):
         cell_size = self._model.get_cell_size()
 
-        first_cell_x = x//cell_size
-        first_cell_y = y//cell_size
+        first_cell_x = int(x//cell_size)
+        first_cell_y = int(y//cell_size)
 
-        second_cell_x = dest_x//cell_size
-        second_cell_y = dest_y//cell_size
+        last_cell_x = int(dest_x//cell_size)
+        last_cell_y = int(dest_y//cell_size)
+
+        dx = abs(last_cell_x - first_cell_x)
+        dy = abs(last_cell_y - first_cell_y)
+
+        current_x = first_cell_x
+        current_y = first_cell_y
+
+        n = 1 + dx + dy
+        x_inc = 1 if (last_cell_x > first_cell_x) else -1
+        y_inc = 1 if (last_cell_y > first_cell_y) else -1
+
+        error = dx - dy
+
+        dx *= 2
+        dy *= 2
+        
+        for i in range(n,0,-1):
+            
+            if self._model.get_map().is_solid(current_x // cell_size, current_y // cell_size):
+                return (current_x,current_y)
+
+            if error > 0:
+                current_x += x_inc
+                error -= dy
+            elif error < 0:
+                current_y += y_inc
+                error += dx
+            elif error == 0:
+                current_x += x_inc
+                current_y += y_inc
+                error -= dy
+                error += dx
+                n -= 1
+                
+        return (-1,-1)
+        
+
+
 
         
 

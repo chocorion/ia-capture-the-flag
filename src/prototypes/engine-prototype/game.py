@@ -32,7 +32,7 @@ class Game:
     def game_loop(self):
 
         while True:
-            self._show_fps()
+            # self._show_fps()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

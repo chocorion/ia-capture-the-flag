@@ -35,7 +35,7 @@ class Game:
         dt = self._clock.tick(self._fps)
 
         while True:
-            # self._show_fps()
+            self._show_fps()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

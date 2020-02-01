@@ -39,13 +39,24 @@ class Physic_engine:
 
                 new_angle = self._rotate(x, y, angle, dest_x, dest_y)
 
-                new_x = x + math.cos(math.radians(new_angle)) * float(speed) * dt/1000
-                new_y = y + math.sin(math.radians(new_angle)) * float(speed) * dt/1000
+                dx = math.cos(math.radians(new_angle))
+                dy = math.sin(math.radians(new_angle))
 
-                collision = self._check_collision_map(x,y,new_x,new_y)
+                new_x = x + dx * float(speed) * dt/1000
+                new_y = y + dy * float(speed) * dt/1000
+
+                bot_radius = bots[i].get_radius()
                 
-                new_x = new_x if collision[0] == -1 else collision[0]
-                new_y = new_y if collision[1] == -1 else collision[1]
+                # Check collision with the border of the circle
+                collision = self._check_collision_map(
+                    x + dx * bot_radius,
+                    y + dy * bot_radius,
+                    new_x + dx * bot_radius,
+                    new_y + dy * bot_radius
+                )
+                
+                new_x = new_x if collision[0] == -1 else collision[0] - dx * bot_radius
+                new_y = new_y if collision[1] == -1 else collision[1] - dy * bot_radius
 
                 bots[i].move(new_x, new_y, new_angle)
 

@@ -23,9 +23,9 @@ class Game:
 
 
         # For latter -> Match class
-
-        self._model.set_ai(1, Basic_AI(1, NUMBER_OF_BOTS))
-        self._model.set_ai(2, Basic_AI(2, NUMBER_OF_BOTS))
+        # Must give a copy of the map !!!
+        self._model.set_ai(1, Basic_AI(1, NUMBER_OF_BOTS, self._model.get_map()))
+        self._model.set_ai(2, Basic_AI(2, NUMBER_OF_BOTS, self._model.get_map()))
 
 
 
@@ -45,6 +45,7 @@ class Game:
 
             self._model.tick(dt)
             self._view.tick(dt)
+
 
     def _show_fps(self):
         print("{:6s}".format(str((self._clock.get_fps()))), end="\r")

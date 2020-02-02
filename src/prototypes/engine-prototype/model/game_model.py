@@ -26,7 +26,7 @@ class Game_model:
             2: None
         }
 
-        self._map = Map(filename=map_filename)
+        self._map = Map(filename=map_filename, cell_size=self._cell_size)
         self._physic_engine = Physic_engine(self)
         self._generate_bots(bots_per_squad=DEFAULT_BOOT_PER_SQUAD)
 

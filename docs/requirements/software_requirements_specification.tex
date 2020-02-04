@@ -147,7 +147,8 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
         \item Implémenter les règles du jeu. \\
                 Priorité : Essentiel.\\
                 Les IA doivent avoir à leur disposition 5 bots, se trouvant dans leur zone de spawn respective. Un drapeau se trouve près de chaque base. Un IA qui amène les deux drapeaux dans sa base gagne la partie.\\
-                Une contrainte de temps sera défini pour éviter que les IA restent inactives. Si aucune n'a réussi à ramener un drapeau dans sa propre base, alors il y a égalité.
+                Une contrainte de temps sera défini pour éviter que les IA restent inactives. Si aucune n'a réussi à ramener un drapeau dans sa propre base, alors il y a égalité.\\
+                
         \item Charger une carte en mémoire depuis un fichier texte. \\
                 Priorité : Conditionnel.
                 \begin{itemize}
@@ -169,11 +170,12 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Implémenter une première version basique permettant de montrer le fonctionnement du moteur de jeu. Elle doit effectuer des actions basiques, c'est à dire diriger ses 5 bots vers le drapeau,
                 tirer sur les adversaires visibles, capturer le drapeau et le ramener à la base.
                 \item Ce comportement simple doit se reposer sur un behavior tree\cite{colledanchise2017behavior}.
-                \item Les bots doivent pouvoir réaliser des actions communes, attaquer ensemble, défendre celui qui a le drapeau, défendre le drapeau ... 
+                \item Les bots doivent pouvoir réaliser des actions communes, attaquer ensemble, défendre celui qui a le drapeau, défendre le drapeau ... \\
             \end{itemize}
             Pour tester cette IA basique, il faut la faire jouer dans une carte avec des ennemis placés aléatoirement, qui sont immobiles. L'IA doit gagner la partie.\\
             Il faut ensuite tester l'IA sur une carte avec des ennemis placés aléatoirement sur la carte, mais cette fois avec la possibilité de tirer dès qu'un bot se trouve dans leur champ de vision. L'IA doit gagner. \\
             Un test un peu plus élaboré consiste à faire jouer l'IA contre une équipe de bots faisant des "rondes" sur la carte, et tirant à vue. Encore une fois l'IA doit gagner pour passer le test.\\
+            
             Pour tester la capacité de l'IA à se défendre, on réutilise le test précédent mais en donnant le drapeau de l'équipe à un des bots effectuant des rondes. L'IA doit le récupérer et gagner pour réussir le test.\\
             Une contrainte de temps doit être incorporée dans les tests pour pouvoir mesurer l'évolution des performances de l'IA. \\
 
@@ -182,7 +184,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 Priorité : Essentiel.
                 \begin{itemize}
                     \item Entre les bots et les éléments de la carte.
-                    \item Entre les projectiles des bots et les objets du jeu.
+                    \item Entre les projectiles des bots et les objets du jeu.\\
                 \end{itemize}
                 Les bots ne doivent pas pouvoir avancer dans une zone considérée comme solide (par exemple un mur). Un moyen pour tester est de lancer une partie avec les bots répartis sur la carte de manière homogène, et en faisant bouger les bots dans des directions aléatoires. Si un bot se retrouve sur une case étant pourtant considérée comme solide, le test échoue.\\
                 
@@ -194,6 +196,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Prendre en compte la transparence des objets de la carte. Par exemple, un bot ne peut pas en voir un autre à travers un mur opaque.\\
             \end{itemize}
             Pour tester le champ de vision des bots, il faut tout d'abord vérifier qu'en mettant un bot sur une carte de jeu, il ne détecte pas les objets n'étant pas dans son champ de vision. Si le moteur détecte une collision, il y a une erreur. \\
+            
             Ensuite, il faut tester que le moteur détecte bien la présence d'objet dans le champ de vision d'un bot.
             On place un objet aléatoirement un bot dans le champ de vision du bot. Le moteur doit le détecter, sinon il y a erreur. \\
             Ensuite, il faut placer le bot devant un obstacle opaque, avec derrière un autre bot. Les bots ne doivent pas se détecter entre eux.\\
@@ -218,6 +221,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Gérer les collision entre le projectile et les éléments de la zone de jeu (par exemple les murs).\\
             \end{itemize}
 
+        \newpage
         \item Gérer la santé des bots.\\
             Priorité : Conditionnel
             \begin{itemize}

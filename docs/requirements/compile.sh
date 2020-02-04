@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+pdflatex software_requirements_specification.tex;
+bibtex software_requirements_specification;
+pdflatex software_requirements_specification.tex;
+pdflatex software_requirements_specification.tex;
+rm software_requirements_specification-blx.bib
+rm software_requirements_specification.aux
+rm software_requirements_specification.bbl
+rm software_requirements_specification.blg
+rm software_requirements_specification.log
+rm software_requirements_specification.run.xml
+rm software_requirements_specification.toc

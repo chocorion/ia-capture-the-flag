@@ -147,7 +147,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
         \item Implémenter les règles du jeu. \\
                 Priorité : Essentiel.\\
                 Les IA doivent avoir à leur disposition 5 bots, se trouvant dans leur zone de spawn respective. Un drapeau se trouve près de chaque base. Un IA qui amène les deux drapeaux dans sa base gagne la partie.\\
-                Une contrainte de temps sera défini pour éviter que les IA restent inactives. Si aucune n'a réussi à ramener un drapeau dans sa propre base, alors il y a égalité.\\
+                Une contrainte de temps sera définie pour éviter que les IA restent inactives. Si aucune n'a réussi à ramener un drapeau dans sa propre base, alors il y a égalité.\\
                 
         \item Charger une carte en mémoire depuis un fichier texte. \\
                 Priorité : Conditionnel.
@@ -159,7 +159,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \end{itemize}
                 Au moins une carte par défaut doit être disponible. \\
                 
-        \item Générer des cartes aléatoire.\\
+        \item Générer des cartes aléatoires.\\
             Priorité : Conditionnel.\\
             Le moteur doit pouvoir générer des cartes correctes (correspondant aux besoins ci-dessus) de manière aléatoire. Les cartes doivent être jouables, c'est-à-dire qu'elles doivent permettre le déplacement des bots depuis leur zone d'apparition jusqu'à la zone du drapeau.\\
             En guise de test, il faudra vérifier que la carte est de la dimension demandée et qu'il est possible de se déplacer des zones de spawn jusqu'aux drapeaux en utilisant A*.\\
@@ -173,7 +173,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Les bots doivent pouvoir réaliser des actions communes, attaquer ensemble, défendre celui qui a le drapeau, défendre le drapeau ... \\
             \end{itemize}
             Pour tester cette IA basique, il faut la faire jouer dans une carte avec des ennemis placés aléatoirement, qui sont immobiles. L'IA doit gagner la partie.\\
-            Il faut ensuite tester l'IA sur une carte avec des ennemis placés aléatoirement sur la carte, mais cette fois avec la possibilité de tirer dès qu'un bot se trouve dans leur champ de vision. L'IA doit gagner. \\
+            Il faut ensuite tester l'IA sur une carte avec des ennemis placés aléatoirement sur la carte, mais cette fois avec la possibilité de tirer dès qu'un bot se trouve dans son champ de vision. L'IA doit gagner. \\
             Un test un peu plus élaboré consiste à faire jouer l'IA contre une équipe de bots faisant des "rondes" sur la carte, et tirant à vue. Encore une fois l'IA doit gagner pour passer le test.\\
             
             Pour tester la capacité de l'IA à se défendre, on réutilise le test précédent mais en donnant le drapeau de l'équipe à un des bots effectuant des rondes. L'IA doit le récupérer et gagner pour réussir le test.\\
@@ -238,7 +238,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Lâcher le drapeau en cas de mort du bot.
                 \item Lâcher automatiquement le drapeau quand le bot revient dans la zone de son équipe.\\
             \end{itemize}
-            Pour tester, il suffit de téléporter un bot sur le drapeau. Si le moteur donne les drapeau au bot, le test passe. Sinon, il échoue.\\
+            Pour tester, il suffit de téléporter un bot sur le drapeau. Si le moteur donne le drapeau au bot, le test passe. Sinon, il échoue.\\
         
         \item Permettre au bot de récupérer des items spéciaux \\
             Priorité : Optionnel.
@@ -246,7 +246,7 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
                 \item Différentes armes.
                 \item Des bonus tels que: vitesse, gains de vie , téléportation. \\
             \end{itemize}
-            Le test est le même que pour le besoin précédent. Il faut télé-porter un bot sur les différents objets, et vérifier que le moteur donne bien l'objet au bot. Sinon le test échoue.\\
+            Le test est le même que pour le besoin précédent. Il faut téléporter un bot sur les différents objets, et vérifier que le moteur donne bien l'objet au bot. Sinon le test échoue.\\
             
         \item Permettre d'ajouter différents types de bots \\
             Priorité : Optionnel. \\
@@ -271,13 +271,13 @@ Suite à nos recherches, nous avons découvert l'existence d'un challenge en lig
             Quantificateur : Le jeu doit pouvoir tourner à 30fps, en utilisant la bibliothèque pygame.\\
 
         \item Le projet doit être codé en utilisant python. \\
-            Quantificateur : Doit être utilisable dans un cours où les étudiants travaillent avec python.\\
+            Quantificateur : Doit être utilisable dans un cours où les étudiants travaillent avec python.\\ %
 
     \end{itemize}
 \subsubsection{Besoins système}
     \begin{itemize}
         \item Le moteur de jeu doit être robuste. \\
-            Contrainte, difficulté technique : Le moteur doit continuer à tourner avec des entrés erronées. \\
+            Contrainte, difficulté technique : Le moteur doit continuer à tourner avec des entrées erronées. \\
             Risques et parades : En cas de problème de robustesse, si le moteur est utilisé pour une évaluation automatique, les résultats seront faussés. Il faut donc une gestion des erreurs efficace.\\
             Un moyen pour tester la robustesse du moteur est l'envoi de réponses aléatoires et n'ayant aucun sens au moteur.\\
             Le moteur doit alors continuer à tourner correctement.\\

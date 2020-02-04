@@ -40,10 +40,12 @@ class Game_view:
         
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
+        self._surface.fill((0, 0, 0, 0))
+
 
 
     def _display_map(self):
-        pygame.draw.rect(self._surface, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, WIDTH, HEIGHT))
+        pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, WIDTH, HEIGHT))
 
         current_map = self._model.get_map()
         
@@ -64,7 +66,7 @@ class Game_view:
 
                 (r, g, b, a) = current_map.get_tile(x, y).get_color()
 
-                pygame.draw.rect(self._surface, pygame.Color(r, g, b, a), current_rect)
+                pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
 
 
     def _display_bots(self):
@@ -79,9 +81,9 @@ class Game_view:
             x_tile = int(x // self._model.get_cell_size())
             y_tile = int(y // self._model.get_cell_size())
 
-            if not x_tile in tiles_to_refresh.keys():
-                tiles_to_refresh[x_tile] = dict()
-            tiles_to_refresh[x_tile][y_tile] = 1
+            # if not x_tile in tiles_to_refresh.keys():
+            #     tiles_to_refresh[x_tile] = dict()
+            # tiles_to_refresh[x_tile][y_tile] = 1
 
         for x_tile in tiles_to_refresh.keys():
             for y_tile in tiles_to_refresh[x_tile].keys():
@@ -114,15 +116,15 @@ class Game_view:
             self._draw_cone(
                 x,
                 y, 
-                pygame.Color(r, g, b, 50),
+                pygame.Color(r, g, b, 70),
                 10 * bot_radius,
                 int(bot.get_angle() - 20),
                 int(bot.get_angle() + 20),
-                2
+                10
             )
 
             pygame.gfxdraw.aacircle(
-                self._surface,
+                self._window,
                 int(x),
                 int(y),
                 bot_radius,
@@ -130,7 +132,7 @@ class Game_view:
             )
 
             pygame.draw.line(
-                self._surface,
+                self._window,
                 pygame.Color(r, g, b),
                 (int(x), int(y)),
                 (

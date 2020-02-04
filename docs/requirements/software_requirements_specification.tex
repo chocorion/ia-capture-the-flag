@@ -5,7 +5,7 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{babel}
 \usepackage{tocloft}
-\usepackage{biblatex}
+\usepackage[backend=bibtex]{biblatex}
 \usepackage{graphicx}
 
 \addbibresource{biblio.bib}
@@ -309,6 +309,6 @@ Nous avons choisi d'élaborer nous même le moteur de jeu, d'une part en raison 
 
 \section{Bibliographie}
 
-\printbibliography[title={\phantom{a}}] % just \title{ } doesn't work
+\printbibliography[heading=none]
 \nocite{*}
 \end{document}

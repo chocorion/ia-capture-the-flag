@@ -7,13 +7,14 @@ from ai import *
 import time, sys
 import pygame # tmp, for quit
 
-TARGET_FPS = 60
-NUMBER_OF_BOTS = 5 # Warning Same cst in other parts of the code
+from ruleset import ruleset
 
-DEFAULT_MAP = "model/map/map_files/map_00.txt"
+TARGET_FPS = 60
 
 class Game:
-    def __init__(self, map_name=DEFAULT_MAP):
+    def __init__(self, map_name=None):
+        if map_name == None:
+            map_name = ruleset["DEFAULT_MAP"]
 
         self._clock = pygame.time.Clock()
         self._fps = TARGET_FPS
@@ -24,8 +25,8 @@ class Game:
 
         # For latter -> Match class
         # Must give a copy of the map !!!
-        self._model.set_ai(1, Basic_AI(1, NUMBER_OF_BOTS, self._model.get_map()))
-        self._model.set_ai(2, Basic_AI(2, NUMBER_OF_BOTS, self._model.get_map()))
+        self.register(Basic_AI)
+        self.register(Basic_AI)
 
 
 
@@ -45,6 +46,12 @@ class Game:
 
             self._model.tick(dt)
             self._view.tick(dt)
+
+    def register(self, player):
+        
+        self._model.set_ai(player)
+
+        return self._model._map
 
 
     def _show_fps(self):

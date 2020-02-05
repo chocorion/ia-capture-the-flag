@@ -6,11 +6,10 @@ from view import *
 
 from ai import *
 
+from ruleset import ruleset
+
 from random import (randrange, uniform)
 import sys
-
-
-DEFAULT_BOOT_PER_SQUAD = 5
 
 
 class Game_model:
@@ -20,15 +19,14 @@ class Game_model:
         self._cell_size = 100
         self._default_bot_radius = 40
 
-        # 1 and 2 are team number (refactor later)
-        self._ai = {
-            1: None,
-            2: None
-        }
+        # While initializing players
+        self._current_team_registration = 0
+
+        self._teams = dict()
 
         self._map = Map(filename=map_filename, cell_size=self._cell_size)
         self._physic_engine = Physic_engine(self)
-        self._generate_bots(bots_per_squad=DEFAULT_BOOT_PER_SQUAD)
+        self._generate_bots(bots_per_squad=ruleset["TEAM_SIZE"])
 
 
     def _generate_bots(self, bots_per_squad):
@@ -62,7 +60,7 @@ class Game_model:
             2: None
         }
 
-        for team in self._ai.keys():
+        for team in self._teams.keys():
             datas = []
 
             for bot in self._bots[team - 1]:
@@ -71,16 +69,15 @@ class Game_model:
 
                 datas.append((x, y, angle))
 
-            result[team] = self._ai[team].tick(datas)
+            result[team] = self._teams[team].tick(datas)
 
         self._physic_engine.tick(result, dt)
 
 
-    def set_ai(self, team, ai):
-        if team not in self._ai.keys():
-            raise TypeError("{} is not a team number !".format(team))
+    def set_ai(self, player):
+        self._current_team_registration += 1
 
-        self._ai[team] = ai
+        self._teams[self._current_team_registration] = player(self._current_team_registration, ruleset["TEAM_SIZE"], self.get_map())
 
 
     def get_map(self):

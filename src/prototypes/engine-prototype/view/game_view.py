@@ -35,7 +35,7 @@ class Game_view:
         self._display()
 
     def _display(self):
-        self._display_map()
+        # self._display_map()
         self._display_bots()
         
         self._window.blit(self._surface, (0, 0))
@@ -81,17 +81,17 @@ class Game_view:
             x_tile = int(x // self._model.get_cell_size())
             y_tile = int(y // self._model.get_cell_size())
 
-            # if not x_tile in tiles_to_refresh.keys():
-            #     tiles_to_refresh[x_tile] = dict()
-            # tiles_to_refresh[x_tile][y_tile] = 1
+            if not x_tile in tiles_to_refresh.keys():
+                tiles_to_refresh[x_tile] = dict()
+            tiles_to_refresh[x_tile][y_tile] = 1
 
         for x_tile in tiles_to_refresh.keys():
             for y_tile in tiles_to_refresh[x_tile].keys():
 
-                start_x = x_tile - 1
-                start_y = y_tile - 1
-                end_x = x_tile + 1
-                end_y = y_tile + 1
+                start_x = x_tile - 4
+                start_y = y_tile - 4
+                end_x = x_tile + 4
+                end_y = y_tile + 4
 
                 if(start_x < 0):
                     start_x = 0

@@ -19,6 +19,7 @@ class Game_view:
 
         pygame.init()
         self._window = pygame.display.set_mode((WIDTH, HEIGHT))
+        self._surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         
         self._model = model
         current_map = model.get_map()
@@ -34,9 +35,13 @@ class Game_view:
         self._display()
 
     def _display(self):
+        self._display_map()
         self._display_bots()
         
+        self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
+        self._surface.fill((0, 0, 0, 0))
+
 
 
     def _display_map(self):
@@ -76,9 +81,9 @@ class Game_view:
             x_tile = int(x // self._model.get_cell_size())
             y_tile = int(y // self._model.get_cell_size())
 
-            if not x_tile in tiles_to_refresh.keys():
-                tiles_to_refresh[x_tile] = dict()
-            tiles_to_refresh[x_tile][y_tile] = 1
+            # if not x_tile in tiles_to_refresh.keys():
+            #     tiles_to_refresh[x_tile] = dict()
+            # tiles_to_refresh[x_tile][y_tile] = 1
 
         for x_tile in tiles_to_refresh.keys():
             for y_tile in tiles_to_refresh[x_tile].keys():
@@ -108,6 +113,16 @@ class Game_view:
             x *= self._mult_factor
             y *= self._mult_factor
 
+            self._draw_cone(
+                x,
+                y, 
+                pygame.Color(r, g, b, 70),
+                10 * bot_radius,
+                int(bot.get_angle() - 20),
+                int(bot.get_angle() + 20),
+                10
+            )
+
             pygame.gfxdraw.aacircle(
                 self._window,
                 int(x),
@@ -125,5 +140,27 @@ class Game_view:
                     int(y + sin(radians(bot.get_angle())) * 1.5 * bot_radius)
                 )
             )
+
+    def _draw_cone(self, x, y, color, length, angle_start, angle_end, step = 1):
+        angle_start = float(angle_start)
+        angle_end = float (angle_end)
+
+        angle_step = 0 if step <= 0 else (angle_end -  angle_start)/step
+
+        points = [(x, y), (x + cos(radians(angle_start)) * length, y + sin(radians(angle_start)) * length)]
+
+        for i in range(step):
+            points.append(
+                (x + cos(radians(angle_start + angle_step * i)) * length, y + sin(radians(angle_start + angle_step * i)) * length)
+            )
+
+        points.append((x + cos(radians(angle_end)) * length, y + sin(radians(angle_end)) * length))
+        points.append((x, y))
+
+        pygame.draw.polygon(
+            self._surface,
+            color,
+            points
+        )
 
 

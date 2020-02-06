@@ -1,5 +1,6 @@
 from Model import Model
 
+# Implements Model to be used by the Game Engine
 class EngineModel(Model):
 
     def __init__(self):

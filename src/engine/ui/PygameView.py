@@ -1,6 +1,7 @@
 from View import View
 
-class EngineView(View):
+# Implements View using pygame
+class PygameView(View):
 
     def __init__(self):
         pass

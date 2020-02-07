@@ -1,4 +1,4 @@
-from View import View
+from ui.View import View
 
 # Implements View using pygame
 class PygameView(View):
@@ -7,4 +7,4 @@ class PygameView(View):
         pass
 
     def tick(self, deltaTime):
-        pass
+        print(deltaTime)

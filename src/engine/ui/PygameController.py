@@ -1,7 +1,7 @@
-from Controller import Controller
+from ui.Controller import Controller
 
 # Implements Controller
-class EngineController(Controller):
+class PygameController(Controller):
 
     def __init__(self):
         pass

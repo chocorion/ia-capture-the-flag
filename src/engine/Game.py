@@ -1,5 +1,4 @@
-from ui.PygameView import PygameView
-from ui.PygameController import PygameController
+from ui.PygameFactory import PygameFactory
 from service.TimeManager import TimeManager
 from service.Config import Config
 
@@ -8,11 +7,11 @@ from time import sleep
 class Game:
     def __init__(self):
         Config.Initialize()
+        uiFactory = PygameFactory()
 
-        self.View = PygameView()
-        self.Controller = PygameController()
+        self.View       = uiFactory.getView()
+        self.Controller = uiFactory.getController()
 
-        pass
 
     def gameLoop(self):
         print("Game starting")

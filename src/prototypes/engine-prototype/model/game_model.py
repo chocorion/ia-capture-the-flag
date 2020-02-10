@@ -9,7 +9,8 @@ from ai import *
 from ruleset import ruleset
 
 from random import (randrange, uniform)
-import sys
+from ai.astar import *
+
 
 
 class Game_model:
@@ -111,9 +112,30 @@ class Game_model:
         
         
         if self._astar_end_cell != None:
-            pass
+            self.mark_path()
+            
 
-    
+    def build_graph(self):
+        nodeGraph = []
+        for x in range(self._map.get_width()):
+            for y in range(self._map.get_height()):
+                insertNode(x, y, str(self._map.get_tile(x,y)), nodeGraph)
+        return nodeGraph
+
+    def mark_path(self):
+        nodeGraph = self.build_graph()
+
+        # Get start and goal node
+        start = list(filter(lambda n: n.x == self._astar_start_cell[0] and n.y ==  self._astar_start_cell[1] , nodeGraph))[0]
+        goal  = list(filter(lambda n: n.x == self._astar_end_cell[0]   and n.y ==  self._astar_end_cell[1], nodeGraph))[0]
+        
+        print(self._astar_start_cell , " | ")
+        print(self._astar_end_cell)
+        res_a_star = a_star(start, goal, nodeGraph)
+        print(res_a_star)
+        for node in res_a_star[0]:
+            self._map.mark(node.x, node.y)
+
     def mark_end_cell(self, x, y):
         cell_x = x // self._cell_size
         cell_y = y // self._cell_size
@@ -128,4 +150,4 @@ class Game_model:
         self._map.mark_end_cell(cell_x, cell_y)
 
         if self._astar_start_cell != None:
-            pass
+            self.mark_path()

@@ -10,6 +10,9 @@ class Node:
         self.neighbors = []
         self.parent = None
     
+    def __repr__(self):
+        return "Node({}, {}, {})".format(self.x, self.y, self.cellContent)
+
     def addNeighbor(self, node):
         self.neighbors.append(node)
 

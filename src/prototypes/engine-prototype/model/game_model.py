@@ -98,23 +98,6 @@ class Game_model:
     def get_cell_size(self):
         return self._cell_size
 
-    def mark_start_cell(self, x, y):
-        cell_x = x // self._cell_size
-        cell_y = y // self._cell_size
-
-        if not self._map.is_empty(cell_x, cell_y):
-            return
-
-        if self._astar_start_cell != None:
-            self._map.unmark(self._astar_start_cell[0], self._astar_start_cell[1])
-        self._astar_start_cell = (cell_x, cell_y)
-        self._map.mark_start_cell(cell_x, cell_y)
-        
-        
-        if self._astar_end_cell != None:
-            self.mark_path()
-            
-
     def build_graph(self):
         nodeGraph = []
         for x in range(self._map.get_width()):
@@ -135,6 +118,24 @@ class Game_model:
         print(res_a_star)
         for node in res_a_star[0]:
             self._map.mark(node.x, node.y)
+
+    
+    def mark_start_cell(self, x, y):
+        cell_x = x // self._cell_size
+        cell_y = y // self._cell_size
+
+        if not self._map.is_empty(cell_x, cell_y):
+            return
+
+        if self._astar_start_cell != None:
+            self._map.unmark(self._astar_start_cell[0], self._astar_start_cell[1])
+            
+        self._astar_start_cell = (cell_x, cell_y)
+        self._map.mark_start_cell(cell_x, cell_y)
+        
+        
+        if self._astar_end_cell != None:
+            self.mark_path()
 
     def mark_end_cell(self, x, y):
         cell_x = x // self._cell_size

@@ -84,6 +84,3 @@ def a_star(start, goal, nodeGraph):
         create_neighbors(current, nodeGraph)
         visitNeighbor(current, closed, border, goal)
     
-    
-    
-

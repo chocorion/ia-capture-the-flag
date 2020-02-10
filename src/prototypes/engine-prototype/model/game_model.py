@@ -112,10 +112,8 @@ class Game_model:
         start = list(filter(lambda n: n.x == self._astar_start_cell[0] and n.y ==  self._astar_start_cell[1] , nodeGraph))[0]
         goal  = list(filter(lambda n: n.x == self._astar_end_cell[0]   and n.y ==  self._astar_end_cell[1], nodeGraph))[0]
         
-        print(self._astar_start_cell , " | ")
-        print(self._astar_end_cell)
         res_a_star = a_star(start, goal, nodeGraph)
-        print(res_a_star)
+        
         for node in res_a_star[0]:
             self._map.mark(node.x, node.y)
 
@@ -135,7 +133,9 @@ class Game_model:
         
         
         if self._astar_end_cell != None:
+            self._map.clear_path()
             self.mark_path()
+
 
     def mark_end_cell(self, x, y):
         cell_x = x // self._cell_size
@@ -151,4 +151,5 @@ class Game_model:
         self._map.mark_end_cell(cell_x, cell_y)
 
         if self._astar_start_cell != None:
+            self._map.clear_path()
             self.mark_path()

@@ -91,6 +91,12 @@ class Map:
         if isinstance(self._map[y][x], Start) or isinstance(self._map[y][x], End):
             self._map[y][x] = Empty()
 
+    def clear_path(self):
+        for y in range(self._height):
+            for x in range(self._width):
+                if isinstance(self._map[y][x], Way):
+                    self._map[y][x] = Empty()
+
     def __repr__(self):
         return "Map({})".format(self._filename)
         

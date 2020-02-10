@@ -71,9 +71,10 @@ def visitNeighbor(current, closed, border, goal):
 def a_star(start, goal, nodeGraph):
     border = [start]
     closed = []
-
+    
     while border:
         current = border[0] # Get node with least cost
+        
         if current == goal:
             return isFinish(current, start, border, closed)
 

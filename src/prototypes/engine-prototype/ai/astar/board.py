@@ -36,7 +36,7 @@ def insertNode(x, y, char, nodeGraph):
 # Creates neighbors list for a node
 def create_neighbors(node, nodeGraph):
     #If you want diagonals put in dirs : [-1,-1], [1,1], [1, -1], [-1,1]]
-    dirs = [[1,0], [0,1], [-1, 0], [0,1]]
+    dirs = [[1,0], [0,1], [-1, 0], [0,-1]]
             
     for dir in dirs:
         for newNode in nodeGraph:

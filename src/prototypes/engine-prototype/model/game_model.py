@@ -28,6 +28,9 @@ class Game_model:
         self._physic_engine = Physic_engine(self)
         self._generate_bots(bots_per_squad=ruleset["TEAM_SIZE"])
 
+        self._astar_start_cell = None
+        self._astar_end_cell = None
+
 
     def _generate_bots(self, bots_per_squad):
         self._bots = [[], []]
@@ -93,3 +96,36 @@ class Game_model:
 
     def get_cell_size(self):
         return self._cell_size
+
+    def mark_start_cell(self, x, y):
+        cell_x = x // self._cell_size
+        cell_y = y // self._cell_size
+
+        if not self._map.is_empty(cell_x, cell_y):
+            return
+
+        if self._astar_start_cell != None:
+            self._map.unmark(self._astar_start_cell[0], self._astar_start_cell[1])
+        self._astar_start_cell = (cell_x, cell_y)
+        self._map.mark_start_cell(cell_x, cell_y)
+        
+        
+        if self._astar_end_cell != None:
+            pass
+
+    
+    def mark_end_cell(self, x, y):
+        cell_x = x // self._cell_size
+        cell_y = y // self._cell_size
+
+        if not self._map.is_empty(cell_x, cell_y):
+            return
+
+        if self._astar_end_cell != None:
+            self._map.unmark(self._astar_end_cell[0], self._astar_end_cell[1])
+        
+        self._astar_end_cell = (cell_x, cell_y)
+        self._map.mark_end_cell(cell_x, cell_y)
+
+        if self._astar_start_cell != None:
+            pass

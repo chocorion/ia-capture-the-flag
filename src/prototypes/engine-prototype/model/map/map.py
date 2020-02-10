@@ -69,11 +69,27 @@ class Map:
     def is_solid(self, x, y):
         return self._map[y][x].is_solid()
 
+    def is_empty(self, x, y):
+        return isinstance(self._map[y][x], Empty)
+
     def get_tile(self, x, y):
         return self._map[y][x]
 
     def get_cell_size(self):
         return self._cell_size
+
+    def mark_start_cell(self, x, y):
+        self._map[y][x] = Start()
+
+    def mark_end_cell(self, x, y):
+        self._map[y][x] = End()
+
+    def mark(self, x, y):
+        self._map[y][x] = Way()
+
+    def unmark(self, x, y):
+        if isinstance(self._map[y][x], Start) or isinstance(self._map[y][x], End):
+            self._map[y][x] = Empty()
 
     def __repr__(self):
         return "Map({})".format(self._filename)

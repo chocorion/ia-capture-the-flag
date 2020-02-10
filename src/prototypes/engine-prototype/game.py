@@ -2,6 +2,7 @@
 
 from model import *
 from view import *
+from controller import *
 from ai import *
 
 import time, sys
@@ -21,6 +22,7 @@ class Game:
 
         self._model = Game_model(map_filename=map_name)
         self._view = Game_view(self._model)
+        self._controller = Game_controller(self._model, self._view)
 
 
         # For latter -> Match class
@@ -36,14 +38,11 @@ class Game:
         dt = self._clock.tick(self._fps)
 
         while True:
-            self._show_fps()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            # self._show_fps()
 
             dt = self._clock.tick(self._fps)
 
+            self._controller.tick(dt)
             self._model.tick(dt)
             self._view.tick(dt)
 

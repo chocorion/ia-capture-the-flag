@@ -31,11 +31,14 @@ class Game_view:
         self._display_map()
 
 
+    def get_mult_factor(self):
+        return self._mult_factor
+
     def tick(self, dt):
         self._display()
 
     def _display(self):
-        # self._display_map()
+        self._display_map()
         self._display_bots()
         
         self._window.blit(self._surface, (0, 0))

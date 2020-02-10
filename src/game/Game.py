@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 from ui.PygameFactory import PygameFactory
 from service.TimeManager import TimeManager
 from service.Config import Config
@@ -36,3 +38,8 @@ class Game:
 
         print("Game closing")
         pass
+
+# Make this an executable file
+if __name__ == "__main__":
+    game = Game()
+    game.gameLoop() 

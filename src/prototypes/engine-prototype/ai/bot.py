@@ -1,3 +1,5 @@
+from ai.astar import *
+
 '''
 Bot for user AI.
 '''
@@ -11,10 +13,16 @@ class Bot:
 
 
     def set_dest(self, x, y):
+        print("Bot compute A*...")
         self._dest = (x, y)
 
 
     def get_dest(self):
+
+        return self._dest
+
+    def get_next_dest(self):
+        ''' Return the next position of the bot'''
         return self._dest
 
     def save_pos(self):

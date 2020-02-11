@@ -32,6 +32,8 @@ class Game_model:
         self._astar_start_cell = None
         self._astar_end_cell = None
 
+        self._ai_destination = None
+
 
     def _generate_bots(self, bots_per_squad):
         self._bots = [[], []]
@@ -71,7 +73,7 @@ class Game_model:
                 (x, y) = bot.get_coord()
                 angle = bot.get_angle
 
-                datas.append((x, y, angle))
+                datas.append((x, y, angle, self._ai_destination))
 
             result[team] = self._teams[team].tick(datas)
 
@@ -153,3 +155,15 @@ class Game_model:
         if self._astar_start_cell != None:
             self._map.clear_path()
             self.mark_path()
+
+
+    def set_ai_destination(self, x, y):
+        x = int(x//self._cell_size)
+        y = int(y//self._cell_size)
+
+        if not self._map.is_solid(x, y):
+            self._ai_destination = (x, y)
+            print("Ai destination set to {}:{}".format(x, y))
+        
+        else:
+            print("Ai destination can't be set in a solid block !")

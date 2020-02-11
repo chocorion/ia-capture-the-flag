@@ -36,22 +36,31 @@ class Basic_AI(AI):
         result = []
 
         for bot_index in range(len(self._bots)):
-            (x, y, angle) = datas[bot_index]
+            (x, y, angle, dest) = datas[bot_index]
             self._bots[bot_index].update(x, y, angle)
 
+            # print(dest)
+
             (last_pos_x, last_pos_y) = self._bots[bot_index].get_saved_pos()
-            (dest_x, dest_y) = self._bots[bot_index].get_dest()
 
-            if distance(x, y, last_pos_x, last_pos_y) < 3:
-                self._bot_set_random_dest(bot_index)
 
-            elif distance(x, y, dest_x, dest_y) < 30:
-                self._bot_set_random_dest(bot_index)
-            
+            if dest != None:
+                (dest_x, dest_y) = dest
+                (bot_dest_x, bot_dest_y) = self._bots[bot_index].get_dest()
+
+                if dest_x != bot_dest_x or dest_y != bot_dest_y:
+                    print("\tBot {} -> dest set to {}:{}".format(bot_index, dest_x, dest_y))
+                    self._bots[bot_index].set_dest(dest_x, dest_y)
+
+                elif distance(x, y, dest_x, dest_y) < 30:
+                    print("Bot reach destination ! Now random dest.")
+                    self._bot_set_random_dest(bot_index)
+
+
 
             self._bots[bot_index].save_pos()
-            (dest_x, dest_y) = self._bots[bot_index].get_dest()
+            (bot_dest_x, bot_dest_y) = self._bots[bot_index].get_next_dest()
 
-            result.append((dest_x, dest_y, 100))
+            result.append((bot_dest_x, bot_dest_y, 100))
 
         return result

@@ -11,7 +11,7 @@ def distance(x1, y1, x2, y2):
 Bot for user AI.
 '''
 class Bot:
-    def __init__(self, game_map, x=0., y=0., angle=0.):
+    def __init__(self, game_map=None, x=0., y=0., angle=0.):
         self._x = x
         self._y = y
         self._angle = angle

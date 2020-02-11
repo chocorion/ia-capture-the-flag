@@ -8,6 +8,8 @@ from ai.astar.board import *
 # Result from A*, able to return multiple variables
 Result = collections.namedtuple('Result', ['path', 'border', 'closed'])
 
+PathMap = {}
+
 
 # Heuristic cost methods (Estimated cost to goal)
 ############
@@ -39,12 +41,14 @@ def reconstructPath(node, start):
         path.append(node)
     return path
 
-def isFinish(current, start, border, closed):
-        return Result(
-            reconstructPath(current, start)
-            , border
-            , closed
-        )
+def getPath(current, start, border, closed):
+    path = Result(
+        reconstructPath(current, start)
+        , border
+        , closed
+    ) 
+    PathMap[(start.x, start.y, current.x, current.y)] = path
+    return path
 
 def setCurrentNeighbor(neighbor, current, goal):
     neighbor.parent        = current
@@ -69,6 +73,13 @@ def visitNeighbor(current, closed, border, goal):
 
 # Calculate shortest path form start to goal
 def a_star(start, goal, nodeGraph):
+    #First check if path already contained in pathMap (no need to recalculate it)
+    extremity = (int(start.x), int(start.y), goal.x, goal.y)
+    print(extremity)
+    if extremity in PathMap:
+        print("Find the Path ! " + str(extremity))
+        return PathMap[extremity]
+
     border = [start]
     closed = []
     
@@ -76,7 +87,7 @@ def a_star(start, goal, nodeGraph):
         current = border[0] # Get node with least cost
         
         if current == goal:
-            return isFinish(current, start, border, closed)
+            return getPath(current, start, border, closed)
 
         # Remove current from border and add it to closed list
         del border[0]

@@ -75,7 +75,7 @@ def visitNeighbor(current, closed, border, goal):
 def a_star(start, goal, nodeGraph):
     #First check if path already contained in pathMap (no need to recalculate it)
     extremity = (int(start.x), int(start.y), goal.x, goal.y)
-    print(extremity)
+
     if extremity in PathMap:
         print("Find the Path ! " + str(extremity))
         return PathMap[extremity]

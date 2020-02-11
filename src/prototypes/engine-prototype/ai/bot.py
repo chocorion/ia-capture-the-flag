@@ -45,7 +45,7 @@ class Bot:
 
             self._path = path
             self._path_index = 0
-            
+
         self._dest = (x, y)
 
 
@@ -53,7 +53,7 @@ class Bot:
         return self._dest
 
     def is_position_check(self, position_x, position_y):
-        return distance(self._x, self._y, position_x, position_y) < 5
+        return distance(self._x, self._y, position_x, position_y) < 20
 
     def get_next_dest(self):
         ''' Return the next position of the bot'''

@@ -38,7 +38,7 @@ class Game_view:
         self._display()
 
     def _display(self):
-        self._display_map()
+        #self._display_map() # a desactiver si opti 
         self._display_bots()
         
         self._window.blit(self._surface, (0, 0))

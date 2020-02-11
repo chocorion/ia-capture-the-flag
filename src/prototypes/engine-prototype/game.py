@@ -27,8 +27,8 @@ class Game:
 
         # For latter -> Match class
         # Must give a copy of the map !!!
-        self.register(Basic_AI)
-        self.register(Basic_AI)
+        self.register(Astar_AI)
+        self.register(Astar_AI)
 
 
 
@@ -38,7 +38,7 @@ class Game:
         dt = self._clock.tick(self._fps)
 
         while True:
-            # self._show_fps()
+            self._show_fps()
 
             dt = self._clock.tick(self._fps)
 

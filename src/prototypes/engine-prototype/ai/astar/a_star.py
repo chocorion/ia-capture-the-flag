@@ -38,7 +38,7 @@ def reconstructPath(node, start):
     path.append(node)
     while node != start:
         node = node.parent
-        path.append(node)
+        path.insert(0, node)
     return path
 
 def getPath(current, start, border, closed):

@@ -27,8 +27,8 @@ class Game:
 
         # For latter -> Match class
         # Must give a copy of the map !!!
-        self.register(Astar_AI)
-        self.register(Astar_AI)
+        self.register(Basic_AI)
+        self.register(Basic_AI)
 
 
 

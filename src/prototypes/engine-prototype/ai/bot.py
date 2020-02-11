@@ -13,7 +13,7 @@ class Bot:
 
 
     def set_dest(self, x, y):
-        print("Bot compute A*...")
+        # print("Bot compute A*...")
         self._dest = (x, y)
 
 

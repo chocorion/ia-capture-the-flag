@@ -108,7 +108,7 @@ class Astar_AI(AI):
 
         for bot_index in range(len(self._bots)):
             #Update positions
-            (x, y, angle) = datas[bot_index]
+            (x, y, angle, dest) = datas[bot_index]
             self._bots[bot_index].update(x, y, angle)
 
             # Get old position and destination

@@ -41,12 +41,15 @@ def reconstructPath(node, start):
         path.append(node)
     return path
 
+
+
 def getPath(current, start, border, closed):
     path = Result(
         reconstructPath(current, start)
         , border
         , closed
-    ) 
+    )
+
     PathMap[(start.x, start.y, current.x, current.y)] = path
     return path
 
@@ -56,9 +59,13 @@ def setCurrentNeighbor(neighbor, current, goal):
     neighbor.estimatedCost = totalCost(neighbor, goal)
     return neighbor
 
+def isSolid(neighbor):
+    Solids = ['#', '-']
+    return neighbor.cellContent in Solids
+    
 def visitNeighbor(current, closed, border, goal):
     for neighbor in current.neighbors:
-        if neighbor.cellContent is '#': # Blocked node
+        if isSolid(neighbor): # Blocked node
             closed.append(neighbor)
             continue
         

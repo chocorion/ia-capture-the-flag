@@ -6,6 +6,8 @@ from ai.astar.board import *
 BOARD_HEIGHT = 0
 BOARD_WIDTH = 0
 
+NeighborMap = {}
+
 # Read board config from txt file and returns a list with all nodes
 def read_from_txt(filename):
     global BOARD_HEIGHT     
@@ -38,11 +40,27 @@ def create_neighbors(node, nodeGraph):
     #If you want diagonals put in dirs : [-1,-1], [1,1], [1, -1], [-1,1]]
     dirs = [[1,0], [0,1], [-1, 0], [0,-1]]
             
-    for dir in dirs:
-        for newNode in nodeGraph:
-            if(newNode.x == node.x + dir[0] and newNode.y == node.y + dir[1]):
-                node.addNeighbor(newNode)
-
+    #for dir in dirs:
+    #    n = node.x + dir[0], node.y + dir[1]
+    #    if n in NeighborMap:
+    #        print("Find neighbor")
+    #        print(node.neighbors)
+    #        node.addNeighbor(NeighborMap[n])
+    #    else:
+    #        for newNode in nodeGraph:
+    #            if(newNode.x == node.x + dir[0] and newNode.y == node.y + dir[1]):
+    #                NeighborMap[n] = newNode
+    #                node.addNeighbor(newNode)
+    pos = (node.x, node.y)
+    if pos in NeighborMap:
+        
+        node.neighbors = NeighborMap[pos]
+    else:
+        for dir in dirs:
+            for newNode in nodeGraph:
+                    if(newNode.x == node.x + dir[0] and newNode.y == node.y + dir[1]):
+                        node.addNeighbor(newNode)
+        NeighborMap[pos] = node.neighbors
 
 # Get board color based on content
 def get_color(content):

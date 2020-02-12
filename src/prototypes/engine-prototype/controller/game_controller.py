@@ -20,7 +20,6 @@ class Game_controller:
 
                 if pygame.mouse.get_pressed()[0]:
                     self._model.mark_start_cell(x, y)
-                    self._model.set_ai_destination(x, y)
 
                 elif pygame.mouse.get_pressed()[2]:
                     self._model.mark_end_cell(x, y)

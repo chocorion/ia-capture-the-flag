@@ -133,6 +133,7 @@ class Game_model:
         self._astar_start_cell = (cell_x, cell_y)
         self._map.mark_start_cell(cell_x, cell_y)
         
+        self.set_ai_destination(x, y)
         
         if self._astar_end_cell != None:
             self._map.clear_path()
@@ -151,6 +152,8 @@ class Game_model:
         
         self._astar_end_cell = (cell_x, cell_y)
         self._map.mark_end_cell(cell_x, cell_y)
+
+        self.set_ai_destination(x, y)
 
         if self._astar_start_cell != None:
             self._map.clear_path()

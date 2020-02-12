@@ -14,7 +14,7 @@ class Map:
 
     # Implement this method to get the required data for the constructor
     @staticmethod
-    def loadMapData(file):
+    def loadMapData(source):
         raise NotImplementedError
 
     # Return a map Cell at the coordinates (x,y)

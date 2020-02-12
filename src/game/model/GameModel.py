@@ -8,6 +8,10 @@ class GameModel(Model):
         mapData = RegularMap.loadMapData('./maps/map_00.txt')
         self._map = RegularMap(mapData)
 
+        self._players = list()
+
+        
+
     def tick(self, deltaTime):
         pass
 

@@ -71,6 +71,8 @@ class RegularMap(Map):
                     info = attributes[1].split(',')
 
                     # Create the new flag while converting the block X and Y to real coordinates
-                    data["flags"].append(Flag(info[0], info[1] * Map.BLOCKSIZE, info[2] * Map.BLOCKSIZE))
+                    data["flags"].append(Flag(int(info[0]), int(info[1] * Map.BLOCKSIZE), int(info[2] * Map.BLOCKSIZE)))
+
+                    continue
 
         return data

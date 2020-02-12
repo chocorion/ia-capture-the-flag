@@ -4,12 +4,16 @@ from ui.PygameFactory import PygameFactory
 from model import *
 from service.TimeManager import TimeManager
 from service.Config import Config
+from service.Physics import *
 
 from time import sleep
 
 class Game:
     def __init__(self):
         Config.Initialize()
+
+        Physics.SetInstance(PythonPhysics())
+
         uiFactory = PygameFactory()
 
         self.View       = uiFactory.getView()

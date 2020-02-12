@@ -1,4 +1,4 @@
-class Node:
+class NodeTree:
 
     RUNNING = 0
     SUCCESS = 1
@@ -7,17 +7,22 @@ class Node:
     def __init__(self):
         self._nodes = list()
 
-    def tick(self):
+    def tick(self, dt):
         pass
 
     def append_node(self, node):
         '''
         Append node to the end of the node list.
         '''
+
         self._nodes.append(node)
 
-    def insert_node(self, node, index=1):
+    def insert_node(self, node, index=0):
         '''
-        Insert node in the node list befor index.
+        Insert node in the node list at index.
         '''
+
         self._nodes.insert(index, node)
+
+    def get_nodes(self):
+        return self._nodes

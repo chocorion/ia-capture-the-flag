@@ -1,20 +1,21 @@
-from ai.behavior_tree import Node
+from ai.behavior_tree import *
 
-class Sequence(Node):
+
+class Selector(NodeTree):
     '''
     Success if one node success.
     '''
     def __init__(self):
         super().__init__()
 
-    def tick(self):
-        for node in super()._nodes:
-            status = node.tick()
+    def tick(self, dt):
+        for node in super().get_nodes():
+            status = node.tick(dt)
 
-            if status == Node.RUNNING:
-                return Node.RUNNING
+            if status == NodeTree.RUNNING:
+                return NodeTree.RUNNING
 
-            if status == Node.SUCCESS:
-                return Node.SUCCESS
+            if status == NodeTree.SUCCESS:
+                return NodeTree.SUCCESS
 
-        return Node.FAILURE
+        return NodeTree.FAILURE

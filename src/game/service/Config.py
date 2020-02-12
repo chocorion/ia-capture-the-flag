@@ -7,7 +7,10 @@ class Config:
         DEFAULT = {
             'Display' : { 
                 'Framerate' : 30,
-            }
+            },
+            'Gameplay' : { 
+                'Ruleset' : "Default",
+            },
         }
 
         def __init__(self):
@@ -58,6 +61,10 @@ class Config:
     @staticmethod
     def Framerate():
         return int(Config.config.parser["Display"]["Framerate"])
+
+    @staticmethod
+    def RulesetName():
+        return Config.config.parser["Gameplay"]["Ruleset"]
 
     @staticmethod
     def SetConfigValue(section, attribute, value):

@@ -4,8 +4,7 @@ import sys
 
 from ui.PygameFactory import PygameFactory
 from model import *
-from service.TimeManager import TimeManager
-from service.Config import Config
+from service import *
 from service.Physics import *
 
 from time import sleep
@@ -13,6 +12,7 @@ from time import sleep
 class Game:
     def __init__(self, Player1, Player2):
         Config.Initialize()
+        Ruleset.Initialize()
 
         Physics.SetInstance(PythonPhysics())
 

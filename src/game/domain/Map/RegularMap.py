@@ -15,6 +15,7 @@ class RegularMap(Map):
     @staticmethod
     def loadMapData(filename):
 
+        # To use for the 'mapData' parameter in constructor
         data = {
             "height": None,         # Real height (set by model)
             "width": None,          # Real width (set by model)
@@ -23,6 +24,8 @@ class RegularMap(Map):
             "blocks": None,         # A two dimensionnal array for storing blocks
             "flags": None,          # The flags for each team to obtain
         }
+
+        # The format character for each tile and it's constructor call
         blocks = {
             '#': 'Wall()',
             '-': 'WallTransparent()',
@@ -34,13 +37,17 @@ class RegularMap(Map):
         with open(filename, "r") as file:
             lines = file.readlines()
 
+            mapDefinitionLines = 3 # The amount of lines before the map tiling
+
             data["blockWidth"] = int(lines[0].split(":")[1])
             data["blockHeight"] = int(lines[1].split(":")[1])
 
-            data["height"] = data["blockHeight"] * Map.CELLSIZE
-            data["width"] = data["blockWidth"] * Map.CELLSIZE
+            data["height"] = data["blockHeight"] * Map.BLOCKSIZE
+            data["width"] = data["blockWidth"] * Map.BLOCKSIZE
 
-            mapLines = lines[3:data["blockHeight"]+3] # Lines between 'height:__' and the end of the tiles definition in the file
+            # The file lines that contains the map tiling
+            # Used to fill 'data["blocks"]' according to 'blocks'
+            mapLines = lines[mapDefinitionLines : data["blockHeight"] + mapDefinitionLines]
 
             data["blocks"] = [[None for i in range(data["blockWidth"])] for i in range(data["blockHeight"])]
 
@@ -54,14 +61,16 @@ class RegularMap(Map):
             data["flags"] = list()
 
             # Read the remaining info in the file
-            for line in lines[data["blockHeight"]+2:]:
+            # starts after the map tiling
+            for line in lines[data["blockHeight"] + mapDefinitionLines :]:
                 # Get the attribute and it's value without '\n' (:-1)
                 attributes = line[:-1].split(':')
 
+                # flag: team, blockX, blockY
                 if attributes[0] == "flag":
                     info = attributes[1].split(',')
 
-                    data["flags"].append(Flag(info[0], info[1] * Map.CELLSIZE, info[2] * Map.CELLSIZE))
-
+                    # Create the new flag while converting the block X and Y to real coordinates
+                    data["flags"].append(Flag(info[0], info[1] * Map.BLOCKSIZE, info[2] * Map.BLOCKSIZE))
 
         return data

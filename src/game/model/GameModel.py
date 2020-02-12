@@ -6,7 +6,7 @@ class GameModel(Model):
 
     def __init__(self):
         mapData = RegularMap.loadMapData('./maps/map_00.txt')
-        self.map = RegularMap(mapData)
+        self._map = RegularMap(mapData)
 
     def tick(self, deltaTime):
         pass

@@ -2,7 +2,7 @@
 # The game terrain on which the game takes place
 class Map:
 
-    CELLSIZE = 100
+    BLOCKSIZE = 100
 
     # mapData: The data used to create the map in memory
     def __init__(self, mapData):

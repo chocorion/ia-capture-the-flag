@@ -7,4 +7,4 @@ class PygameView(View):
         pass
 
     def tick(self, deltaTime):
-        print(deltaTime)
+        print("---")

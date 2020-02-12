@@ -3,7 +3,7 @@
 class Map:
 
     def __init__(self):
-        raise NotImplementedError
+        self.blocks = None # 2 dimensional array
 
     # Return a map Cell at the coordinates (x,y)
     # The coordinates range from 0 to the amount of tiles in the specific direction

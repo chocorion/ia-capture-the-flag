@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 from ui.PygameFactory import PygameFactory
+from model import *
 from service.TimeManager import TimeManager
 from service.Config import Config
 
@@ -13,6 +14,7 @@ class Game:
 
         self.View       = uiFactory.getView()
         self.Controller = uiFactory.getController()
+        self.Model      = GameModel()
 
 
     def gameLoop(self):

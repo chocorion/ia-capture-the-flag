@@ -1,4 +1,4 @@
-from ai.behavior_tree import Node
+from ai.behavior_tree import *
 
 class SequenceMemory(Sequence):
     def __init__(self):

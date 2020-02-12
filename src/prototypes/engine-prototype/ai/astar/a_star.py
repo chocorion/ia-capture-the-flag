@@ -1,10 +1,11 @@
 import bisect
 import math
 import collections
-import timeit
+import time
 from ai.astar.node import Node
 from ai.astar.board import *
 
+from queue import PriorityQueue
 # Result from A*, able to return multiple variables
 Result = collections.namedtuple('Result', ['path', 'border', 'closed'])
 
@@ -66,7 +67,8 @@ def isSolid(neighbor):
 def visitNeighbor(current, closed, border, goal):
     for neighbor in current.neighbors:
         if isSolid(neighbor): # Blocked node
-            closed.append(neighbor)
+            #closed.append(neighbor)
+            closed.insert(0,neighbor) #opti
             continue
         
         if neighbor in closed or neighbor in border:
@@ -75,8 +77,10 @@ def visitNeighbor(current, closed, border, goal):
         neighbor = setCurrentNeighbor(neighbor, current, goal)
 
         if neighbor not in border:
-            bisect.insort(border, neighbor) # Adds node in border list (Ascending order)
-
+            border.insert(0,neighbor) #opti
+            #bisect.insort(border, neighbor) # Adds node in border list (Ascending order)
+    border.sort() #opti
+    
 
 # Calculate shortest path form start to goal
 def a_star(start, goal, nodeGraph):
@@ -98,7 +102,8 @@ def a_star(start, goal, nodeGraph):
 
         # Remove current from border and add it to closed list
         del border[0]
-        closed.append(current)
+        #closed.append(current)
+        closed.insert(0,current) #opti
         create_neighbors(current, nodeGraph)
         visitNeighbor(current, closed, border, goal)
-    
+

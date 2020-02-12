@@ -1,5 +1,5 @@
-from ai.behavior_tree import Node
+from ai.behavior_tree import *
 
-class Condition(Node):
+class Condition(NodeTree):
     def __init__(self):
         super().__init__()

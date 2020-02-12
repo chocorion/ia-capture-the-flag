@@ -1,9 +1,9 @@
-from ai.behavior_tree import Node
+from ai.behavior_tree import *
 
-class Leaf(Node):
+class Leaf(NodeTree):
     def __init__(self, fun):
         super().__init__()
         self._fun = fun
 
-    def tick(self):
-        return fun()
+    def tick(self, dt):
+        return self._fun(dt)

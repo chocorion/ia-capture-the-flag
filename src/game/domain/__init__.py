@@ -1,1 +1,1 @@
-from .Player import PLayer
+from .Player import Player

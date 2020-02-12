@@ -3,7 +3,7 @@
 class Model:
 
     # Initialize game data
-    def __init__(self):
+    def __init__(self, Player1, Player2):
         raise NotImplementedError
 
     # Update and handle the game data

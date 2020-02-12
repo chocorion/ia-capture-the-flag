@@ -1,9 +1,9 @@
+from domain.Player import Player
 
-# This class may interact with the game
-class Player:
+class myPlayer(Player):
 
     def __init__(self, map, rules):
-        raise NotImplementedError
+        print("Bonjour! Je suis un joueur :)))")
 
     # Poll the player for its new actions
     #
@@ -25,4 +25,4 @@ class Player:
     #       3 -> Shoot + Drop Flag
     #
     def poll(self, pollingData):
-        raise NotImplementedError
+        return { "bots": { } } # :(((

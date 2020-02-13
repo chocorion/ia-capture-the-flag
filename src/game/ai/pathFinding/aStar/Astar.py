@@ -3,11 +3,17 @@ from ai.pathFinding.base import AbstractNode,Heuristic
 
 class Astar(PathFinder):
     
-    def __init__(self):
+    def __init__(self, graph):
+        super().__init__(self, graph)
         raise NotImplementedError
     
+    # If need an other representation than the generic graph
+    # Else remove this function
+    def build_graph(self):
+        raise NotImplementedError
+
     #Override method
-    def getPath(self, start, goal, nodeGraph):
+    def getPath(self, start, goal):
         raise NotImplementedError
     
     def totalCost(self, node, goal, heuristic):

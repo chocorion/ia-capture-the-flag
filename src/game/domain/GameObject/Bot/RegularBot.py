@@ -9,6 +9,7 @@ class RegularBot(Bot):
         self.y = y
         self.angle = 0
         self.radius = 36 # Default radius of a regular bot
+        self.speed = 0
         self.player = player
 
         self.color = (255, 0, 0, 255) if player == 1 else (0, 0, 255, 255)

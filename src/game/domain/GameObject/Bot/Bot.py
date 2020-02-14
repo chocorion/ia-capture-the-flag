@@ -8,6 +8,7 @@ class Bot(GameObject):
         self.x = None
         self.y = None
         self.angle = None
+        self.speed = None
         self.player = None
 
         self.color = None

@@ -54,8 +54,16 @@ class GameModel(Model):
         # Send polling data to each player and get their response
         for player in self._players:
             team_id = str(team)
+
+            pollingData = { "bots" : {}, "events": {}}
+
+            for bot_id in self._teams[team_id]["bots"].keys():
+                bot = self._teams[team_id]["bots"][bot_id]
+                pollingData["bots"][bot_id] = { "current_position" : (bot.x, bot.y, bot.angle, bot.speed) }
+
             # Async call ?
-            teams_data[team_id] = player.poll({ "bots" : self._teams[team_id]["bots"], "events": {}})
+
+            teams_data[team_id] = player.poll(pollingData)
             team += 1
             
         # if async, wait for both players response
@@ -72,9 +80,9 @@ class GameModel(Model):
                 # bitwise comparison for actions
                 actions = bin(data["bots"][bot_id]["actions"])
 
-                if actions[Player.SHOOT]:
+                if actions[0]: # SHOOT
                     pass
-                if actions[Player.DROP_FLAG]:
+                if actions[1]: # DROP_FLAG
                     pass
 
     # (needed by the View) No point in having it private, should change in the future

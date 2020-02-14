@@ -2,9 +2,9 @@
 # This class may interact with the game
 class Player:
 
-    # Position in bitwise comparison
-    SHOOT = 0
-    DROP_FLAG = 1
+    # Value in bitwise comparison
+    SHOOT = 1
+    DROP_FLAG = 2
 
     def __init__(self, map, rules):
         raise NotImplementedError

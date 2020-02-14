@@ -11,6 +11,7 @@ class Map:
         self._blockWidth = None     # Width in real coordinates
         self._blockHeight = None    # Width in real coordinates
         self._blocks = None         # 2 dimensional array
+        self._bots = None           # the player's bots
 
     # Implement this method to get the required data for the constructor
     @staticmethod

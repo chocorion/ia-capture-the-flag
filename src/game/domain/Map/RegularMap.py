@@ -1,6 +1,7 @@
 from domain.Map import Map
 from domain.GameObject.Block import *
 from domain.GameObject.Flag import Flag
+from random import *
 
 class RegularMap(Map):
 
@@ -11,6 +12,8 @@ class RegularMap(Map):
         self._width = mapData["width"]
         self._blocks = mapData["blocks"]
         self._flags = mapData["flags"]
+        self._spawns = mapData["spawns"]
+        self._bots = list()
 
     @staticmethod
     def loadMapData(filename):
@@ -23,6 +26,7 @@ class RegularMap(Map):
             "blockWidth": None,     # The width of the map in blocks
             "blocks": None,         # A two dimensionnal array for storing blocks
             "flags": None,          # The flags for each team to obtain
+            "spawns": None,          # Remember the spawn locations for each team
         }
 
         # The format character for each tile and it's constructor call
@@ -34,10 +38,12 @@ class RegularMap(Map):
             '2': 'Spawn(2)'
         }
 
+        data["spawns"] = { 1: [], 2: [] } # Spawn blocks for each team
+
         with open(filename, "r") as file:
             lines = file.readlines()
 
-            mapDefinitionLines = 3 # The amount of lines before the map tiling
+            mapDefinitionLines = 2 # The amount of lines before the map tiling
 
             data["blockWidth"] = int(lines[0].split(":")[1])
             data["blockHeight"] = int(lines[1].split(":")[1])
@@ -58,6 +64,14 @@ class RegularMap(Map):
 
                     data["blocks"][y][x] = eval(blocks[mapLines[y][x]])
 
+                    # Game Objects know their location
+                    data["blocks"][y][x].x = x * Map.BLOCKSIZE # Position is top-left
+                    data["blocks"][y][x].y = y * Map.BLOCKSIZE
+
+                    if(type(data["blocks"][y][x]).__name__ == "Spawn"):
+                        # If this is a spawn block, add it to it's team's spawn blocks
+                        data["spawns"][data["blocks"][y][x].team].append(data["blocks"][y][x]) 
+
             data["flags"] = list()
 
             # Read the remaining info in the file
@@ -76,3 +90,7 @@ class RegularMap(Map):
                     continue
 
         return data
+
+    def GetRandomPositionInSpawn(self, team):
+        block = choice(self._spawns[team])
+        return (block.x + randint(0,Map.BLOCKSIZE), block.y + randint(0,Map.BLOCKSIZE))

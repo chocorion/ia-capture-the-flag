@@ -37,6 +37,7 @@ class Game:
                 
             runningStopwatch.Mark()
 
+            self.Model.tick(deltaTime)
             self.Controller.tick(deltaTime)
             self.View.tick(deltaTime)
 
@@ -51,6 +52,7 @@ class Game:
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("usage : ./Game.py <PlayerFile1> <PlayerFile2>")
+        exit()
 
     exec("import {} as PlayerPackage1".format(sys.argv[1]))
     exec("import {} as PlayerPackage2".format(sys.argv[2]))

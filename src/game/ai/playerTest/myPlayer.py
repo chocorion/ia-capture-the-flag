@@ -3,6 +3,7 @@ from domain.Player import Player
 class myPlayer(Player):
 
     def __init__(self, map, rules):
+        # map and rules are python objects, need to make them JSON
         print("Bonjour! Je suis un joueur :))) avec {} bots".format(rules["BotsCount"]))
 
     # Poll the player for its new actions

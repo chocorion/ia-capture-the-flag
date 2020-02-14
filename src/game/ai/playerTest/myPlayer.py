@@ -26,4 +26,12 @@ class myPlayer(Player):
     #       3 -> Shoot + Drop Flag
     #
     def poll(self, pollingData):
-        return { "bots": { } } # :(((
+
+        returnData = { "bots": { } }
+
+        for bot_id in pollingData["bots"].keys():
+            bot = pollingData["bots"][bot_id]
+            
+            returnData["bots"][bot_id] = { "target_position" : (bot.x + 10, bot.y + 10, 0), "actions" : 0 }
+
+        return returnData

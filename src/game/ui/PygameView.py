@@ -11,15 +11,15 @@ from math import (ceil, floor, radians, cos, sin)
 class PygameView(View):
 
     def __init__(self, model):
-
-        pygame.init()
-        self._window = pygame.display.set_mode((Config.ResolutionWidth(), Config.ResolutionHeight()))
-        self._surface = pygame.Surface((Config.ResolutionWidth(), Config.ResolutionHeight()), pygame.SRCALPHA)
         
         self._model = model
         self._map = self._model.getMap()
 
-        self._cell_size = min(Config.ResolutionWidth()//self._map.blockWidth, Config.ResolutionHeight()//self._map.blockHeight)
+        self._cell_size = min(Config.ResolutionWidth()//self._map.blockWidth, Config.ResolutionHeight()//self._map.blockHeight + 1)
+
+        pygame.init()
+        self._window = pygame.display.set_mode((self._map.blockWidth * self._cell_size, self._map.blockHeight * self._cell_size))
+        self._surface = pygame.Surface((self._map.blockWidth * self._cell_size, self._map.blockHeight * self._cell_size), pygame.SRCALPHA)
 
         self._mult_factor = self._cell_size/self._map.BLOCKSIZE
 
@@ -31,7 +31,6 @@ class PygameView(View):
 
     def tick(self, deltaTime):
         self._display()
-        pass
 
     def _display(self):
         self._surface.fill((0, 0, 0, 0))

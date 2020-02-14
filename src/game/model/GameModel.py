@@ -72,9 +72,9 @@ class GameModel(Model):
                 # bitwise comparison for actions
                 actions = bin(data["bots"][bot_id]["actions"])
 
-                if actions[Player.SHOOT]:
+                if actions[0]: # SHOOT
                     pass
-                if actions[Player.DROP_FLAG]:
+                if actions[1]: # DROP_FLAG
                     pass
 
     # (needed by the View) No point in having it private, should change in the future

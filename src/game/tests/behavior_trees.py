@@ -22,7 +22,7 @@ def test_fun_success(dt):
     return NodeTree.SUCCESS
 
 class TestBehaviorTree(unittest.TestCase):
-    def test_selector(self):
+    def test_selector_success(self):
         global TEST_FLAG
         TEST_FLAG = False
 
@@ -32,6 +32,23 @@ class TestBehaviorTree(unittest.TestCase):
 
         selector.append_node(Leaf(test_fun_success))
         selector.append_node(Leaf(test_fun_failure))
+
+        root_node.append_node(selector)
+
+        root_node.tick(42)
+
+        self.assertTrue(TEST_FLAG)
+
+    def test_selector_failure(self):
+        global TEST_FLAG
+        TEST_FLAG = False
+
+        root_node = Sequence()
+
+        selector = Selector()
+
+        selector.append_node(Leaf(test_fun_failure))
+        selector.append_node(Leaf(test_fun_success))
 
         root_node.append_node(selector)
 

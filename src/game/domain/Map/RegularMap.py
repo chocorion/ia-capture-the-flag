@@ -26,7 +26,7 @@ class RegularMap(Map):
             "blockWidth": None,     # The width of the map in blocks
             "blocks": None,         # A two dimensionnal array for storing blocks
             "flags": None,          # The flags for each team to obtain
-            "spawns": None,          # Remember the spawn locations for each team
+            "spawns": None,         # Remember the spawn locations for each team
         }
 
         # The format character for each tile and it's constructor call
@@ -62,6 +62,7 @@ class RegularMap(Map):
                     if mapLines[y][x] not in blocks.keys():
                         continue
 
+                    # See definition of 'blocks' for explanation
                     data["blocks"][x][y] = eval(blocks[mapLines[y][x]])
 
                     # Game Objects know their location
@@ -92,5 +93,4 @@ class RegularMap(Map):
         return data
 
     def GetRandomPositionInSpawn(self, team):
-        block = choice(self._spawns[team])
-        return (block.x + randint(0,Map.BLOCKSIZE), block.y + randint(0,Map.BLOCKSIZE))
+        return Map.GetRandomPositionInBlock(choice(self._spawns[team]))

@@ -1,3 +1,4 @@
+from random import *
 
 # The game terrain on which the game takes place
 class Map:
@@ -22,3 +23,8 @@ class Map:
     # The coordinates range from 0 to the amount of tiles in the specific direction
     def getCell(self, x, y):
         raise NotImplementedError
+
+    # Obtain a random coordinate inside a block
+    @staticmethod
+    def GetRandomPositionInBlock(block):
+        return (block.x + randint(0,Map.BLOCKSIZE), block.y + randint(0,Map.BLOCKSIZE))

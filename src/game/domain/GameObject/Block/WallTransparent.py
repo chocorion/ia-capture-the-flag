@@ -6,3 +6,5 @@ class WallTransparent(Block):
         def __init__(self):
             self.solid = True
             self.transparent = True
+
+            self.color = (153,153,153,255)

@@ -5,10 +5,10 @@ from ui.PygameView import PygameView
 
 class PygameFactory(UiFactory):
     class __PygameFactory(UiFactory):
-        def __init__(self):
+        def __init__(self, model):
             super().__init__()
             self.controller = PygameController()
-            self.view = PygameView()
+            self.view = PygameView(model)
 
         def getController(self):
             return self.controller
@@ -18,9 +18,9 @@ class PygameFactory(UiFactory):
 
     Instance = None
 
-    def __new__(self):
+    def __new__(self, model):
         if not PygameFactory.Instance:
-            PygameFactory.Instance = PygameFactory.__PygameFactory()
+            PygameFactory.Instance = PygameFactory.__PygameFactory(model)
 
         return PygameFactory.Instance
 

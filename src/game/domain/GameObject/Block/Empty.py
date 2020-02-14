@@ -6,3 +6,5 @@ class Empty(Block):
         def __init__(self):
             self.solid = False
             self.transparent = True
+
+            self.color = (240,240,240,255)

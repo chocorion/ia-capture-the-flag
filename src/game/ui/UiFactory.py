@@ -2,5 +2,5 @@ class UiFactory():
     def getController(self):
         pass
 
-    def getView(self):
+    def getView(self, model):
         pass

@@ -1,13 +1,10 @@
+from domain.Player import Player
 
-# This class may interact with the game
-class Player:
-
-    # Position in bitwise comparison
-    SHOOT = 0
-    DROP_FLAG = 1
+class myPlayer(Player):
 
     def __init__(self, map, rules):
-        raise NotImplementedError
+        # map and rules are python objects, need to make them JSON
+        print("Bonjour! Je suis un joueur :))) avec {} bots".format(rules["BotsCount"]))
 
     # Poll the player for its new actions
     #
@@ -29,4 +26,4 @@ class Player:
     #       3 -> Shoot + Drop Flag
     #
     def poll(self, pollingData):
-        raise NotImplementedError
+        return { "bots": { } } # :(((

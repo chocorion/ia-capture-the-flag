@@ -6,11 +6,12 @@ class Map:
 
     # mapData: The data used to create the map in memory
     def __init__(self, mapData):
-        self._width = None          # Width in real coordinates
-        self._height = None         # Height in real coordinates
-        self._blockWidth = None     # Width in real coordinates
-        self._blockHeight = None    # Width in real coordinates
-        self._blocks = None         # 2 dimensional array
+        self.width = None          # Width in real coordinates
+        self.height = None         # Height in real coordinates
+        self.blockWidth = None     # Width in real coordinates
+        self.blockHeight = None    # Width in real coordinates
+        self.blocks = None         # 2 dimensional array
+        self._bots = None           # the player's bots
 
     # Implement this method to get the required data for the constructor
     @staticmethod

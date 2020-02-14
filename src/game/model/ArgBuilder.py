@@ -12,3 +12,6 @@ class ArgBuilder(ABCMeta):
     @abstractmethod
     def end_argument(self):
         ...
+
+    @abstractmethod
+    def 

@@ -8,4 +8,6 @@ class Block(GameObject):
         self.solid = None           # Wether another entity must collide with this
         self.transparent = None     # Wether light can travel through this
 
+        self.color = None
+
         raise NotImplementedError

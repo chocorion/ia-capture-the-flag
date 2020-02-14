@@ -9,6 +9,8 @@ class Bot(GameObject):
         self.y = None
         self.angle = None
         self.player = None
+
+        self.color = None
         raise NotImplementedError
 
     def move(self, x, y):

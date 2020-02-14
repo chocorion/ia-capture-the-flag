@@ -7,6 +7,8 @@ class Config:
         DEFAULT = {
             'Display' : { 
                 'Framerate' : 30,
+                'ResolutionWidth' : 1280,
+                'ResolutionHeight' : 720,
             },
             'Gameplay' : { 
                 'Ruleset' : "Default",
@@ -61,6 +63,14 @@ class Config:
     @staticmethod
     def Framerate():
         return int(Config.config.parser["Display"]["Framerate"])
+
+    @staticmethod
+    def ResolutionWidth():
+        return int(Config.config.parser["Display"]["ResolutionWidth"])
+
+    @staticmethod
+    def ResolutionHeight():
+        return int(Config.config.parser["Display"]["ResolutionHeight"])
 
     @staticmethod
     def RulesetName():

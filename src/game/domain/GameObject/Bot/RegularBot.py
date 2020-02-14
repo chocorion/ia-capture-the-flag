@@ -8,8 +8,10 @@ class RegularBot(Bot):
         self.x = x
         self.y = y
         self.angle = 0
-        self.radius = 10 # Default radius of a regular bot
+        self.radius = 36 # Default radius of a regular bot
         self.player = player
+
+        self.color = (255, 0, 0, 255) if player == 1 else (0, 0, 255, 255)
 
         print("New bot in team {} | x: {}, y: {}".format(player,x,y))
 

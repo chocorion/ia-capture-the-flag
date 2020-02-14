@@ -42,7 +42,7 @@ class GameModel(Model):
                 bot_id = team_id + "_" + str(i) # Bot identifier is <team>_<number>
 
                 (x, y) = self._map.GetRandomPositionInSpawn(team)
-                self._teams[team_id]["bots"][bot_id] = RegularBot(team_id, x, y)
+                self._teams[team_id]["bots"][bot_id] = RegularBot(team, x, y)
 
 
         
@@ -77,8 +77,14 @@ class GameModel(Model):
                 if actions[Player.DROP_FLAG]:
                     pass
 
+    # (needed by the View) No point in having it private, should change in the future
+    def getMap(self):
+        return self._map
 
-
+    def getBots(self):
+        bots = self._teams["1"]["bots"].copy()
+        bots.update(self._teams["2"]["bots"])
+        return bots
 
     # Only used if we make it a server
     def register(self, player):

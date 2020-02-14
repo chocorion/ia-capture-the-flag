@@ -7,3 +7,5 @@ class Spawn(Block):
             self.solid = False
             self.transparent = True
             self.team = team
+
+            self.color = (255, 0, 0, 30) if team == 1 else (0, 0, 255, 30)

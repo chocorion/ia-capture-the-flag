@@ -16,11 +16,12 @@ class Game:
 
         Physics.SetInstance(PythonPhysics())
 
-        uiFactory = PygameFactory()
+        self.Model      = GameModel(Player1, Player2)
+
+        uiFactory = PygameFactory(self.Model)
 
         self.View       = uiFactory.getView()
         self.Controller = uiFactory.getController()
-        self.Model      = GameModel(Player1, Player2)
 
 
     def gameLoop(self):
@@ -42,6 +43,8 @@ class Game:
             self.View.tick(deltaTime)
 
             # running = False # Game over
+
+            print("Tickrate: {} tick/s".format(round(1000/deltaTime,2)))
 
         runningStopwatch.StopTimer()
 

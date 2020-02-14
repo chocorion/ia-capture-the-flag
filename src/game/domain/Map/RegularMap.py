@@ -6,11 +6,11 @@ from random import *
 class RegularMap(Map):
 
     def __init__(self, mapData):
-        self._blockHeight = mapData["blockHeight"]
-        self._blockWidth = mapData["blockWidth"]
-        self._height = mapData["height"]
-        self._width = mapData["width"]
-        self._blocks = mapData["blocks"]
+        self.blockHeight = mapData["blockHeight"]
+        self.blockWidth = mapData["blockWidth"]
+        self.height = mapData["height"]
+        self.width = mapData["width"]
+        self.blocks = mapData["blocks"]
         self._flags = mapData["flags"]
         self._spawns = mapData["spawns"]
         self._bots = list()
@@ -55,22 +55,22 @@ class RegularMap(Map):
             # Used to fill 'data["blocks"]' according to 'blocks'
             mapLines = lines[mapDefinitionLines : data["blockHeight"] + mapDefinitionLines]
 
-            data["blocks"] = [[None for i in range(data["blockWidth"])] for i in range(data["blockHeight"])]
+            data["blocks"] = [[None for i in range(data["blockHeight"])] for i in range(data["blockWidth"])]
 
             for y in range(data["blockHeight"]):
                 for x in range(data["blockWidth"]):
                     if mapLines[y][x] not in blocks.keys():
                         continue
 
-                    data["blocks"][y][x] = eval(blocks[mapLines[y][x]])
+                    data["blocks"][x][y] = eval(blocks[mapLines[y][x]])
 
                     # Game Objects know their location
-                    data["blocks"][y][x].x = x * Map.BLOCKSIZE # Position is top-left
-                    data["blocks"][y][x].y = y * Map.BLOCKSIZE
+                    data["blocks"][x][y].x = x * Map.BLOCKSIZE # Position is top-left
+                    data["blocks"][x][y].y = y * Map.BLOCKSIZE
 
-                    if(type(data["blocks"][y][x]).__name__ == "Spawn"):
+                    if(type(data["blocks"][x][y]).__name__ == "Spawn"):
                         # If this is a spawn block, add it to it's team's spawn blocks
-                        data["spawns"][data["blocks"][y][x].team].append(data["blocks"][y][x]) 
+                        data["spawns"][data["blocks"][x][y].team].append(data["blocks"][x][y]) 
 
             data["flags"] = list()
 

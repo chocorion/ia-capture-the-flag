@@ -6,7 +6,7 @@ class NodeTreeSingleChild(NodeTree):
     """
 
     def _check_if_no_child(self):
-        if len(super().get_nodes() != 0):
+        if len(super().get_nodes()) != 0:
             raise Exception("Error, this node can't have more than one child.")
 
     def append_node(self, node):
@@ -17,8 +17,8 @@ class NodeTreeSingleChild(NodeTree):
             node (Node) : The node to append.
         """
         self._check_if_no_child()
-        
-        super().append(node)
+
+        super().append_node(node)
 
 
     def insert_node(self, node, index=0):
@@ -30,5 +30,5 @@ class NodeTreeSingleChild(NodeTree):
             index (int) : Index to insert node at.
         """
         self._check_if_no_child()
-        
-        super().insert(index, node)
+
+        super().insert_node(index, node)

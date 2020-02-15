@@ -9,9 +9,8 @@ class Inverter(NodeTreeSingleChild):
     """
 
     
-    def __init__(self, fun):
+    def __init__(self):
         super().__init__()
-        self._fun = fun
 
 
     def tick(self, dt):

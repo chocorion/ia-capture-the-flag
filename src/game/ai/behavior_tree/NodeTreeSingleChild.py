@@ -32,3 +32,10 @@ class NodeTreeSingleChild(NodeTree):
         self._check_if_no_child()
 
         super().insert_node(index, node)
+
+    
+    def get_child(self):
+        """
+        Return the only child node.
+        """
+        return super().get_nodes()[0]

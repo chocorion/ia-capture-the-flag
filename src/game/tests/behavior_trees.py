@@ -15,6 +15,7 @@ DEFAULT_TICK = 100
 # Warning -> tests can't currently be launched in parallel
 TEST_FLAG  = False
 TEST_COUNT = 0
+TEST_VALUE = 0
 
 
 # Test function to put in leaf
@@ -38,6 +39,11 @@ def increment_count_success(dt):
     TEST_COUNT += 1
 
     return NodeTree.SUCCESS
+
+def set_value_to_one(dt):
+    global TEST_VALUE
+
+    TEST_VALUE = 1
 
 class TestBehaviorTree(unittest.TestCase):
     def test_selector_success(self):
@@ -148,3 +154,32 @@ class TestBehaviorTree(unittest.TestCase):
 
         self.assertTrue(status == NodeTree.SUCCESS)
 
+
+    def test_condition_on_true(self):
+        global TEST_VALUE
+        TEST_VALUE = 0
+
+        def fun():
+            return True
+
+        root_node = Condition(fun)
+        root_node.append_node(Leaf(set_value_to_one))
+
+        root_node.tick(DEFAULT_TICK)
+
+        self.assertTrue(TEST_VALUE == 1)
+
+
+    def test_condition_on_false(self):
+        global TEST_VALUE
+        TEST_VALUE = 0
+
+        def fun():
+            return False
+
+        root_node = Condition(fun)
+        root_node.append_node(Leaf(set_value_to_one))
+
+        root_node.tick(DEFAULT_TICK)
+
+        self.assertTrue(TEST_VALUE != 1)

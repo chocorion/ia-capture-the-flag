@@ -25,7 +25,7 @@ class Succeeder(NodeTreeSingleChild):
             State (int) : Must be NodeTree.RUNNING or NodeTree.SUCCESS.
         """
 
-        status = super().get_nodes()[0].tick(dt)
+        status = super().get_child().tick(dt)
 
         if status == NodeTree.RUNNING:
             return status

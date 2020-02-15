@@ -29,7 +29,7 @@ class Inverter(NodeTreeSingleChild):
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
 
-        status = super().get_nodes()[0].tick(dt)
+        status = super().get_child().tick(dt)
 
         if status == NodeTree.RUNNING:
             return status

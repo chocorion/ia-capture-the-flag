@@ -31,7 +31,7 @@ class Repeater(NodeTreeSingleChild):
         """
 
         for i in range(self._iteration):
-            status = super().get_nodes()[0].tick(dt)
+            status = super().get_child().tick(dt)
 
             if status == NodeTree.RUNNING:
                 return status

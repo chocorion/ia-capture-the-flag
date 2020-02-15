@@ -28,7 +28,7 @@ class RepeaterUntilFail(NodeTreeSingleChild):
         """
 
         while True:
-            status = super().get_nodes()[0].tick(dt)
+            status = super().get_child().tick(dt)
 
             if status == NodeTree.RUNNING:
                 return status

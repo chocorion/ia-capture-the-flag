@@ -53,12 +53,15 @@ class Game:
 
 # Make this an executable file
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("usage : ./Game.py <PlayerFile1> <PlayerFile2>")
-        exit()
-
-    exec("import {} as PlayerPackage1".format(sys.argv[1]))
-    exec("import {} as PlayerPackage2".format(sys.argv[2]))
+    if len(sys.argv) == 1:
+        import ai.playerTest.myPlayer as PlayerPackage1
+        import ai.playerTest.myPlayer as PlayerPackage2
+    elif len(sys.argv) == 2:
+        exec("import {} as PlayerPackage1".format(sys.argv[1]))
+        import ai.playerTest.myPlayer as PlayerPackage2
+    else:
+        exec("import {} as PlayerPackage1".format(sys.argv[1]))
+        exec("import {} as PlayerPackage2".format(sys.argv[2]))
 
     game = Game(PlayerPackage1.myPlayer,PlayerPackage2.myPlayer)
     game.gameLoop() 

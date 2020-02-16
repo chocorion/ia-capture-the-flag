@@ -96,42 +96,18 @@ class GameModel(Model):
             for bot_id in data["bots"].keys():
                 bot = self._teams[team_id]["bots"][bot_id]
 
-                # WARNING: Need to verify that the movement is correct
                 target_x = data["bots"][bot_id]["target_position"][0]
                 target_y = data["bots"][bot_id]["target_position"][1]
                 target_speed = data["bots"][bot_id]["target_position"][2]
 
-                # Check angle
-                new_angle = Physics.getAngle( bot.x, bot.y, target_x, target_y)
-
-                delta_angle = new_angle - bot.angle
-
-                if delta_angle > 180:
-                    delta_angle = delta_angle - 360
-
-                elif delta_angle < -180:
-                    delta_angle = 360 + delta_angle
-                
-                max_angle = float(self._ruleset["RotationMultiplier"]) * bot.max_rotate
-
-                if abs(delta_angle) > max_angle :
-                    delta_angle = max_angle if delta_angle > 0 else -max_angle
-                    
-                bot.angle = bot.angle + delta_angle
-
-                # Check speed
-                max_speed = float(self._ruleset["SpeedMultiplier"]) * bot.max_speed
-
-                if target_speed > max_speed:
-                    target_speed = max_speed
-
-                bot.speed = target_speed
+                # Perform checks                    
+                bot.angle = self.checkAngle(bot, target_x, target_y)
+                bot.speed = self.checkSpeed(bot, target_speed)
 
                 # Apply movement
                 (x,y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
                 bot.x = x
                 bot.y = y
-
 
                 # bitwise comparison for actions
                 actions = bin(data["bots"][bot_id]["actions"])
@@ -140,6 +116,44 @@ class GameModel(Model):
                     pass
                 if actions[1]: # DROP_FLAG
                     pass
+
+    def checkSpeed(self, bot, target_speed):
+        """
+        Checks whether a target speed is correct for a bot.
+
+        Returns:
+            target_speed (int) : A correct target speed for this bot.
+        """
+        max_speed = float(self._ruleset["SpeedMultiplier"]) * bot.max_speed
+
+        if target_speed > max_speed:
+            target_speed = max_speed
+
+        return target_speed
+
+    def checkAngle(self, bot, target_x, target_y):
+        """
+        Checks whether a target point is correct for a bot.
+
+        Returns:
+            target_angle (int) : A correct target angle for this bot.
+        """
+        new_angle = Physics.getAngle( bot.x, bot.y, target_x, target_y)
+
+        delta_angle = new_angle - bot.angle
+
+        if delta_angle > 180:
+            delta_angle = delta_angle - 360
+
+        elif delta_angle < -180:
+            delta_angle = 360 + delta_angle
+        
+        max_angle = float(self._ruleset["RotationMultiplier"]) * bot.max_rotate
+
+        if abs(delta_angle) > max_angle :
+            delta_angle = max_angle if delta_angle > 0 else -max_angle
+            
+        return bot.angle + delta_angle
 
     # (needed by the View) No point in having it private, should change in the future
     def getMap(self):

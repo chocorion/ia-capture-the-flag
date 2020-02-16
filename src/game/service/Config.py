@@ -24,6 +24,7 @@ class Config:
                 'ResolutionHeight' : 720,
             },
             'Gameplay' : { 
+                'TimeRate' : 1,
                 'Ruleset' : "Default",
             },
         }
@@ -96,6 +97,13 @@ class Config:
         Target window Height value in pixels.
         """
         return int(Config.config.parser["Display"]["ResolutionHeight"])
+
+    @staticmethod
+    def TimeRate():
+        """
+        The time multiplier at which the game occurs.
+        """
+        return float(Config.config.parser["Gameplay"]["TimeRate"])
 
     @staticmethod
     def RulesetName():

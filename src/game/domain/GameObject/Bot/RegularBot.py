@@ -18,7 +18,7 @@ class RegularBot(Bot):
         self.max_rotate = 10 # Default max rotation in degrees
         
         self.fov = 50 # Default FOV
-        self.view_distance = 70 # Default view distance
+        self.view_distance = 35 # Default view distance
 
         self.color = (255, 0, 0, 255) if player == 1 else (0, 0, 255, 255)
 

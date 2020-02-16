@@ -127,10 +127,10 @@ class PygameView(View):
         for x_tile in tiles_to_refresh.keys():
             for y_tile in tiles_to_refresh[x_tile].keys():
 
-                start_x = x_tile - 4
-                start_y = y_tile - 4
-                end_x = x_tile + 4
-                end_y = y_tile + 4
+                start_x = x_tile - 5
+                start_y = y_tile - 5
+                end_x = x_tile + 5
+                end_y = y_tile + 5
 
                 if(start_x < 0):
                     start_x = 0
@@ -157,7 +157,7 @@ class PygameView(View):
                 x,
                 y, 
                 pygame.Color(r, g, b, 70),
-                bot.view_distance,
+                bot.view_distance * 2,
                 int(bot.angle - bot.fov),
                 int(bot.angle + bot.fov),
                 10
@@ -189,7 +189,7 @@ class PygameView(View):
            x (int): The screen x coordinate.
            y (int): The screen y coordinate.
            color (r,g,b,a): RGBA tuple.
-           length (int): The radius of the circle containing the cone.
+           length (int): The diameter of the circle containing the cone.
            angle_start (int): The angle at which the cone starts within the circle.
            angle_end (int): The angle at which the cone ends within the circle.
            step (int): The done is made of triangles, a lower step makes a more precise curve.

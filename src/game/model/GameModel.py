@@ -1,6 +1,7 @@
 from model.Model import Model
 from service.Ruleset import Ruleset
 from service.Physics import Physics
+from service.Config import Config
 from domain.Map import *
 from domain.GameObject.Bot import *
 from domain.Player import Player
@@ -72,6 +73,8 @@ class GameModel(Model):
            deltaTime (int): The time in milliseconds since the last call to this function.
         """
 
+        self.deltaTime = deltaTime
+
         teams_data = dict()
         team = 1
         # Send polling data to each player and get their response
@@ -96,6 +99,7 @@ class GameModel(Model):
             for bot_id in data["bots"].keys():
                 bot = self._teams[team_id]["bots"][bot_id]
 
+                # Unpack target
                 target_x = data["bots"][bot_id]["target_position"][0]
                 target_y = data["bots"][bot_id]["target_position"][1]
                 target_speed = data["bots"][bot_id]["target_position"][2]
@@ -104,10 +108,11 @@ class GameModel(Model):
                 bot.angle = self.checkAngle(bot, target_x, target_y)
                 bot.speed = self.checkSpeed(bot, target_speed)
 
+                bot.speed = bot.speed * self.getDeltaTimeModifier()
+
                 # Apply movement
-                (x,y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                bot.x = x
-                bot.y = y
+                (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
+                (bot.x,bot.y) = self.checkCollision(bot.x,bot.y,real_x,real_y)
 
                 # bitwise comparison for actions
                 actions = bin(data["bots"][bot_id]["actions"])
@@ -149,11 +154,65 @@ class GameModel(Model):
             delta_angle = 360 + delta_angle
         
         max_angle = float(self._ruleset["RotationMultiplier"]) * bot.max_rotate
+        max_angle = max_angle * self.getDeltaTimeModifier()
 
         if abs(delta_angle) > max_angle :
             delta_angle = max_angle if delta_angle > 0 else -max_angle
             
         return bot.angle + delta_angle
+
+    def getDeltaTimeModifier(self):
+        return (self.deltaTime / (1000 / (30 * Config.TimeRate())))
+
+    def checkCollision(self, x, y, target_x, target_y):
+        """
+        Checks whether a target's path collides with the map.
+
+        Returns:
+            position (int,int) : The first valid position.
+        """
+        
+        dx = abs(target_x - x)
+        dy = abs(target_y - y)
+
+        current_x = x
+        current_y = y
+
+        last_x = x
+        last_y = y
+
+        n = int(1 + dx + dy)
+
+        x_inc = 1 if (target_x > x) else -1
+        y_inc = 1 if (target_y > y) else -1
+
+        error = dx - dy
+
+        dx *= 2
+        dy *= 2
+        
+        for i in range(n,0,-1):
+            
+            if self._map.blocks[int(current_x // self._map.BLOCKSIZE)][int(current_y // self._map.BLOCKSIZE)].solid:
+                return (last_x, last_y)
+
+            last_x = current_x
+            last_y = current_y
+
+            if error > 0:
+                current_x += x_inc
+                error -= dy
+            elif error < 0:
+                current_y += y_inc
+                error += dx
+            elif error == 0:
+                current_x += x_inc
+                current_y += y_inc
+                error -= dy
+                error += dx
+                n -= 1
+                
+        return (target_x,target_y)
 
     # (needed by the View) No point in having it private, should change in the future
     def getMap(self):

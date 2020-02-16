@@ -1,14 +1,23 @@
 from domain.GameObject import GameObject
 from math import sqrt
 
-# An entity controlled by a Player
 class Bot(GameObject):
+    """
+    An entity controlled by a Player
+
+    Attributes:
+        x (int) : Real x coordinate
+        y (int) : Real y coordinate
+        player (int) : Player/Team number
+        angle (int) : Angle the bot is facing in degrees.
+        color (rgba) : Color of the bot (Needs to be moved in View somehow)
+
+    """
 
     def __init__(self, player, x, y):
         self.x = None
         self.y = None
         self.angle = None
-        self.speed = None
         self.player = None
 
         self.color = None

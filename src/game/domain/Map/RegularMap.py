@@ -4,8 +4,24 @@ from domain.GameObject.Flag import Flag
 from random import *
 
 class RegularMap(Map):
+    """
+    Implements Map.
+    """
 
     def __init__(self, mapData):
+        """
+        Initialize the Map according to mapData.
+
+        Parameters:
+            inside mapData :
+            width (int):        Width in real coordinates
+            height (int):       Height in real coordinates
+            blockWidth (int):   Width in amount of blocks
+            blockHeight (int):  Height in amount of blocks
+            blocks (list):      2 dimensional array containing the map blocks
+            flags (list):       List of Flag objects
+            spawns (list):      List of Spawn objects
+        """
         self.blockHeight = mapData["blockHeight"]
         self.blockWidth = mapData["blockWidth"]
         self.height = mapData["height"]
@@ -17,6 +33,9 @@ class RegularMap(Map):
 
     @staticmethod
     def loadMapData(filename):
+        """
+        Constructs the map data for Init. See its description above.
+        """
 
         # To use for the 'mapData' parameter in constructor
         data = {
@@ -93,4 +112,11 @@ class RegularMap(Map):
         return data
 
     def GetRandomPositionInSpawn(self, team):
+        """
+        Parameters:
+            team (int): The team number.
+
+        Returns:
+            point (x,y): A point located in the spawn of a said team.
+        """
         return Map.GetRandomPositionInBlock(choice(self._spawns[team]))

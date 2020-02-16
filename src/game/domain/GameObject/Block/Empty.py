@@ -1,10 +1,12 @@
 from domain.GameObject.Block import Block
 
-# Floor you can walk on and see through
 class Empty(Block):
+    """
+    Just an empty block. Used as a regular floor.
+    """
 
-        def __init__(self):
-            self.solid = False
-            self.transparent = True
+    def __init__(self):
+        self.solid = False
+        self.transparent = True
 
-            self.color = (240,240,240,255)
+        self.color = (240,240,240,255)

@@ -7,8 +7,24 @@ from copy import deepcopy
 
 # Implements Model to be used by the Game Engine
 class GameModel(Model):
+    """
+    Implements the Game Model.
+
+    Attributes:
+        map (Map) : The game map.
+        ruleset (Ruleset) : The set of rules for this game.
+        players (list(Player)) : The players that will be polled each tick.
+        teams (dict) : Contains player informations to be sent to them.
+    """
 
     def __init__(self, Player1, Player2):
+        """
+        Initialize game data.
+  
+        Parameters: 
+           Player1 (Player): The player in control of the Red team.
+           Player2 (Player): The player in control of the Blue team.
+        """
         mapData = RegularMap.loadMapData('./maps/map_00.txt')
 
         # Generate an empty map and send it to the players
@@ -31,7 +47,7 @@ class GameModel(Model):
             print("Player 2 can't be evaluated because it failed to initialize")
         ####
 
-        self._teams = dict() # This will contain informations about players, structured so that we can send those easily to them
+        self._teams = dict() # This will 
 
         for team in range(1,3): # 2 Players
             team_id = str(team)
@@ -48,6 +64,12 @@ class GameModel(Model):
         
 
     def tick(self, deltaTime):
+        """ 
+        Update and handle the game data. Poll each player and process their actions.
+  
+        Parameters: 
+           deltaTime (int): The time in milliseconds since the last call to this function.
+        """
 
         teams_data = dict()
         team = 1
@@ -90,11 +112,23 @@ class GameModel(Model):
         return self._map
 
     def getBots(self):
+        """ 
+        Update and handle the game data. Poll each player and process their actions.
+  
+        Returns:
+            bots (list) : The list of all Bots in the game.
+        """
         bots = self._teams["1"]["bots"].copy()
         bots.update(self._teams["2"]["bots"])
         return bots
 
-    # Only used if we make it a server
     def register(self, player):
+        """
+        Only used if we make it a server
+
+        Add a new player to the game and provide it with necessary data.
+
+        Returns:
+            data : Contains all the data a player can have at it's init.
+        """
         self._players.append(player)
-        # return formatted map and ruleset

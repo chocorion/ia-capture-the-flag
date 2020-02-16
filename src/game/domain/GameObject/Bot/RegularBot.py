@@ -1,8 +1,10 @@
 from domain.GameObject.Bot import Bot
 from service.Physics import Physics
 
-# An entity controlled by a Player
 class RegularBot(Bot):
+    """
+    Just a regular Bot.
+    """
 
     def __init__(self, player, x, y):
         self.x = x

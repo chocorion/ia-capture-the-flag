@@ -1,6 +1,16 @@
 from domain.GameObject import GameObject
 
 class Flag(GameObject):
+    """
+    A flag that belongs to a team and can be moved by bots.
+
+    Attributes:
+        x (int) : Real x coordinate
+        y (int) : Real y coordinate
+        team (int) : Team number
+        color (rgba) : Color of the flag (Needs to be moved in View somehow)
+
+    """
     
     def __init__(self, team, x, y):
         self.team = team

@@ -9,8 +9,23 @@ from math import (ceil, floor, radians, cos, sin)
 
 # Implements View using pygame
 class PygameView(View):
+    """
+    Implements the Game View using the Pygame library.
+
+    Attributes:
+        model (Model)   : The data to represent.
+        map (Map)       : The Map object from Model, for easier access.
+    """
 
     def __init__(self, model):
+        """ 
+        The constructor for PygameView.
+
+        Stores necessary objects as attributes and computes different values used for displaying.
+  
+        Parameters: 
+           model (Model): The data to represent.
+        """
         
         self._model = model
         self._map = self._model.getMap()
@@ -27,12 +42,29 @@ class PygameView(View):
 
 
     def get_mult_factor(self):
+        """ 
+        Getter for mult_factor.
+
+        The multiplication factor is used by the controller to determine the location of a block from a real coordinate.
+  
+        Returns: 
+           mult_factor (double): Cellsize / Blocksize, computed during init.
+        """
         return self._mult_factor
 
     def tick(self, deltaTime):
+        """ 
+        Called each tick to refresh the View.
+  
+        Parameters: 
+           deltaTime (int): The time in milliseconds since the last call to this function.
+        """
         self._display()
 
     def _display(self):
+        """ 
+        Updates the window with the current representation of the game.
+        """
         self._surface.fill((0, 0, 0, 0))
         #self._display_map() # a desactiver si opti 
         self._display_bots()
@@ -43,12 +75,24 @@ class PygameView(View):
 
 
     def _display_map(self):
+        """ 
+        Clears the window and draws all map blocks on screen.
+        """
         pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, Config.ResolutionWidth(), Config.ResolutionHeight()))
         
         self._display_tiles(0,0,self._map.blockWidth - 1,self._map.blockHeight - 1)
 
 
     def _display_tiles(self, start_x, start_y, end_x, end_y):
+        """ 
+        Draws map blocks contained in a rectangle selection.
+  
+        Parameters: 
+           start_x (int): Top-left block X of the selection, X coordinate in blocks.
+           start_y (int): Top-left block Y of the selection, Y coordinate in blocks.
+           end_x (int): Bottom-right block of the selection, X coordinate in blocks.
+           end_y (int): Bottom-right block of the selection, Y coordinate in blocks.
+        """
         for y in range(start_y, end_y + 1):
             for x in range(start_x, end_x + 1):
                 current_rect = pygame.Rect(
@@ -64,6 +108,9 @@ class PygameView(View):
 
 
     def _display_bots(self):
+        """ 
+        Draws every bot from the model and updates their adjacent tiles as well.
+        """
         bots = self._model.getBots()
 
         tiles_to_refresh = dict()
@@ -135,6 +182,18 @@ class PygameView(View):
             )
 
     def _draw_cone(self, x, y, color, length, angle_start, angle_end, step = 1):
+        """ 
+        Draws a cone.
+  
+        Parameters: 
+           x (int): The screen x coordinate.
+           y (int): The screen y coordinate.
+           color (r,g,b,a): RGBA tuple.
+           length (int): The radius of the circle containing the cone.
+           angle_start (int): The angle at which the cone starts within the circle.
+           angle_end (int): The angle at which the cone ends within the circle.
+           step (int): The done is made of triangles, a lower step makes a more precise curve.
+        """
         angle_start = float(angle_start)
         angle_end = float (angle_end)
 

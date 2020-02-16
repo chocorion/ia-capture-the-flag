@@ -15,6 +15,8 @@ class Ruleset:
         DEFAULT = {
             'Default' : { 
                 'BotsCount' : 5,
+                'SpeedMultiplier' : 1,
+                'RotationMultiplier' : 1,
             },
         }
 

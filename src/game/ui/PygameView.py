@@ -157,9 +157,9 @@ class PygameView(View):
                 x,
                 y, 
                 pygame.Color(r, g, b, 70),
-                10 * bot_radius,
-                int(bot.angle - 20),
-                int(bot.angle + 20),
+                bot.view_distance,
+                int(bot.angle - bot.fov),
+                int(bot.angle + bot.fov),
                 10
             )
 

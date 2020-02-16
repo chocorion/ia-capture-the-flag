@@ -1,5 +1,6 @@
 from model.Model import Model
 from service.Ruleset import Ruleset
+from service.Physics import Physics
 from domain.Map import *
 from domain.GameObject.Bot import *
 from domain.Player import Player
@@ -47,7 +48,7 @@ class GameModel(Model):
             print("Player 2 can't be evaluated because it failed to initialize")
         ####
 
-        self._teams = dict() # This will 
+        self._teams = dict()
 
         for team in range(1,3): # 2 Players
             team_id = str(team)
@@ -93,11 +94,44 @@ class GameModel(Model):
         for team_id in teams_data.keys():
             data = teams_data[team_id]
             for bot_id in data["bots"].keys():
+                bot = self._teams[team_id]["bots"][bot_id]
 
                 # WARNING: Need to verify that the movement is correct
-                self._teams[team_id]["bots"][bot_id].x = data["bots"][bot_id]["target_position"][0]
-                self._teams[team_id]["bots"][bot_id].y = data["bots"][bot_id]["target_position"][1]
-                self._teams[team_id]["bots"][bot_id].angle = data["bots"][bot_id]["target_position"][2]
+                target_x = data["bots"][bot_id]["target_position"][0]
+                target_y = data["bots"][bot_id]["target_position"][1]
+                target_speed = data["bots"][bot_id]["target_position"][2]
+
+                # Check angle
+                new_angle = Physics.getAngle( bot.x, bot.y, target_x, target_y)
+
+                delta_angle = new_angle - bot.angle
+
+                if delta_angle > 180:
+                    delta_angle = delta_angle - 360
+
+                elif delta_angle < -180:
+                    delta_angle = 360 + delta_angle
+                
+                max_angle = float(self._ruleset["RotationMultiplier"]) * bot.max_rotate
+
+                if abs(delta_angle) > max_angle :
+                    delta_angle = max_angle if delta_angle > 0 else -max_angle
+                    
+                bot.angle = bot.angle + delta_angle
+
+                # Check speed
+                max_speed = float(self._ruleset["SpeedMultiplier"]) * bot.max_speed
+
+                if target_speed > max_speed:
+                    target_speed = max_speed
+
+                bot.speed = target_speed
+
+                # Apply movement
+                (x,y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
+                bot.x = x
+                bot.y = y
+
 
                 # bitwise comparison for actions
                 actions = bin(data["bots"][bot_id]["actions"])

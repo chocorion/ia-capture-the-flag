@@ -10,7 +10,12 @@ class Bot(GameObject):
         y (int) : Real y coordinate
         player (int) : Player/Team number
         angle (int) : Angle the bot is facing in degrees.
+        speed (int) : Current speed of the bot.
+        fov (int) : Field of View of the bot.
+        view_distance (int) : Distance to which the bot can see.
         color (rgba) : Color of the bot (Needs to be moved in View somehow)
+
+        max_speed (int) : The maximum speed this bot can reach.
 
     """
 
@@ -19,6 +24,10 @@ class Bot(GameObject):
         self.y = None
         self.angle = None
         self.player = None
+        self.speed = None
+        
+        self.fov = None
+        self.view_distance = None
 
         self.color = None
         raise NotImplementedError

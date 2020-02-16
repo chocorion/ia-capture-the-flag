@@ -52,6 +52,6 @@ class myPlayer(Player):
         for bot_id in pollingData["bots"].keys():
             current_position = pollingData["bots"][bot_id]["current_position"]
             
-            returnData["bots"][bot_id] = { "target_position" : (current_position[0] + 10, current_position[1] + 10 , current_position[2] + 10, 0), "actions" : 0 }
+            returnData["bots"][bot_id] = { "target_position" : (2000, 1000 , 100), "actions" : 0 }
 
         return returnData

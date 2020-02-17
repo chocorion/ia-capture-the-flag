@@ -120,7 +120,7 @@ class GameModel(Model):
             thread.start()
             
         for thread in threads:
-            thread.join()
+            thread.join(0.016)
                 
 
         for team_id in self.teams_data.keys():

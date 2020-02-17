@@ -9,6 +9,14 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 from model.DictBuilder import DictBuilder
 
+def fill_builder(builder):
+    for i in range(5):
+        builder.add_bot()
+
+        builder.add_life(42)
+        builder.add_flag(0)
+        builder.add_cooldown(0)
+
 class TestDictBuilder(unittest.TestCase):
     def test_empty_arg(self):
         argBuilder = DictBuilder()
@@ -17,3 +25,24 @@ class TestDictBuilder(unittest.TestCase):
 
         with self.assertRaises(Exception):
             argBuilder.end_argument()
+
+
+    # TODO: replace 5 by config value
+    def test_add_more_than_five(self):
+        dictBuilder = DictBuilder()
+
+        dictBuilder.begin_argument()
+
+        fill_builder(dictBuilder)
+
+        with self.assertRaises(Exception):
+            dictBuilder.add_bot()
+
+
+    def get_empty_result(self):
+        dictBuilder = DictBuilder()
+        dictBuilder.begin_argument()
+
+        with self.assertRaises(Exception):
+            dictBuilder.get_result()
+

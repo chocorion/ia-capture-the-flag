@@ -3,6 +3,12 @@ from model.ArgBuilder import ArgBuilder
 class DictBuilder(ArgBuilder):
     
     def get_result(self):
+        """
+        Return the argument built by this builder.
+
+        Return :
+            dico (dict()) : Dict containing all the arguments.
+        """
         if self._finish:
             return self._dico
         
@@ -18,12 +24,15 @@ class DictBuilder(ArgBuilder):
 
     def end_argument(self):
         if self._current_bot_id != 5:
-            raise Exception("To much bots are declared in this argument.")
+            raise Exception("Argument doesn't contain 5 bots !")
 
         self._finish = True
 
 
     def add_bot(self):
+        if self._current_bot_id >= 5:
+            raise Exception("To much bot in this argument")
+
         self._current_bot_id += 1
         self._dico[self._current_bot_id] = dict()
 
@@ -37,4 +46,4 @@ class DictBuilder(ArgBuilder):
 
 
     def add_cooldown(self, cooldown_millis):
-        self._dico[self._current_bot_id]["cooldown"] = cooldown_millis
+        self._dico[self._current_bot_id]["cooldown"] = cooldown_millis 

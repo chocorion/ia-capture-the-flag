@@ -33,9 +33,7 @@ class RepeaterUntilFail(NodeTreeSingleChild):
             if status == NodeTree.RUNNING:
                 return status
 
-            elif status == NodeTree.SUCCESS:
-                return NodeTree.RUNNING
-
-            else:
+            elif status == NodeTree.FAILURE:
                 # On child failure return success.
                 return NodeTree.SUCCESS
+                

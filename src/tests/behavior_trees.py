@@ -95,6 +95,31 @@ class TestBehaviorTree(unittest.TestCase):
         self.assertFalse(status == NodeTree.FAILURE)
 
         self.assertTrue(TEST_COUNT == 42)
+
+    def test_repeater_until_fail(self):
+        global TEST_COUNT
+
+        TEST_COUNT = 0
+
+        def f(dt):
+            global TEST_COUNT
+
+            if TEST_COUNT == 42:
+                return NodeTree.FAILURE
+
+            TEST_COUNT += 1
+            return NodeTree.SUCCESS
+
+        root_node = RepeaterUntilFail()
+        root_node.append_node(Leaf(f))
+
+        status = root_node.tick(DEFAULT_TICK)
+
+        self.assertFalse(status == NodeTree.RUNNING)
+        self.assertFalse(status == NodeTree.FAILURE)
+
+        self.assertTrue(TEST_COUNT == 42)
+        
         
     
     def test_NodeTreeSingleChild(self):

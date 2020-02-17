@@ -21,41 +21,16 @@ class ArgBuilder(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def add_bot(self):
+    def add_bot(self, life_amount, flag_number, cooldown):
         """
         Add a new bot to the argument.
-        """
-        ...
-
-    @abstractmethod
-    def add_life(self, life_amount):
-        """
-        Add life parameter for the current bot.
 
         Parameters:
             life_amount (int) : Total life of the current bot.
-        """
-        ...
-
-    @abstractmethod
-    def add_flag(self, flag_num):
-        """
-        Add flag parameter for the current bot.
-
-        Parameters:
             flag_num (int) : 
                 0 if bot doesn't have any flag.
                 1 if the bot has flag of this team.
                 2 if the bot has enemy flag.
-        """
-        ...
-
-    @abstractmethod
-    def add_cooldown(self, cooldown_millis):
-        """
-        Add cooldown for current bot.
-
-        Parameters :
             cooldown_millis (int) : Cooldown in milliseconds.
         """
         ...

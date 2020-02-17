@@ -13,5 +13,18 @@ class ArgBuilder(ABCMeta):
     def end_argument(self):
         ...
 
-    # @abstractmethod
-    # def 
+    @abstractmethod
+    def add_bot(self):
+        ...
+
+    @abstractmethod
+    def add_life(self):
+        ...
+
+    @abstractmethod
+    def add_flag(self):
+        ...
+
+    @abstractmethod
+    def add_cooldown(self):
+        ...

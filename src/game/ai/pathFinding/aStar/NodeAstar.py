@@ -17,7 +17,9 @@ class NodeAstar(AbstractNode):
         return self._estimatedCost < other._estimatedCost
 
     def __eq__(self, other):
-        return (self._x == other._x and self._y == other._y)
+        if other != None:
+            return (self._x == other._x and self._y == other._y)
+        return False
 
     def __repr__(self):
         return "Node({}, {}, {})".format(self._x, self._y, self._cellContent)

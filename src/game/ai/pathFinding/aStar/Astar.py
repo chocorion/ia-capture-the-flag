@@ -40,6 +40,7 @@ class Astar(PathFinder):
             closed.insert(0,current)
             current.createNeighbors(self._graph)
             self.visitNeighbor(current, closed, border, nodeGoal)
+        
 
     def totalCost(self, node, nodeGoal, heuristic):
         return node._cost + heuristic(node, nodeGoal)
@@ -49,6 +50,7 @@ class Astar(PathFinder):
         path.append((node._x, node._y))
         while node != nodeStart:
             node = node._parent
+            if not node : break # Should not occurs but occurs
             path.insert(0,(node._x, node._y))
         return path
     

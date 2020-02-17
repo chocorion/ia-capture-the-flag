@@ -8,6 +8,7 @@ from domain.Map import Map
 import math
 import random
 from domain.GameObject.Block import *
+
 class myPlayer(Player):
 
     def __init__(self, _map, rules):
@@ -20,7 +21,7 @@ class myPlayer(Player):
         self._pathFinder   = None
         self._currentPath  = {}
         self._currentIndex = {}
-        self._currentTry   = {}
+        self._currentTry   = {} 
         self._lastPosition = {}
         self._canSend = False
 
@@ -60,16 +61,18 @@ class myPlayer(Player):
             3 -> Shoot + Drop Flag        
         
         """
+    def buildNodeList(self):
+        Nodelist = []
+        for y in range(self._map["blockHeight"]):
+            for x in range(self._map["blockWidth"]):
+                    Nodelist.insert(
+                        0,
+                        NodeAstar(x, y, self._map["blocks"][x][y]))
+        return Nodelist
 
     def distance(self,x1, y1, x2, y2):
         return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-    def getNextPos(self, bot_id, current_position):
-        if bot_id in self._currentPath and bot_id in self._currentIndex:
-            x, y =  (self._currentPath[bot_id][self._currentIndex[bot_id]][0] * Map.BLOCKSIZE,
-                     self._currentPath[bot_id][self._currentIndex[bot_id]][1] * Map.BLOCKSIZE)
-            return (x, y)
-    
     def initPathFinder(self):
         if not self._pathFinder:
             self._pathFinder = Astar(self._graph)
@@ -79,6 +82,13 @@ class myPlayer(Player):
             self._currentIndex[bot_id] = 0
         if not bot_id in self._lastPosition:
             self._lastPosition[bot_id] = -1, -1
+
+    def getNextPos(self, bot_id, current_position):
+        if bot_id in self._currentPath and bot_id in self._currentIndex:
+            x, y =  (self._currentPath[bot_id][self._currentIndex[bot_id]][0] * Map.BLOCKSIZE,
+                     self._currentPath[bot_id][self._currentIndex[bot_id]][1] * Map.BLOCKSIZE)
+            return (x, y)
+    
                 
     def getPath(self, bot_id, current_position, pos):
         if not bot_id in self._currentPath:
@@ -90,7 +100,7 @@ class myPlayer(Player):
             posInPath    = self.getNextPos(bot_id, current_position)
             lengthPath   = len(self._currentPath[bot_id])-1
             distancePath = self.distance(current_position[0], current_position[1], posInPath[0], posInPath[1])
-           
+
             if distancePath < 80.0 and self._currentIndex[bot_id] != lengthPath :
                 self._currentIndex[bot_id] += 1
             
@@ -149,9 +159,10 @@ class myPlayer(Player):
         for bot_id in pollingData["bots"].keys():
             self.initCurrentIndex(bot_id)
             current_position = pollingData["bots"][bot_id]["current_position"]
-            #cas de test
+            #cas de test random pos
             if pos == None :
                 pos = (5600, 2500, current_position[2], 0)
+
             # if (bot_id in self._currentIndex and bot_id in self._currentPath and self._currentPath[bot_id] != None
             #     and self._currentIndex[bot_id] == len(self._currentPath[bot_id])-1):
             #     remove =self._currentPath.pop(bot_id)
@@ -192,10 +203,11 @@ class myPlayer(Player):
 
                         
                     currentPosInPath = self._currentPath[bot_id][self._currentIndex[bot_id]]
+
                     returnData["bots"][bot_id] = { "target_position" : 
                     (currentPosInPath[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
-                    currentPosInPath[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
-                    speed), "actions" : 0 }
+                        currentPosInPath[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+                            speed), "actions" : 0 }
                 else:
                     returnData["bots"][bot_id] = {"target_position" : (current_position[0], current_position[1], 0),"actions" : 0 }
         return returnData
@@ -205,12 +217,3 @@ class myPlayer(Player):
         self.initPathFinder()
         self.pathWithPollingData(pollingData)
         return self.getReturnPoll(pollingData)
-
-    def buildNodeList(self):
-        Nodelist = []
-        for y in range(self._map["blockHeight"]):
-            for x in range(self._map["blockWidth"]):
-                    Nodelist.insert(
-                        0,
-                        NodeAstar(x, y, self._map["blocks"][x][y]))
-        return Nodelist

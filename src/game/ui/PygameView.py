@@ -209,9 +209,13 @@ class PygameView(View):
         points.append((x + cos(radians(angle_end)) * length, y + sin(radians(angle_end)) * length))
         points.append((x, y))
 
+        self.cone_surface = pygame.Surface.copy(self._surface)
+
         pygame.draw.polygon(
-            self._surface,
+            self.cone_surface,
             color,
             points
         )
+
+        self._window.blit(self.cone_surface, (0, 0))
 

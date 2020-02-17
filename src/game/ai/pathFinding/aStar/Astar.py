@@ -4,6 +4,8 @@ from ai.pathFinding.aStar.NodeAstar import NodeAstar
 from domain.GameObject.Block import *
 from domain.Map import Map
 import bisect
+
+PathMap = {}
 class Astar(PathFinder):
     
     def __init__(self, graph):
@@ -23,6 +25,14 @@ class Astar(PathFinder):
     #Override method
     def getPath(self, start, goal):
         nodeStart, nodeGoal = self.getNodeStartGoal(start, goal)
+
+        #First check if path already contained in pathMap (no need to recalculate it)
+        extremity = (int(nodeStart._x), int(nodeStart._y), nodeGoal._x, nodeGoal._y)
+
+        if extremity in PathMap:
+            print("Find the Path ! " + str(extremity))
+            return PathMap[extremity]
+
         border = [nodeStart]
         closed = []
 
@@ -32,6 +42,7 @@ class Astar(PathFinder):
 
             if current == nodeGoal:
                 path = self.reconstructPath(current, nodeStart)
+                PathMap[(nodeStart._x, nodeStart._y, current._x, current._y)] = path
                 #print(path)
                 return path
 

@@ -44,8 +44,6 @@ class Game:
 
             # running = False # Game over
 
-            print("Tickrate: {} tick/s".format(round(1000/deltaTime,2)))
-
         runningStopwatch.StopTimer()
 
         print("Game closing")

@@ -81,8 +81,13 @@ class TimeManager:
         msWait = 1000 / Config.Framerate()
 
         deltaTime = self.PeekDeltaTimeMs()
+        slept = 0
         if deltaTime < msWait: 
-            time.sleep((msWait - deltaTime)/1000)
+            slept = msWait - deltaTime
+            time.sleep(slept/1000)
             deltaTime = msWait
+
+
+        print("Tickrate: {} tick/s ({}% time usage)".format(round(1000/deltaTime,2),round((msWait-slept)/msWait*100)))
         
         return deltaTime

@@ -1,10 +1,6 @@
 from abc import (ABCMeta, abstractmethod)
 
-class ArgBuilder(ABCMeta):
-    @abstractmethod
-    def reset(self):
-        ...
-    
+class ArgBuilder(metaclass=ABCMeta):
     @abstractmethod
     def begin_argument(self):
         ...

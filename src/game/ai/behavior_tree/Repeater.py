@@ -29,11 +29,25 @@ class Repeater(NodeTreeSingleChild):
         Return : 
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
+        start = 0
+        if self._currently_processing != None:
+            status = self._currently_processing.tick(dt)
 
-        for i in range(self._iteration):
+            if status != NodeTree.RUNNING:
+                self._currently_processing = None
+
+            if status != NodeTree.SUCCESS:
+                return status
+                
+            start = self._current_start + 1
+
+
+        for i in range(start, self._iteration):
             status = super().get_child().tick(dt)
 
             if status == NodeTree.RUNNING:
+                self._currently_processing = super().get_child()
+                self._current_start = i
                 return status
 
             elif status == NodeTree.FAILURE:

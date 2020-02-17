@@ -14,7 +14,22 @@ class Condition(NodeTreeSingleChild):
         self._condition = condition
 
     def tick(self, dt):
+        # Don't repeat condition if child was already running
+        if self._currently_processing != None:
+            status = self._currently_processing.tick(dt)
+
+            if status != NodeTree.RUNNING:
+                self._currently_processing = None
+
+            return status
+
         if self._condition():
-            return super().get_child().tick(dt)
+            status = super().get_child().tick(dt)
+
+            if status == NodeTree.RUNNING:
+                self._currently_processing = super().get_child()
+            else:
+                return status
+
         else:
             return NodeTree.FAILURE

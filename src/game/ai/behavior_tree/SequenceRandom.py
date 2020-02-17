@@ -8,6 +8,8 @@ class SequenceRandom(NodeTree):
     """
     def __init__(self):
         super().__init__()
+        self._currently_processing_index = -1
+        self._saved_shuffle = None
 
 
     def tick(self, dt):
@@ -24,14 +26,26 @@ class SequenceRandom(NodeTree):
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
 
-        nodes = super().get_nodes()
-
-        shuffle(nodes)
         
-        for node in nodes:
-            status = node.tick(dt)
+        start = 0
+
+        if self._currently_processing_index != -1:
+            start = self._currently_processing_index
+            nodes = self._saved_shuffle
+
+            self._currently_processing_index = -1
+            self._saved_shuffle = None
+        else:
+            nodes = super().get_nodes()
+            shuffle(nodes)
+
+        
+        for node_index in range(start, len(nodes)):
+            status = nodes[node_index].tick(dt)
 
             if status == NodeTree.RUNNING:
+                self._currently_processing_index = node_index
+                self._saved_shuffle = nodes
                 return NodeTree.RUNNING
 
             if status == NodeTree.FAILURE:

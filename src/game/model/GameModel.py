@@ -13,7 +13,8 @@ import sys
 
 class PollThread(threading.Thread):
     def __init__(self, model, team_id, player, pollingData):
-        threading.Thread.__init__(self)
+        super(PollThread, self).__init__()
+        self._stop_event = threading.Event()
         self.model = model
         self.team_id = team_id
         self.player = player
@@ -23,6 +24,9 @@ class PollThread(threading.Thread):
         self.model.teams_data[self.team_id] = None
         result = self.player.poll(self.pollingData)
         self.model.teams_data[self.team_id] = result
+
+    def stop(self):
+        self._stop_event.set()
 
 class GameModel(Model):
     """
@@ -121,6 +125,9 @@ class GameModel(Model):
             
         for thread in threads:
             thread.join(0.016)
+
+        for thread in threads:
+            thread.stop()
                 
 
         for team_id in self.teams_data.keys():

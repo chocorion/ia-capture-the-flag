@@ -23,7 +23,10 @@ class Player:
             pollingData :
             {
                 "bots" : {
-                    "<bot_identifier>" : { "current_position" : ( <x> , <y> , <angle>, <speed> ) },
+                    "<bot_identifier>" : { 
+                        "attributes"        : ( <life> , <flag> , <shoot_cooldown> ),
+                        "current_position"  : ( <x> , <y> , <angle>, <speed> ),
+                    },
                     ...
                 },
                 "events" : {

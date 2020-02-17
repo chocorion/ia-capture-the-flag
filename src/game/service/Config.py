@@ -25,6 +25,7 @@ class Config:
             },
             'Gameplay' : { 
                 'TimeRate' : 1,
+                'InvalidResponsesKick' : 50,
                 'Ruleset' : "Default",
             },
         }
@@ -104,6 +105,13 @@ class Config:
         The time multiplier at which the game occurs.
         """
         return float(Config.config.parser["Gameplay"]["TimeRate"])
+
+    @staticmethod
+    def InvalidResponsesKick():
+        """
+        The amount of a times you need to provide an invalid response to be kicked.
+        """
+        return float(Config.config.parser["Gameplay"]["InvalidResponsesKick"])
 
     @staticmethod
     def RulesetName():

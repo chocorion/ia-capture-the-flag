@@ -1,4 +1,5 @@
 from model.ArgBuilder import ArgBuilder
+from service.Ruleset import Ruleset
 
 class DictBuilder(ArgBuilder):
     
@@ -23,14 +24,14 @@ class DictBuilder(ArgBuilder):
 
 
     def end_argument(self):
-        if self._current_bot_id != 5:
+        if self._current_bot_id != int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("Argument doesn't contain 5 bots !")
 
         self._finish = True
 
 
     def add_bot(self):
-        if self._current_bot_id >= 5:
+        if self._current_bot_id >= int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("To much bot in this argument")
         else:
             for i in range(1, self._current_bot_id + 1):

@@ -32,6 +32,11 @@ class DictBuilder(ArgBuilder):
     def add_bot(self):
         if self._current_bot_id >= 5:
             raise Exception("To much bot in this argument")
+        else:
+            for i in range(1, self._current_bot_id + 1):
+                for j in ["life", "flag", "cooldown"]:
+                    if j not in self._dico[self._current_bot_id].keys():
+                        raise Exception("Can't create a new bot when current on is not complete !")
 
         self._current_bot_id += 1
         self._dico[self._current_bot_id] = dict()

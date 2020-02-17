@@ -3,12 +3,12 @@ class Heuristic():
 
     @staticmethod
     def manhattanDistance(node, goal):
-        x = abs(node.x - goal.x)
-        y = abs(node.y - goal.y)
+        x = abs(node._x - goal._x)
+        y = abs(node._y - goal._y)
         return x + y
 
     @staticmethod
     def euclideanDistance(node, goal):
-        x = (node.x - goal.x) ** 2 
-        y = (node.y - goal.y) ** 2
+        x = (node._x - goal._x) ** 2 
+        y = (node._y - goal._y) ** 2
         return math.sqrt(x + y)

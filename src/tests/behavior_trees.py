@@ -40,6 +40,20 @@ def increment_count_success(dt):
 
     return NodeTree.SUCCESS
 
+def increment_count_failure(dt):
+    global TEST_COUNT
+
+    TEST_COUNT += 1
+
+    return NodeTree.FAILURE
+
+def increment_count_running(dt):
+    global TEST_COUNT
+
+    TEST_COUNT += 1
+
+    return NodeTree.RUNNING
+
 def set_value_to_one(dt):
     global TEST_VALUE
 
@@ -62,6 +76,7 @@ class TestBehaviorTree(unittest.TestCase):
         root_node.tick(DEFAULT_TICK)
 
         self.assertTrue(TEST_FLAG)
+
 
     def test_selector_failure(self):
         global TEST_FLAG
@@ -95,6 +110,7 @@ class TestBehaviorTree(unittest.TestCase):
         self.assertFalse(status == NodeTree.FAILURE)
 
         self.assertTrue(TEST_COUNT == 42)
+
 
     def test_repeater_until_fail(self):
         global TEST_COUNT
@@ -208,3 +224,33 @@ class TestBehaviorTree(unittest.TestCase):
         root_node.tick(DEFAULT_TICK)
 
         self.assertTrue(TEST_VALUE != 1)
+
+    
+    def test_running_seq(self):
+        global TEST_COUNT
+        TEST_COUNT = 0
+
+        root_node = Sequence()
+        root_node.append_node(Leaf(increment_count_success))
+        root_node.append_node(Leaf(increment_count_running))
+
+        root_node.tick(DEFAULT_TICK)
+        root_node.tick(DEFAULT_TICK)
+
+
+        self.assertTrue(TEST_COUNT == 3, msg='Test value is -> {}'.format(TEST_COUNT))
+
+
+    def test_running_selector(self):
+        global TEST_COUNT
+        TEST_COUNT = 0
+
+        root_node = Selector()
+        root_node.append_node(Leaf(increment_count_failure))
+        root_node.append_node(Leaf(increment_count_running))
+
+        root_node.tick(DEFAULT_TICK)
+        root_node.tick(DEFAULT_TICK)
+
+
+        self.assertTrue(TEST_COUNT == 3, msg='Test value is -> {}'.format(TEST_COUNT))

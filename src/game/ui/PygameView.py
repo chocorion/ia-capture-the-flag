@@ -143,6 +143,9 @@ class PygameView(View):
 
                 self._display_tiles(start_x,start_y,end_x,end_y)
 
+        surfaceTeam1 = pygame.Surface.copy(self._surface)
+        surfaceTeam2 = pygame.Surface.copy(self._surface)
+
         for bot_id in bots.keys():  
             bot = bots[bot_id] 
             (r, g, b, a) = bot.color
@@ -160,7 +163,8 @@ class PygameView(View):
                 bot.view_distance * 2,
                 int(bot.angle - bot.fov),
                 int(bot.angle + bot.fov),
-                10
+                10,
+                surfaceTeam1 if bot.player == 1 else surfaceTeam2
             )
 
             pygame.gfxdraw.aacircle(
@@ -180,8 +184,12 @@ class PygameView(View):
                     int(y + sin(radians(bot.angle)) * 1.5 * bot_radius)
                 )
             )
+        
+        self._window.blit(surfaceTeam1, (0, 0))
+        self._window.blit(surfaceTeam2, (0, 0))
 
-    def _draw_cone(self, x, y, color, length, angle_start, angle_end, step = 1):
+
+    def _draw_cone(self, x, y, color, length, angle_start, angle_end, step = 1, surface = None):
         """ 
         Draws a cone.
   
@@ -194,6 +202,10 @@ class PygameView(View):
            angle_end (int): The angle at which the cone ends within the circle.
            step (int): The done is made of triangles, a lower step makes a more precise curve.
         """
+
+        if surface == None:
+            surface = self._surface
+
         angle_start = float(angle_start)
         angle_end = float (angle_end)
 
@@ -209,13 +221,9 @@ class PygameView(View):
         points.append((x + cos(radians(angle_end)) * length, y + sin(radians(angle_end)) * length))
         points.append((x, y))
 
-        self.cone_surface = pygame.Surface.copy(self._surface)
-
         pygame.draw.polygon(
-            self.cone_surface,
+            surface,
             color,
             points
         )
-
-        self._window.blit(self.cone_surface, (0, 0))
 

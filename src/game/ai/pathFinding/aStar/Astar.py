@@ -16,9 +16,9 @@ class Astar(PathFinder):
         raise NotImplementedError
     
     def getNodeStartGoal(self, start, goal):
-        x, y, cellContent = start[0] // Map.BLOCKSIZE, start[1] // Map.BLOCKSIZE, Empty()
+        x, y, cellContent = start[0] // Map.BLOCKSIZE, start[1] // Map.BLOCKSIZE, Empty(start[0], start[1])
         nodeStart = NodeAstar(x, y, cellContent)
-        x, y, cellContent = goal[0] // Map.BLOCKSIZE, goal[1] // Map.BLOCKSIZE, Empty()
+        x, y, cellContent = goal[0] // Map.BLOCKSIZE, goal[1] // Map.BLOCKSIZE, Empty(start[0], start[1])
         nodeGoal  = NodeAstar(x, y, cellContent)
         return nodeStart, nodeGoal
     

@@ -182,8 +182,7 @@ class GameModel(Model):
         for bot_id in allBots.keys():
             bot = allBots[bot_id]
             for flag in self._map.flags:
-                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius):
-                    print("pickup {} {} {} {} {} {}".format(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius))
+                if not flag.held and Physics.rectIntersectsCircle(flag.x,bot.x,flag.width,flag.height,flag.y,bot.y,bot.radius):
                     bot.pickUp(flag)
 
 

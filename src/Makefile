@@ -5,4 +5,7 @@ doc:
 tests:
 	bash -c "./tests/run_tests.py -v"
 
-.PHONY: doc tests
+.PHONY: doc tests runExample
+
+runExample:
+	bash -c "cd game; ./Game.py ai.playerTest.myPlayer ai.playerTest.myPlayer"

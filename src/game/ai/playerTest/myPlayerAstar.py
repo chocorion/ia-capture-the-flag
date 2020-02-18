@@ -164,9 +164,7 @@ class myPlayer(Player):
 
     def isBlocked(self, current_position, bot_id):
         x, y = int(current_position[0] // Map.BLOCKSIZE), int(current_position[1] // Map.BLOCKSIZE)
-        print(self._lastPosition)
         if self._lastPosition[bot_id] == current_position:
-            print("BOT BLOQUÉ dans un mur {}\n".format("solide" if self._map["blocks"][x][y].solid else "pas solide"))
             current_position = self._pollingData["bots"][bot_id]["current_position"]
             
             angle = current_position[2]
@@ -180,7 +178,6 @@ class myPlayer(Player):
             
             # Bloqué à gauche
             if pos_x % Map.BLOCKSIZE < 3 and self._map["blocks"][x - 1][y].solid:
-                print("Bot bloqué à GAUCHE")
                 if angle < 0: #negative
                     self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y - 1))
                 else:
@@ -189,8 +186,6 @@ class myPlayer(Player):
 
             # Bloqué à droite
             elif pos_x % Map.BLOCKSIZE > Map.BLOCKSIZE - 3 and self._map["blocks"][x + 1][y].solid:
-                print("Bot bloqué à DROITE")
-
                 if angle < 0:
                     self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y - 1))
                 else:
@@ -198,8 +193,6 @@ class myPlayer(Player):
 
             # Bloqué en haut
             elif pos_y % Map.BLOCKSIZE < 3 and self._map["blocks"][x][y - 1].solid:
-                print("Bot bloqué en HAUT")
-
                 if angle < -90:
                     self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x - 1, y))
                 else:
@@ -207,8 +200,6 @@ class myPlayer(Player):
     
             # Bloqué en bas
             elif pos_y % Map.BLOCKSIZE > Map.BLOCKSIZE - 3 and self._map["blocks"][x][y + 1].solid:
-                print("Bot bloqué en BAS")
-
                 if angle < 90:
                     self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x - 1, y))
                 else:

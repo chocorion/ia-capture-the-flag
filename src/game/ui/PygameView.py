@@ -113,14 +113,13 @@ class PygameView(View):
 
         Use only on a map that has flags.
         """
-        flag_size = int(self._cell_size * 0.5)
 
         for flag in self._map.flags:
             current_rect = pygame.Rect(
-                flag.x * self._mult_factor + (self._cell_size - flag_size)//2,
-                flag.y * self._mult_factor + (self._cell_size - flag_size)//2,
-                flag_size,
-                flag_size
+                flag.x * self._mult_factor - (self._cell_size - flag.width * self._mult_factor)//2,
+                flag.y * self._mult_factor - (self._cell_size - flag.height * self._mult_factor)//2,
+                flag.width * self._mult_factor,
+                flag.height * self._mult_factor
             )
                 
             (r, g, b, a) = flag.color

@@ -44,6 +44,8 @@ class Bot(GameObject):
     def pickUp(self, gameObject):
         if not gameObject.held:
             gameObject.held = True
+            gameObject.x = self.x
+            gameObject.y = self.y
             self.heldItems.append(gameObject)
 
     def drop(self, gameObject):

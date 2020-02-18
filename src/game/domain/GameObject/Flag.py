@@ -1,4 +1,5 @@
 from domain.GameObject import GameObject
+from domain.Map import Map
 
 class Flag(GameObject):
     """
@@ -13,9 +14,11 @@ class Flag(GameObject):
     """
     
     def __init__(self, team, x, y):
-        super().__init__(x, y)
+        self.width = Map.BLOCKSIZE // 2
+        self.height = Map.BLOCKSIZE // 2
+
+        super().__init__(x + self.width, y +  + self.height)
         self.team = team
         self.pickable = True
-        print(team,x,y)
 
         self.color = (255, 0, 0, 200) if team == 1 else (0, 0, 255, 200)

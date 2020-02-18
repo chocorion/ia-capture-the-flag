@@ -50,3 +50,10 @@ class Physics():
         Returns wether a point (x1,y1) is inside a circle (x2,y2,radius).
         """
         return Physics.instance.isInCircle(x1,x2,y1,y2,radius)
+
+    @staticmethod
+    def rectIntersectsCircle(x1,x2,w,h,y1,y2,radius):
+        """
+        Returns wether a rect (x1,y1,w,h) is inside a circle (x2,y2,radius).
+        """
+        return Physics.instance.rectIntersectsCircle(x1,x2,w,h,y1,y2,radius)

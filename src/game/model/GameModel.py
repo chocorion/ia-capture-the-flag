@@ -130,6 +130,7 @@ class GameModel(Model):
             thread.stop()
                 
 
+        # Interpret players orders
         for team_id in self.teams_data.keys():
             if(self.teams_data[team_id] == None):
                 print("Invalid response from player !!!")
@@ -154,7 +155,9 @@ class GameModel(Model):
 
                     # Apply movement
                     (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                    (bot.x,bot.y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
+                    (new_x,new_y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
+
+                    bot.move(new_x - bot.x, new_y - bot.y)
 
                     # bitwise comparison for actions
                     actions = bin(data["bots"][bot_id]["actions"])
@@ -172,6 +175,16 @@ class GameModel(Model):
                 print("Player {} is disqualified for failing to provide consistent responses.".format(team_id))
                 self.kick(team_id)
                 self._team_fails[team_id] = -1
+
+        # Check if bots can pick items on the ground
+        allBots = self.getBots()
+
+        for bot_id in allBots.keys():
+            bot = allBots[bot_id]
+            for flag in self._map.flags:
+                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius):
+                    print("pickup {} {} {} {} {} {}".format(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius))
+                    bot.pickUp(flag)
 
 
     # (needed by the View) No point in having it private, should change in the future

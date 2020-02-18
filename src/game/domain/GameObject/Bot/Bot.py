@@ -6,8 +6,8 @@ class Bot(GameObject):
     An entity controlled by a Player
 
     Attributes:
-        x (int) : Real x coordinate
-        y (int) : Real y coordinate
+
+        heldItems (list(GameObject)) : The items held by this bot
         angle (int) : Angle the bot is facing in degrees.
         speed (int) : Current speed of the bot.
 
@@ -23,8 +23,11 @@ class Bot(GameObject):
     """
 
     def __init__(self, player, x, y):
-        self.x = None
-        self.y = None
+        super().__init__(x, y)
+        self.pickable = False
+        self.heldItems = list()
+
+        ### Redefine these to create a custom bot
         self.angle = None
         self.player = None
         self.speed = None
@@ -36,11 +39,22 @@ class Bot(GameObject):
         self.view_distance = None
 
         self.color = None
-        raise NotImplementedError
+        ###
+
+    def pickUp(self, gameObject):
+        if not gameObject.held:
+            gameObject.held = True
+            self.heldItems.append(gameObject)
+
+    def drop(self, gameObject):
+        self.heldItems.remove(gameObject)
+        gameObject.held = False
 
     def move(self, x, y):
-        self.x += x
-        self.y += y
+        super().move(x,y)
+
+        for item in self.heldItems:
+            item.move(x,y)
 
     def rotate(self, angle):
         self.angle += angle

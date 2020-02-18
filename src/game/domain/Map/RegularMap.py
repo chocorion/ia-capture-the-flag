@@ -50,11 +50,11 @@ class RegularMap(Map):
 
         # The format character for each tile and it's constructor call
         blocks = {
-            '#': 'Wall()',
-            '-': 'WallTransparent()',
-            ' ': 'Empty()',
-            '1': 'Spawn(1)',
-            '2': 'Spawn(2)'
+            '#': 'Wall({},{})',
+            '-': 'WallTransparent({},{})',
+            ' ': 'Empty({},{})',
+            '1': 'Spawn(1,{},{})',
+            '2': 'Spawn(2,{},{})'
         }
 
         data["spawns"] = { 1: [], 2: [] } # Spawn blocks for each team
@@ -82,11 +82,7 @@ class RegularMap(Map):
                         continue
 
                     # See definition of 'blocks' for explanation
-                    data["blocks"][x][y] = eval(blocks[mapLines[y][x]])
-
-                    # Game Objects know their location
-                    data["blocks"][x][y].x = x * Map.BLOCKSIZE # Position is top-left
-                    data["blocks"][x][y].y = y * Map.BLOCKSIZE
+                    data["blocks"][x][y] = eval(blocks[mapLines[y][x]].format(x * Map.BLOCKSIZE,y * Map.BLOCKSIZE))
 
                     if(type(data["blocks"][x][y]).__name__ == "Spawn"):
                         # If this is a spawn block, add it to it's team's spawn blocks

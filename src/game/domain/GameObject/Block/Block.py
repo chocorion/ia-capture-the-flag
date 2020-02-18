@@ -11,5 +11,9 @@ class Block(GameObject):
         color (rgba) : Color of the block (Needs to be moved in View somehow)
     """
 
-    def __init__(self):
-        raise NotImplementedError
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.solid = False
+        self.transparent = False
+
+        self.color = None

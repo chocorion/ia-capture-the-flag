@@ -7,11 +7,20 @@ class GameObject:
     Attributes:
         x (int) : Real x coordinate
         y (int) : Real y coordinate
+        pickable (bool) : Whether it can be picked up and moved around
+        held (bool) : Whether it is held by someone or something
 
     """
 
-    def __init__(self):
-        raise NotImplementedError
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.pickable = False
+        self.held = False
+
+    def move(self, x, y):
+        self.x += x
+        self.y += y
 
     def isIn(self, x, y):
         raise NotImplementedError

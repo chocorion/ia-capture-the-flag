@@ -13,8 +13,8 @@ class Flag(GameObject):
     """
     
     def __init__(self, team, x, y):
+        super().__init__(x, y)
         self.team = team
-        self.x = x
-        self.y = y
+        self.pickable = True
 
         self.color = (255, 0, 0, 30) if team == 1 else (0, 0, 255, 30)

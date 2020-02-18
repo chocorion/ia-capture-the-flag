@@ -5,8 +5,8 @@ class Spawn(Block):
     A block in which bots from a certain team can appear.
     """
 
-    def __init__(self, team):
-        self.solid = False
+    def __init__(self, team, x, y):
+        super().__init__(x,y)
         self.transparent = True
         self.team = team
 

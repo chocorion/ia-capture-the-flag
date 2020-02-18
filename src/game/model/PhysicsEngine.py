@@ -94,7 +94,7 @@ class PhysicsEngine(Physics):
         dx *= 2
         dy *= 2
         
-        for i in range(n,0,-1):
+        for i in range(n, 0, -1):
             
             if self._map.blocks[int(current_x // self._map.BLOCKSIZE)][int(current_y // self._map.BLOCKSIZE)].solid:
                 return (last_x, last_y)
@@ -115,4 +115,4 @@ class PhysicsEngine(Physics):
                 error += dx
                 n -= 1
                 
-        return (target_x,target_y)
+        return (last_x, last_y)

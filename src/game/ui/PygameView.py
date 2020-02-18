@@ -68,6 +68,7 @@ class PygameView(View):
         self._surface.fill((0, 0, 0, 0))
         #self._display_map() # a desactiver si opti 
         self._display_bots()
+        self._display_flags()
         
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
@@ -106,6 +107,24 @@ class PygameView(View):
 
                 pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
 
+    def _display_flags(self):
+        """
+        Draws flags. 
+
+        Use only on a map that has flags.
+        """
+        flag_size = int(self._cell_size * 0.5)
+
+        for flag in self._map.flags:
+            current_rect = pygame.Rect(
+                flag.x * self._mult_factor + (self._cell_size - flag_size)//2,
+                flag.y * self._mult_factor + (self._cell_size - flag_size)//2,
+                flag_size,
+                flag_size
+            )
+                
+            (r, g, b, a) = flag.color
+            pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
 
     def _display_bots(self):
         """ 

@@ -111,7 +111,7 @@ class RegularMap(Map):
 
         return data
 
-    def GetRandomPositionInSpawn(self, team):
+    def GetRandomPositionInSpawn(self, team, margin = 0):
         """
         Parameters:
             team (int): The team number.
@@ -119,4 +119,4 @@ class RegularMap(Map):
         Returns:
             point (x,y): A point located in the spawn of a said team.
         """
-        return Map.GetRandomPositionInBlock(choice(self._spawns[team]))
+        return Map.GetRandomPositionInBlock(choice(self._spawns[team]), margin)

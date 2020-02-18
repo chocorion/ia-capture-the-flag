@@ -8,16 +8,19 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 from model.DictBuilder import DictBuilder
-
+from service import *
 def fill_builder(builder):
     for i in range(5):
-        builder.add_bot()
+        builder.add_bot(42, 0, 0)
 
-        builder.add_life(42)
-        builder.add_flag(0)
-        builder.add_cooldown(0)
 
 class TestDictBuilder(unittest.TestCase):
+
+    def __init__(self, methodName):
+        super().__init__(methodName)
+        Config.Initialize()
+        Ruleset.Initialize()
+
     def test_empty_arg(self):
         argBuilder = DictBuilder()
 
@@ -51,11 +54,10 @@ class TestDictBuilder(unittest.TestCase):
         dictBuilder = DictBuilder()
         dictBuilder.begin_argument()
 
-        dictBuilder.add_bot()
-        dictBuilder.add_life(42)
+        dictBuilder.add_bot(42, 0, 0)
 
         with self.assertRaises(Exception):
-            dictBuilder.add_bot()
+            dictBuilder.end_argument()
 
     
     def test_valid_construction(self):

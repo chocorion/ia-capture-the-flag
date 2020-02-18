@@ -30,26 +30,13 @@ class DictBuilder(ArgBuilder):
         self._finish = True
 
 
-    def add_bot(self):
+    def add_bot(self, life_amount, flag_number, cooldown):
         if self._current_bot_id >= int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("To much bot in this argument")
-        else:
-            for i in range(1, self._current_bot_id + 1):
-                for j in ["life", "flag", "cooldown"]:
-                    if j not in self._dico[self._current_bot_id].keys():
-                        raise Exception("Can't create a new bot when current on is not complete !")
 
         self._current_bot_id += 1
-        self._dico[self._current_bot_id] = dict()
-
-
-    def add_life(self, life_amount):
-        self._dico[self._current_bot_id]["life"] = life_amount
-
-
-    def add_flag(self, flag_num):
-        self._dico[self._current_bot_id]["flag"] = flag_num
-
-
-    def add_cooldown(self, cooldown_millis):
-        self._dico[self._current_bot_id]["cooldown"] = cooldown_millis 
+        self._dico[self._current_bot_id] = {
+            "life": life_amount,
+            "flag": flag_number,
+            "cooldown": cooldown
+        }

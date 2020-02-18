@@ -5,7 +5,7 @@ class Graph:
         self._listEdges = listEdges
         # Not implemented yet, must determine which data we give to the graph
         self._data      = data 
-        raise NotImplementedError
+        self._neighborMap = {}
     
     def buildGraph(self):
         raise NotImplementedError
@@ -20,3 +20,5 @@ class Graph:
     def getListEdges(self):
         raise NotImplementedError
 
+    def setData(self, data):
+        self._data = data

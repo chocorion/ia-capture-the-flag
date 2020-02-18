@@ -44,7 +44,7 @@ class Map:
         raise NotImplementedError
 
     @staticmethod
-    def GetRandomPositionInBlock(block):
+    def GetRandomPositionInBlock(block, margin = 0):
         """
         Obtain a random coordinate inside a block
 
@@ -54,4 +54,4 @@ class Map:
         Returns:
             point (x,y): A point inside the given block.
         """
-        return (block.x + randint(0,Map.BLOCKSIZE), block.y + randint(0,Map.BLOCKSIZE))
+        return (block.x + randint(margin,Map.BLOCKSIZE - margin), block.y + randint(margin,Map.BLOCKSIZE - margin))

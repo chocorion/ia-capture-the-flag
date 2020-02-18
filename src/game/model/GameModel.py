@@ -154,7 +154,7 @@ class GameModel(Model):
 
                     # Apply movement
                     (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                    (bot.x,bot.y) = (real_x, real_y)#self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
+                    (bot.x,bot.y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
 
                     # bitwise comparison for actions
                     actions = bin(data["bots"][bot_id]["actions"])

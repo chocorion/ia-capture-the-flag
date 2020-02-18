@@ -190,7 +190,7 @@ class myPlayer(Player):
             # Bloqué à droite
             elif pos_x % Map.BLOCKSIZE > Map.BLOCKSIZE - 3:
                 print("Bloqué Droite")
-                
+
             # Bloqué en haut
             if pos_y % Map.BLOCKSIZE < 3:
                 print("Bloqué Haut")
@@ -201,29 +201,29 @@ class myPlayer(Player):
                 
 
             # Wall right
-            if angle > 0 and angle <= 45:
+            if angle > 0 and angle <= 45 and pos_y % Map.BLOCKSIZE > Map.BLOCKSIZE - 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y + 1))
                 
-            elif angle > -45 and angle <= 0:
+            elif angle > -45 and angle <= 0 and pos_y % Map.BLOCKSIZE < 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y - 1))
 
             # Wall left
-            elif angle > 135 and angle <= 180:
+            elif angle > 135 and angle <= 180 and pos_y % Map.BLOCKSIZE > Map.BLOCKSIZE - 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y + 1))
-            elif angle >= -180 and angle <= -135:
+            elif angle >= -180 and angle <= -135 and pos_y % Map.BLOCKSIZE < 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x, y - 1))
 
 
             # Wall up
-            elif angle <= 135 and angle > 90:
+            elif angle <= 135 and angle > 90 and pos_x % Map.BLOCKSIZE > Map.BLOCKSIZE - 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x - 1, y))
-            elif angle <= 90 and angle > 45:
+            elif angle <= 90 and angle > 45 and pos_x % Map.BLOCKSIZE < 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x + 1, y))
 
             # Wall down
-            elif angle > -135 and angle <= -90:
+            elif angle > -135 and angle <= -90 and pos_x % Map.BLOCKSIZE > Map.BLOCKSIZE - 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x - 1, y ))
-            elif angle > -90 and angle <= -45:
+            elif angle > -90 and angle <= -45 and pos_x % Map.BLOCKSIZE < 3:
                 self._currentPath[bot_id].insert(self._currentIndex[bot_id], (x + 1, y))
             else:
                 return False

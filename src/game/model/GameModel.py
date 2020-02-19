@@ -1,5 +1,6 @@
 from model.Model import Model
 from model.PhysicsEngine import PhysicsEngine
+from model.PlayerProcess import PlayerProcess
 from model.ArgBuilder.JSONBuilder import JSONBuilder
 from model.ArgBuilder.DictBuilder import DictBuilder
 from service.Ruleset import Ruleset
@@ -11,59 +12,7 @@ from domain.GameObject.Bot import *
 from domain.Player import Player
 from copy import deepcopy
 
-from multiprocessing import Process, Pipe
 import sys
-
-class PlayerProcess():
-    def __init__(self, model, team_id, player, pollingData):
-        """
-        Creates a new process to run a player's tick.
-
-        Arguments:
-            model (Model) : Access to the model of the game
-            team_id (string) : The team to operate
-            player (Player) : The player to call
-            pollingData (any) : Data formatted by the used ArgBuilder
-        """
-
-        self._target = self.run
-
-        self._parent_conn, child_conn = Pipe()
-
-        self._model = model
-        self._team_id = team_id
-
-        self._stopwatch = TimeManager()
-
-        self._args = (child_conn, model, team_id, player, pollingData)
-
-        self._process = Process(target=self._target, args=self._args)
-
-    def run(self, pipe_out, model, team_id, player, pollingData):
-        model.teams_data[team_id] = None
-        pipe_out.send(player.poll(pollingData))
-        pipe_out.close()
-
-    def check(self):
-        if self._parent_conn.poll(0):
-            result = self._parent_conn.recv()
-
-            #print("Result obtained in {} ms".format(self._stopwatch.DeltaTimeMs()))
-
-            if result != None:
-                self._model.teams_data[self._team_id] = result
-
-    def start(self):
-        self._stopwatch.StartTimer()
-        self._process.start()
-
-    def join(self, timeout):
-        self._process.join(timeout)
-
-    def kill(self):
-        #print("Killed after timing out in {} ms".format(self._stopwatch.DeltaTimeMs()))
-        self._process.kill()
-
 class GameModel(Model):
     """
     Implements the Game Model.
@@ -97,7 +46,7 @@ class GameModel(Model):
 
         self._players = dict()
 
-        self._threads = list()
+        self._playerProcesses = dict()
 
         self._turn = 0
 
@@ -105,12 +54,12 @@ class GameModel(Model):
 
         #### Implementation Simu ####
         try:
-            self._players["1"] = Player1(deepcopy(mapData), deepcopy(self._ruleset))
+            self._players["1"] = Player1(mapData, self._ruleset)
         except:
             print("Player 1 can't be evaluated because it failed to initialize")
 
         try:
-            self._players["2"] = Player2(deepcopy(mapData), deepcopy(self._ruleset))
+            self._players["2"] = Player2(mapData, self._ruleset)
         except:
             print("Player 2 can't be evaluated because it failed to initialize")
         ####
@@ -131,6 +80,10 @@ class GameModel(Model):
                 (x, y) = self._map.GetRandomPositionInSpawn(team)
                 self._teams[team_id]["bots"][bot_id] = RegularBot(team, x, y)
 
+            
+            self._playerProcesses[team_id] = PlayerProcess(self, team_id, self._players[team_id])
+            self._playerProcesses[team_id].start()
+
     def tick(self, deltaTime):
         """ 
         Update and handle the game data. Poll each player and process their actions.
@@ -144,7 +97,7 @@ class GameModel(Model):
 
 
         if self._turn >= 0 and self._turn != 1 :
-            # Called before the start of the countdown and each turn after the first one
+            # Called before the start of the countdown and each turn after (not including) the first turn
             self.handlePlayerPolling()
 
         if self._turn > 0:
@@ -166,9 +119,6 @@ class GameModel(Model):
         """
         Creates and starts each Player Process which will process the player's polling function.
         """
-        # The processes are destroyed each time.
-        # Should be improvable to preserve the processes and only restart them instead of creating
-        self._threads = list()
 
         # This timer will run for the whole game
         # Setting the turn to -1 will make us able to know we are in the initial countdown phase
@@ -195,22 +145,18 @@ class GameModel(Model):
             self._argBuilder.end_argument()
 
             pollingData = self._argBuilder.get_result()
-            
-            # This part could be improved by conserving Process inside PlayerProcess object
-            try:
-                self._threads.append(PlayerProcess(self, team_id, player, pollingData))
-            except:
-                print("WARNING: Could not start polling thread for team {} ! Their actions will not be applied.".format(team_id))
+
+            self._playerProcesses[team_id].setData(pollingData)
             
         # Start each player's computation and sleep while they should be processing
         # After we are done sleeping, two things can occur:
         #   1 - If we are in countdown phase : Players will be able to compute for the duration of the countdown
         #   2 - Else : Players will be immediatly checked and killed. If they did not finish, their (individual) turn is invalid; not affecting other players.
-        for thread in self._threads:
-            thread.start()
+        for playerProcess in self._playerProcesses.values():
+            playerProcess.execute()
 
         # The entire computation of a player must be done during this sleep (if not in countdown phase)
-        TimeManager.Sleep(int(self._ruleset["ThinkTimeMs"]))
+        #TimeManager.Sleep(int(self._ruleset["ThinkTimeMs"]))
 
     def handleNormalTurn(self):
         """
@@ -218,9 +164,8 @@ class GameModel(Model):
         """
 
         # This occurs right after sleeping during ThinkTimeMs milliseconds
-        for thread in self._threads:
-            thread.check()
-            thread.kill()
+        for playerProcess in self._playerProcesses.values():
+            playerProcess.check()
                 
         self._turn += 1
 
@@ -275,8 +220,8 @@ class GameModel(Model):
         TODO
         """
         self._turn = 1
-        for thread in self._threads:
-            thread.check()
+        for playerProcess in self._playerProcesses.values():
+            playerProcess.check()
         for team_id in self.teams_data.keys():
             if(self.teams_data[team_id] == None):
                 print(team_id + " not ready")
@@ -287,8 +232,8 @@ class GameModel(Model):
         """
         print("Game starting in {}s ...".format(int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self._stopwatch.PeekDeltaTimeMs()))
 
-        for thread in self._threads:
-            thread.check()
+        for playerProcess in self._playerProcesses.values():
+            playerProcess.check()
         for team_id in self.teams_data.keys():
             if(self.teams_data[team_id] == None):
                 print(team_id + " not ready")

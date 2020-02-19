@@ -217,7 +217,7 @@ class GameModel(Model):
 
     def handleFirstTurn(self):
         """
-        TODO
+        Handles the end of the countdown and sets the turn to 1. This causes the turn to be handled without asking for new data, since it is collected during countdown.
         """
         self._turn = 1
         for playerProcess in self._playerProcesses.values():
@@ -228,7 +228,7 @@ class GameModel(Model):
 
     def handleStartingCountdown(self):
         """
-        TODO
+        Handles the countdown phase by always checking for a response without giving new data.
         """
         print("Game starting in {}s ...".format(int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self._stopwatch.PeekDeltaTimeMs()))
 
@@ -240,7 +240,7 @@ class GameModel(Model):
 
     def checkItemsPickup(self):
         """
-        TODO
+        Checks all bots for a surrounding item to pick.
         """
         allBots = self.getBots()
 

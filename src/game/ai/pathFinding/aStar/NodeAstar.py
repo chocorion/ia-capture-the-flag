@@ -35,7 +35,7 @@ class NodeAstar(AbstractNode):
     # Creates neighbors list for a node
     def createNeighbors(self, nodeGraph):
         #If you want diagonals put in dirs : [-1,-1], [1,1], [1, -1], [-1,1]]
-        dirs = [[1,0], [0,1], [-1, 0], [0,-1], [-1,-1], [1,1], [1, -1], [-1,1]]
+        dirs = [[1,0], [0,1], [-1, 0], [0,-1]] #,[-1,-1], [1,1], [1, -1], [-1,1]]
         pos = (self._x, self._y)
 
         if pos in nodeGraph._neighborMap:

@@ -17,6 +17,8 @@ class Ruleset:
                 'BotsCount' : 5,
                 'SpeedMultiplier' : 1,
                 'RotationMultiplier' : 1,
+                'StartCountdownSeconds' : 5,
+                'ThinkTimeMs' : 16,
             },
         }
 

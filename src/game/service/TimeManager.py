@@ -91,3 +91,10 @@ class TimeManager:
         print("Tickrate: {} tick/s ({:2d}% time usage)".format(round(1000/deltaTime,2),round((msWait-slept)/msWait*100)), end='\r')
         
         return deltaTime
+
+    @staticmethod
+    def Sleep(ms):
+        """
+        Sleep for a time in milliseconds
+        """
+        time.sleep(ms/1000)

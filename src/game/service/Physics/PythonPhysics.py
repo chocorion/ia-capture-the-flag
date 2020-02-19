@@ -24,4 +24,5 @@ class PythonPhysics(PhysicsMethods):
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)) <= radius # Useless to call distance for this
 
     def rectIntersectsCircle(self,x1,y1,w,h,x2,y2,radius):
+        # does not check if a side intersect with the circle, only corners.
         return self.isInCircle(x1,y1,x2,y2,radius) or self.isInCircle(x1+w,y1,x2,y2,radius) or self.isInCircle(x1+w,y1,x2+h,y2,radius) or self.isInCircle(x1,y1,x2+h,y2,radius)

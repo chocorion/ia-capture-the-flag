@@ -295,8 +295,15 @@ class myPlayer(Player):
                     
                     returnData["bots"][bot_id] = { "target_position" : (xInPath, yInPath, speed), "actions" : 0 }
                 else:
-                    returnData["bots"][bot_id] = {"target_position" : (current_position[0], current_position[1], 0),"actions" : 0 }
-
+                    if bot_id in self._currentPath and bot_id in self._currentIndex and self._currentIndex[bot_id] == lengthPath:
+                        currentPosInPath = self._currentPath[bot_id][self._currentIndex[bot_id]]
+                        xInPath          = currentPosInPath[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
+                        yInPath          = currentPosInPath[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
+                        if self.distance(xInPath, yInPath, current_position[0], current_position[1]) > 10:
+                            returnData["bots"][bot_id] = {"target_position" : (xInPath, yInPath, 100),"actions" : 0 }
+                    else:
+                        returnData["bots"][bot_id] = {"target_position" : (current_position[0], current_position[1], 0),"actions" : 0 }
+            #print(current_position)
         return returnData
 
 

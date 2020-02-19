@@ -111,8 +111,8 @@ class myPlayer(Player):
 
     def getNextPos(self, bot_id):
         if bot_id in self._currentPath and bot_id in self._currentIndex:
-            x, y =  (self._currentPath[bot_id][self._currentIndex[bot_id]][0] * Map.BLOCKSIZE,
-                     self._currentPath[bot_id][self._currentIndex[bot_id]][1] * Map.BLOCKSIZE)
+            x, y =  (self._currentPath[bot_id][self._currentIndex[bot_id]][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+                     self._currentPath[bot_id][self._currentIndex[bot_id]][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2)
             return (x, y)
 
     """
@@ -225,7 +225,8 @@ class myPlayer(Player):
         for bot_id in self._pollingData["bots"].keys():
             self.initCurrentIndex(bot_id)
             current_position = self._pollingData["bots"][bot_id]["current_position"]
-            
+            tmp_x, tmp_y = int(current_position[0]), int(current_position[1])
+            current_position = (tmp_x, tmp_y, current_position[2], current_position[3])
             #cas de test random pos
             if pos == None :
                 pos = (5600, 2500, current_position[2], 0)
@@ -260,7 +261,7 @@ class myPlayer(Player):
 
     def getReturnPoll(self):
         returnData  = { "bots": { } }
-        maxDistance = 75.0
+        maxDistance = 10.0
 
         for bot_id in self._pollingData["bots"].keys():
             current_position = self._pollingData["bots"][bot_id]["current_position"]

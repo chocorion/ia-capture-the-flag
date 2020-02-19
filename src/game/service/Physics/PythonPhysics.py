@@ -18,7 +18,6 @@ class PythonPhysics(PhysicsMethods):
         return degrees(atan2(target_y - y, target_x - x))
 
     def applyMovement(self, x, y, angle, distance):
-        print(distance)
         return (x + distance * cos(radians(angle)),y + distance * sin(radians(angle)))
 
     def isInCircle(self,x1,y1,x2,y2,radius):

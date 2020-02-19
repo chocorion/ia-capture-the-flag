@@ -6,6 +6,7 @@ class Bot(GameObject):
     An entity controlled by a Player
 
     Attributes:
+        health (int) : Base amount of life of this bot
 
         heldItems (list(GameObject)) : The items held by this bot
         angle (int) : Angle the bot is facing in degrees.
@@ -28,8 +29,9 @@ class Bot(GameObject):
         self.heldItems = list()
 
         ### Redefine these to create a custom bot
+        self.health = None
         self.angle = None
-        self.player = None
+        self.player = player
         self.speed = None
         
         self.max_speed = None
@@ -60,3 +62,17 @@ class Bot(GameObject):
 
     def rotate(self, angle):
         self.angle += angle
+
+    def flag(self):
+        flag = 0
+
+        for item in self.heldItems:
+            if type(item).__name__ == "Flag":
+                flag = item.team
+                break
+        
+        return flag
+
+    def cooldown(self):
+        return 0
+        

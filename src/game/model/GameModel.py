@@ -1,5 +1,7 @@
 from model.Model import Model
 from model.PhysicsEngine import PhysicsEngine
+from model.ArgBuilder.JSONBuilder import JSONBuilder
+from model.ArgBuilder.DictBuilder import DictBuilder
 from service.Ruleset import Ruleset
 from service.Physics import Physics
 from service.Config import Config
@@ -13,6 +15,15 @@ import sys
 
 class PollThread(threading.Thread):
     def __init__(self, model, team_id, player, pollingData):
+        """
+        Creates a new thread to run a player's tick.
+
+        Arguments:
+            model (Model) : Access to the model of the game
+            team_id (string) : The team to operate
+            player (Player) : The player to call
+            pollingData (any) : Data formatted by the used ArgBuilder
+        """
         super(PollThread, self).__init__()
         self._stop_event = threading.Event()
         self.model = model
@@ -56,6 +67,8 @@ class GameModel(Model):
         self._ruleset = Ruleset.GetRuleset()
 
         self._engine = PhysicsEngine(self._ruleset, self._map)
+
+        self._argBuilder = DictBuilder()
 
         self._players = dict()
 
@@ -107,16 +120,19 @@ class GameModel(Model):
         for team_id in self._players.keys():
             player = self._players[team_id]
 
-            pollingData = { "bots" : {}, "events": {}}
+            self._argBuilder.begin_argument()
 
-            for bot_id in self._teams[team_id]["bots"].keys():
-                bot = self._teams[team_id]["bots"][bot_id]
-                pollingData["bots"][bot_id] = { "current_position" : (bot.x, bot.y, bot.angle, bot.speed) }
+            for bot in self._teams[team_id]["bots"].values():
+                self._argBuilder.add_bot(bot)
 
-            #try:
-            threads.append(PollThread(self, team_id, player, pollingData))
-            #except:
-            #    print("WARNING: Could not start polling thread for team {} ! Their actions will not be applied.".format(team_id))
+            self._argBuilder.end_argument()
+
+            pollingData = self._argBuilder.get_result()
+            
+            try:
+                threads.append(PollThread(self, team_id, player, pollingData))
+            except:
+                print("WARNING: Could not start polling thread for team {} ! Their actions will not be applied.".format(team_id))
 
             team += 1
             

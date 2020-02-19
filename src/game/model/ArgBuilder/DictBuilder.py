@@ -1,4 +1,4 @@
-from model.ArgBuilder import ArgBuilder
+from model.ArgBuilder.ArgBuilder import ArgBuilder
 from service.Ruleset import Ruleset
 
 class DictBuilder(ArgBuilder):
@@ -10,33 +10,36 @@ class DictBuilder(ArgBuilder):
         Return :
             dico (dict()) : Dict containing all the arguments.
         """
-        if self._finish:
+        if self._finished:
             return self._dico
         
         raise Exception("Object was not completed !")
 
 
     def begin_argument(self):
-        self._dico = dict()
+        self._dico = { "bots" : {}, "events" : {}}
         self._current_bot_id = 0
 
-        self._finish = False
+        self._finished = False
 
 
     def end_argument(self):
         if self._current_bot_id != int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("Argument doesn't contain 5 bots !")
 
-        self._finish = True
+        self._finished = True
 
 
-    def add_bot(self, life_amount, flag_number, cooldown):
+    def add_bot(self, bot):
         if self._current_bot_id >= int(Ruleset.GetRulesetValue("BotsCount")):
-            raise Exception("To much bot in this argument")
-
-        self._current_bot_id += 1
-        self._dico[self._current_bot_id] = {
-            "life": life_amount,
-            "flag": flag_number,
-            "cooldown": cooldown
+            raise Exception("To many bots in this argument")
+        
+        bot_identifier = str(bot.player) + "_" + str(self._current_bot_id)
+        
+        self._dico["bots"][bot_identifier] = {
+            "current_position" : (bot.x, bot.y, bot.angle, bot.speed),
+            "life": bot.health,
+            "flag": bot.flag(),
+            "cooldown": bot.cooldown()
         }
+        self._current_bot_id += 1

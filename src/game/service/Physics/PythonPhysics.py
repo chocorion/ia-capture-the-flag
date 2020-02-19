@@ -8,7 +8,7 @@ class PythonPhysics(PhysicsMethods):
     """
 
     def distance(self,x1,x2,y1,y2):
-        return sqrt(pow(x1 - x2, 1) + pow(y1 - y2, 2))
+        return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
     def angularDistance(self,a,b):
         p = abs(b - a)
@@ -18,10 +18,11 @@ class PythonPhysics(PhysicsMethods):
         return degrees(atan2(target_y - y, target_x - x))
 
     def applyMovement(self, x, y, angle, distance):
+        print(distance)
         return (x + distance * cos(radians(angle)),y + distance * sin(radians(angle)))
 
-    def isInCircle(self,x1,x2,y1,y2,radius):
-        return sqrt(pow(x1 - x2, 1) + pow(y1 - y2, 2)) <= radius # Useless to call distance for this
+    def isInCircle(self,x1,y1,x2,y2,radius):
+        return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)) <= radius # Useless to call distance for this
 
-    def rectIntersectsCircle(self,x1,x2,w,h,y1,y2,radius):
-        return self.isInCircle(x1,x2,y1,y2,radius) or self.isInCircle(x1+w,x2,y1,y2,radius) or self.isInCircle(x1+w,x2,y1+h,y2,radius) or self.isInCircle(x1,x2,y1+h,y2,radius)
+    def rectIntersectsCircle(self,x1,y1,w,h,x2,y2,radius):
+        return self.isInCircle(x1,y1,x2,y2,radius) or self.isInCircle(x1+w,y1,x2,y2,radius) or self.isInCircle(x1+w,y1,x2+h,y2,radius) or self.isInCircle(x1,y1,x2+h,y2,radius)

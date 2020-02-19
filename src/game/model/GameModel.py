@@ -129,7 +129,6 @@ class GameModel(Model):
         for thread in threads:
             thread.stop()
                 
-
         # Interpret players orders
         for team_id in self.teams_data.keys():
             if(self.teams_data[team_id] == None):
@@ -146,7 +145,7 @@ class GameModel(Model):
                     target_x = data["bots"][bot_id]["target_position"][0]
                     target_y = data["bots"][bot_id]["target_position"][1]
                     target_speed = data["bots"][bot_id]["target_position"][2]
-
+                    
                     # Perform checks                    
                     bot.angle = self._engine.checkAngle(bot, target_x, target_y)
                     bot.speed = self._engine.checkSpeed(bot, target_speed)
@@ -182,7 +181,7 @@ class GameModel(Model):
         for bot_id in allBots.keys():
             bot = allBots[bot_id]
             for flag in self._map.flags:
-                if not flag.held and Physics.rectIntersectsCircle(flag.x,bot.x,flag.width,flag.height,flag.y,bot.y,bot.radius):
+                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius):
                     bot.pickUp(flag)
 
 

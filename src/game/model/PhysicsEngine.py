@@ -33,6 +33,8 @@ class PhysicsEngine(Physics):
 
         if target_speed > max_speed:
             target_speed = max_speed
+        if target_speed < 0:
+            target_speed = 0
 
         return target_speed
 

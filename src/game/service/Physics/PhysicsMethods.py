@@ -19,5 +19,5 @@ class PhysicsMethods:
     def isInCircle(self,x1,x2,y1,y2,radius):
         pass
 
-    def rectIntersectsCircle(self,x1,x2,w,h,y1,y2,radius):
+    def rectIntersectsCircle(self,x1,y1,w,h,x2,y2,radius):
         pass

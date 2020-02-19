@@ -9,3 +9,6 @@ tests:
 
 runExample:
 	bash -c "cd game; ./Game.py ai.playerTest.myPlayer ai.playerTest.myPlayer"
+
+runAstar:
+	bash -c "cd game; ./Game.py ai.playerTest.myPlayerAstar ai.playerTest.myPlayerAstar"

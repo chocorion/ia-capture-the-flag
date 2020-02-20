@@ -21,7 +21,7 @@ class RegularBot(Bot):
         self.fov = 50 # Default FOV
         self.view_distance = 35 # Default view distance
 
-        self.hitbox = Physics.createCirclePolygon(6)
+        # self.hitbox = Physics.createCirclePolygon(6)
 
         self.color = (255, 0, 0, 255) if player == 1 else (0, 0, 255, 255)
 

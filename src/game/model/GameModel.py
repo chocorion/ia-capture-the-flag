@@ -44,6 +44,8 @@ class GameModel(Model):
 
         self._engine = PhysicsEngine(self._ruleset, self._map)
 
+        self._engine.createCollisionMap("RegularBot", 36)
+
         self._argBuilder = DictBuilder()
 
         self._players = dict()
@@ -87,6 +89,9 @@ class GameModel(Model):
             
             self._playerProcesses[team_id] = PlayerProcess(self, team_id, self._players[team_id])
             self._playerProcesses[team_id].start()
+
+    def getengine(self):
+        return self._engine
 
     def tick(self, deltaTime):
         """ 
@@ -180,38 +185,38 @@ class GameModel(Model):
                 self._team_fails[team_id] += 1
                 continue
 
-            try:
-                data = self.teams_data[team_id]
-                for bot_id in data["bots"].keys():
-                    bot = self._teams[team_id]["bots"][bot_id]
+            # try:
+            data = self.teams_data[team_id]
+            for bot_id in data["bots"].keys():
+                bot = self._teams[team_id]["bots"][bot_id]
 
-                    # Unpack target
-                    target_x = data["bots"][bot_id]["target_position"][0]
-                    target_y = data["bots"][bot_id]["target_position"][1]
-                    target_speed = data["bots"][bot_id]["target_position"][2]
-                    
-                    # Perform checks                    
-                    bot.angle = self._engine.checkAngle(bot, target_x, target_y)
-                    bot.speed = self._engine.checkSpeed(bot, target_speed)
+                # Unpack target
+                target_x = data["bots"][bot_id]["target_position"][0]
+                target_y = data["bots"][bot_id]["target_position"][1]
+                target_speed = data["bots"][bot_id]["target_position"][2]
+                
+                # Perform checks                    
+                bot.angle = self._engine.checkAngle(bot, target_x, target_y)
+                bot.speed = self._engine.checkSpeed(bot, target_speed)
 
-                    bot.speed = bot.speed * self._engine.getDeltaTimeModifier()
+                bot.speed = bot.speed * self._engine.getDeltaTimeModifier()
 
-                    # Apply movement
-                    (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                    (new_x,new_y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
+                # Apply movement
+                (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
+                (new_x,new_y) = self._engine.checkCollision("RegularBot",bot.x,bot.y,real_x,real_y)
 
-                    bot.move(new_x - bot.x, new_y - bot.y)
+                bot.move(new_x - bot.x, new_y - bot.y)
 
-                    # bitwise comparison for actions
-                    actions = bin(data["bots"][bot_id]["actions"])
+                # bitwise comparison for actions
+                actions = bin(data["bots"][bot_id]["actions"])
 
-                    if actions[0]: # SHOOT
-                        pass
-                    if actions[1]: # DROP_FLAG
-                        pass
-            except:
-                print("Invalid response from player {} : {}".format(team_id,sys.exc_info()[0]))
-                self._team_fails[team_id] += 1
+                if actions[0]: # SHOOT
+                    pass
+                if actions[1]: # DROP_FLAG
+                    pass
+            # except:
+            #     print("Invalid response from player {} : {}".format(team_id,sys.exc_info()[0]))
+            #     self._team_fails[team_id] += 1
 
         for team_id in self._team_fails.keys():
             if self._team_fails[team_id] >= Config.InvalidResponsesKick():

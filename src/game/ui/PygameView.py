@@ -77,12 +77,14 @@ class PygameView(View):
 
         if self._refresh_map:
             self._refresh_map = False
+
             self._display_map() 
 
         self._display_bots()
         self._display_flags()
         self._display_countdown()
         
+        self.display_collision_map("RegularBot")
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
 
@@ -144,7 +146,28 @@ class PygameView(View):
             self.countdown_end = True
             self._refresh_map = True
             
-                
+    def display_collision_map(self, name):
+        collision_map = self._model.getengine().collisions_maps[name]
+        factor = self._model.getengine().collisions_maps_factors[name]
+
+        (x,y) = (0,0)
+        for line in collision_map:
+            for dot in line:
+                if dot:
+
+                    current_rect = pygame.Rect(
+                        x * self._cell_size * factor,
+                        y * self._cell_size * factor,
+                        self._cell_size * factor,
+                        self._cell_size * factor
+                    )
+                    
+                    (r, g, b, a) = (255,0,0,0)
+
+                    pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
+                y += 1
+            x += 1
+            y = 0
 
 
     def _display_tiles(self, start_x, start_y, end_x, end_y):

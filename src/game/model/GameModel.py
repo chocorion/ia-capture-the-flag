@@ -90,6 +90,11 @@ class GameModel(Model):
             self._playerProcesses[team_id] = PlayerProcess(self, team_id, self._players[team_id])
             self._playerProcesses[team_id].start()
 
+        self._last_flag_position = [
+            (-1, -1),
+            (-1, -1)
+        ]
+
     def getengine(self):
         return self._engine
 
@@ -108,6 +113,7 @@ class GameModel(Model):
         if self._turn >= 0 and self._turn != 1 :
             # Called before the start of the countdown and each turn after (not including) the first turn
             self.handlePlayerPolling()
+            self.updateLastFlagPosition()
 
         if self._turn > 0:
             # Call each turn to handle physics and player response
@@ -147,6 +153,16 @@ class GameModel(Model):
 
             # Start to build the pollindData
             self._argBuilder.begin_argument()
+
+            for i in range(2):
+                old_flag_x, old_flag_y = self._last_flag_position[i]
+                
+                flag_x = self._map.flags[i].x
+                flag_y = self._map.flags[i].y
+
+
+                if flag_x != old_flag_x or flag_y != old_flag_y:
+                    self._argBuilder.add_flag(self._map.flags[i].team, (flag_x, flag_y))
 
             for bot_id in self._teams[team_id]["bots"].keys():
                 self._argBuilder.add_bot(self._teams[team_id]["bots"][bot_id], bot_id)
@@ -288,3 +304,7 @@ class GameModel(Model):
         Kick a player from the game.
         """
         del self._players[team_id]
+
+    def updateLastFlagPosition(self):
+        for i in range(2):
+            self._last_flag_position[i] = (self._map.flags[i].x, self._map.flags[i].y)

@@ -83,7 +83,7 @@ class GameModel(Model):
             for i in range(0,int(self._ruleset["BotsCount"])):
                 bot_id = team_id + "_" + str(i) # Bot identifier is <team>_<number>
 
-                (x, y) = self._map.GetRandomPositionInSpawn(team)
+                (x, y) = self._map.GetRandomPositionInSpawn(team, 36)
                 self._teams[team_id]["bots"][bot_id] = RegularBot(team, x, y)
 
             

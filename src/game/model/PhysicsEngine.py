@@ -17,7 +17,7 @@ class PhysicsEngine(Physics):
         self._map = map_
 
         self.collisions_maps = dict()
-        self.collisions_maps_factors = dict()
+        self.collisions_maps_dividers = dict()
 
 
     def tick(self, deltaTime):
@@ -102,7 +102,7 @@ class PhysicsEngine(Physics):
         
         for i in range(n, 0, -1):
             
-            if self.collisions_maps[collision_map][int(current_x * self.collisions_maps_factors[collision_map])][int(current_y * self.collisions_maps_factors[collision_map])]:
+            if self.collisions_maps[collision_map][int(current_x // self.collisions_maps_dividers[collision_map])][int(current_y // self.collisions_maps_dividers[collision_map])]:
                 return (last_x, last_y)
 
             last_x = current_x
@@ -125,13 +125,16 @@ class PhysicsEngine(Physics):
 
     def createCollisionMap(self, name, padding):
 
-        factor = 0.1 # 1 / round(Map.BLOCKSIZE / padding)
-        self.collisions_maps_factors[name] = factor
+        divider = 10 # 1 / round(Map.BLOCKSIZE / padding)
+        self.collisions_maps_dividers[name] = divider
 
-        collisions_map_padding = int(Map.BLOCKSIZE // padding * factor)
-        self.collisions_maps[name] = [[False for i in range(0,int(Map.BLOCKSIZE * self._map.blockHeight * factor))] for j in range(0,int(Map.BLOCKSIZE * self._map.blockWidth * factor))]
+        collisions_map_padding = int(padding // (Map.BLOCKSIZE // divider))
+        collisions_map_width = int(self._map.blockWidth * divider)
+        collisions_map_height = int(self._map.blockHeight * divider)
 
-        block_size_factored = int(Map.BLOCKSIZE * factor)
+        self.collisions_maps[name] = [[False for i in range(0,collisions_map_height)] for j in range(0,collisions_map_width)]
+
+        block_size_factored = int(Map.BLOCKSIZE // divider)
 
         (x,y) = (0,0)
         for blockline in self._map.blocks:
@@ -142,7 +145,7 @@ class PhysicsEngine(Physics):
                             nx = int(x + rx)
                             ny = int(y + ry)
                             
-                            if nx >= 0 and ny >= 0 and nx < int(self._map.blockWidth * Map.BLOCKSIZE * factor) and ny < int(self._map.blockHeight * Map.BLOCKSIZE * factor):
+                            if nx >= 0 and ny >= 0 and nx < collisions_map_width and ny < collisions_map_height:
                                 # print("{} {}".format(nx,ny))
                                 self.collisions_maps[name][nx][ny] = True
 

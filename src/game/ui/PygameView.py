@@ -84,7 +84,7 @@ class PygameView(View):
         self._display_flags()
         self._display_countdown()
         
-        self.display_collision_map("RegularBot")
+        #self.display_collision_map("RegularBot")
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
 
@@ -148,7 +148,7 @@ class PygameView(View):
             
     def display_collision_map(self, name):
         collision_map = self._model.getengine().collisions_maps[name]
-        factor = self._model.getengine().collisions_maps_factors[name]
+        divider = self._model.getengine().collisions_maps_dividers[name]
 
         (x,y) = (0,0)
         for line in collision_map:
@@ -156,10 +156,10 @@ class PygameView(View):
                 if dot:
 
                     current_rect = pygame.Rect(
-                        x * self._cell_size * factor,
-                        y * self._cell_size * factor,
-                        self._cell_size * factor,
-                        self._cell_size * factor
+                        x * self._cell_size // divider,
+                        y * self._cell_size // divider,
+                        self._cell_size // divider,
+                        self._cell_size // divider
                     )
                     
                     (r, g, b, a) = (255,0,0,0)

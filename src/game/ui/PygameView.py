@@ -33,12 +33,20 @@ class PygameView(View):
         self._cell_size = min(Config.ResolutionWidth()//self._map.blockWidth, Config.ResolutionHeight()//self._map.blockHeight + 1)
 
         pygame.init()
-        self._window = pygame.display.set_mode((self._map.blockWidth * self._cell_size, self._map.blockHeight * self._cell_size))
-        self._surface = pygame.Surface((self._map.blockWidth * self._cell_size, self._map.blockHeight * self._cell_size), pygame.SRCALPHA)
+
+        self._default_font_big = pygame.font.Font(pygame.font.get_default_font(), 64) 
+        self._default_font_big_outline = pygame.font.Font(pygame.font.get_default_font(), 64) 
+
+        self._window_rect = (self._map.blockWidth * self._cell_size, self._map.blockHeight * self._cell_size)
+
+        self._window = pygame.display.set_mode(self._window_rect)
+        self._surface = pygame.Surface(self._window_rect, pygame.SRCALPHA)
 
         self._mult_factor = self._cell_size/self._map.BLOCKSIZE
 
-        self._display_map()
+        self._refresh_map = True
+
+        self.last_displayed_timer = None
 
 
     def get_mult_factor(self):
@@ -66,9 +74,14 @@ class PygameView(View):
         Updates the window with the current representation of the game.
         """
         self._surface.fill((0, 0, 0, 0))
-        #self._display_map() # a desactiver si opti 
+
+        if self._refresh_map:
+            self._refresh_map = False
+            self._display_map() 
+
         self._display_bots()
         self._display_flags()
+        self._display_countdown()
         
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
@@ -82,6 +95,56 @@ class PygameView(View):
         pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, Config.ResolutionWidth(), Config.ResolutionHeight()))
         
         self._display_tiles(0,0,self._map.blockWidth - 1,self._map.blockHeight - 1)
+
+    def _display_countdown(self):
+        if self._model.cooldownremaining > 0:
+            self.countdown_end = False
+            to_display = ceil(self._model.cooldownremaining / 1000)
+
+            # refresh timer surface only if it changes
+            if self.last_displayed_timer != to_display: 
+                to_display = '{}'.format(to_display)
+                self.last_displayed_timer_text = self._default_font_big.render(to_display, True, (255,0,0,255))
+
+                self.last_displayed_timer_text_outline = self._default_font_big_outline.render(to_display, True, (0,0,0,255))
+
+                self.last_displayed_timer_text_rect = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect1 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect2 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect3 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect4 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect5 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect6 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect7 = self.last_displayed_timer_text.get_rect()
+                self.last_displayed_timer_text_outline_rect8 = self.last_displayed_timer_text.get_rect()
+
+                self.last_displayed_timer_text_rect.center = (self._window_rect[0] // 2, self._window_rect[1] // 2)
+
+                outline_margin = 5
+                self.last_displayed_timer_text_outline_rect1.center = (self._window_rect[0] // 2 + outline_margin, self._window_rect[1] // 2)
+                self.last_displayed_timer_text_outline_rect2.center = (self._window_rect[0] // 2, self._window_rect[1] // 2 + outline_margin)
+                self.last_displayed_timer_text_outline_rect3.center = (self._window_rect[0] // 2 - outline_margin, self._window_rect[1] // 2)
+                self.last_displayed_timer_text_outline_rect4.center = (self._window_rect[0] // 2, self._window_rect[1] // 2 - outline_margin)
+                self.last_displayed_timer_text_outline_rect5.center = (self._window_rect[0] // 2 + outline_margin, self._window_rect[1] // 2 + outline_margin)
+                self.last_displayed_timer_text_outline_rect6.center = (self._window_rect[0] // 2 + outline_margin, self._window_rect[1] // 2 - outline_margin)
+                self.last_displayed_timer_text_outline_rect7.center = (self._window_rect[0] // 2 - outline_margin, self._window_rect[1] // 2 + outline_margin)
+                self.last_displayed_timer_text_outline_rect8.center = (self._window_rect[0] // 2 - outline_margin, self._window_rect[1] // 2 - outline_margin)
+
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect1)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect2)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect3)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect4)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect5)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect6)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect7)
+            self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect8)
+            self._window.blit(self.last_displayed_timer_text, self.last_displayed_timer_text_rect)
+            self._refresh_map = True
+        elif not self.countdown_end:
+            self.countdown_end = True
+            self._refresh_map = True
+            
+                
 
 
     def _display_tiles(self, start_x, start_y, end_x, end_y):

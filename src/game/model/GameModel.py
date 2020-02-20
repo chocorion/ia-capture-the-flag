@@ -22,6 +22,8 @@ class GameModel(Model):
         ruleset (Ruleset) : The set of rules for this game.
         players (list(Player)) : The players that will be polled each tick.
         teams (dict) : Contains player informations to be sent to them.
+
+        cooldownremaining (int) : time in milliseconds since end of start cooldown.
     """
 
     def __init__(self, Player1, Player2):
@@ -51,6 +53,8 @@ class GameModel(Model):
         self._turn = 0
 
         self._stopwatch = TimeManager()
+        
+        self.cooldownremaining = self._ruleset["StartCountdownSeconds"] * 1000
 
         #### Implementation Simu ####
         try:
@@ -156,7 +160,7 @@ class GameModel(Model):
             playerProcess.execute()
 
         # The entire computation of a player must be done during this sleep (if not in countdown phase)
-        #TimeManager.Sleep(int(self._ruleset["ThinkTimeMs"]))
+        TimeManager.Sleep(int(self._ruleset["ThinkTimeMs"]))
 
     def handleNormalTurn(self):
         """
@@ -220,23 +224,19 @@ class GameModel(Model):
         Handles the end of the countdown and sets the turn to 1. This causes the turn to be handled without asking for new data, since it is collected during countdown.
         """
         self._turn = 1
+        self.cooldownremaining = 0
+
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()
-        for team_id in self.teams_data.keys():
-            if(self.teams_data[team_id] == None):
-                print(team_id + " not ready")
 
     def handleStartingCountdown(self):
         """
         Handles the countdown phase by always checking for a response without giving new data.
         """
-        print("Game starting in {}s ...".format(int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self._stopwatch.PeekDeltaTimeMs()))
+        self.cooldownremaining = int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self._stopwatch.PeekDeltaTimeMs()
 
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()
-        for team_id in self.teams_data.keys():
-            if(self.teams_data[team_id] == None):
-                print(team_id + " not ready")
 
     def checkItemsPickup(self):
         """

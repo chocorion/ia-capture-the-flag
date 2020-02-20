@@ -48,6 +48,8 @@ class PlayerProcess():
 
         self._process = Process(target=self._target, args=self._args)
 
+        self.last_response_time = None
+
     def setData(self, pollingData):
         """
         Changes what data will be put in the queue for the next call to execute.
@@ -74,8 +76,8 @@ class PlayerProcess():
         """
         try: 
             result = self._result_queue.get(False)
-
-            print("Result obtained in {} ms".format(self._stopwatch.DeltaTimeMs()))
+            self.last_response_time = self._stopwatch.DeltaTimeMs()
+            
         except:
             if self._model.teams_data[self._team_id] == None:
                 result = None

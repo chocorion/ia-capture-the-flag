@@ -28,6 +28,11 @@ def points_distance(p1, p2):
 
 class myPlayer(Player):
     
+    def debug(self, bot_id, message):
+        if int(bot_id.split("_")[1]) == 0:
+            print("[LITTLE_PLAYER] " + message)
+
+
     def __init__(self, game_map, rules, team):
         self._team         = team
         self._map          = game_map
@@ -49,18 +54,28 @@ class myPlayer(Player):
                         NodeAstar(x, y, self._map["blocks"][x][y]))
         return Nodelist
     
-    def build_response(self):
+    def _build_response(self):
         response = {"bots": dict()}
 
         for bot_id in self._bot_data["bots"].keys():
             dest = self._bot_data["bots"][bot_id]["destination"]
 
             response["bots"][bot_id] = {
-                "target_position": (dest[0], dest[1], 100),
+                "target_position": (
+                    dest[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+                    dest[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+                    1
+                ),
                 "actions": 0
             }
 
+            self.debug(bot_id, "Reponse -> {}".format(response["bots"][bot_id]))
+
         return response
+
+    def _update_data(self, polling_data):
+        for bot_id in polling_data["bots"].keys():
+            self._bot_data["bots"][bot_id]["current_position"] = polling_data["bots"][bot_id]["current_position"]
 
     def poll(self, pollingData):
         if self._init:
@@ -75,11 +90,13 @@ class myPlayer(Player):
             
             self._init = False
 
+        self._update_data(pollingData)
+
         for bot_id in self._bot_data["bots"].keys():
             result = self._bot_data["bots"][bot_id]["behavior"].tick(0)
-            print("bot_id {} -> {}".format(bot_id, NodeResultToString[result]))
+            self.debug(bot_id, "Behavior status -> {}".format(NodeResultToString[result]))
 
-        return self.build_response()
+        return self._build_response()
 
 
     ###########################################################
@@ -115,8 +132,12 @@ class myPlayer(Player):
             if current_index == self._bot_data["bots"][bot_id]["path_length"]:
                 return NodeTree.SUCCESS
 
+            self.debug(bot_id, "from {:5d} {:5d} to {:5d} {:5d}".format(bot_position[0], bot_position[1],path[current_index][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[current_index][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2))
+            self.debug(bot_id, "DISTANCE -> {}".format(distance(path[current_index][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[current_index][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, bot_position[0], bot_position[1])))
+            
+            if distance(path[current_index][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[current_index][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, bot_position[0], bot_position[1]) <= 80:
+                self.debug(bot_id, "Check point Passed !")
 
-            if points_distance(path[current_index], (bot_position[0], bot_position[1])) < 10:
                 self._bot_data["bots"][bot_id]["destination"] = path[current_index + 1]
                 self._bot_data["bots"][bot_id]["path_index"] += 1
 

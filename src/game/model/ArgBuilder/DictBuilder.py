@@ -41,3 +41,10 @@ class DictBuilder(ArgBuilder):
             "cooldown": bot.cooldown()
         }
         self._current_bot_id += 1
+
+
+    def add_flag(self, team, current_position):
+        if "flags" not in self._dico["events"].keys():
+            self._dico["events"]["flags"] = list()
+
+        self._dico["events"]["flags"].append({"team": team, "position": (current_position[0], current_position[1])})

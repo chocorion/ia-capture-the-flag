@@ -29,3 +29,13 @@ class ArgBuilder(metaclass=ABCMeta):
             bot (Bot): domain.Bot
         """
         ...
+
+    @abstractmethod
+    def add_flag(self, team, current_position):
+        """
+        Add a flag event to the argument.
+
+        Parameters :
+            team (int): flag owner
+            current_position (int, int): x and y coord of the flag
+        """

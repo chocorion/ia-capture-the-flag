@@ -319,6 +319,10 @@ class myPlayer(Player):
             },
             "events" : {
                 ...
+                "flags": {
+                    "team" : <team_number>
+                    "position" : (<x>, <y>)
+                }
             }
         }
     
@@ -341,6 +345,13 @@ class myPlayer(Player):
     """
     def poll(self, pollingData):
         self._pollingData = pollingData
+
+        # if "flags" in pollingData["events"].keys():
+        #     print("Flag position update !")
+
+        #     for flag in pollingData["events"]["flags"]:
+        #         print("\t{} -> {}:{}".format(flag["team"], flag["position"][0], flag["position"][1]))
+
         self.initPathFinder()
         self.pathWithPollingData()
         return self.getReturnPoll()

@@ -58,12 +58,12 @@ class GameModel(Model):
 
         #### Implementation Simu ####
         try:
-            self._players["1"] = Player1(mapData, self._ruleset)
+            self._players["1"] = Player1(mapData, self._ruleset, team=1)
         except:
             print("Player 1 can't be evaluated because it failed to initialize")
 
         try:
-            self._players["2"] = Player2(mapData, self._ruleset)
+            self._players["2"] = Player2(mapData, self._ruleset, team=2)
         except:
             print("Player 2 can't be evaluated because it failed to initialize")
         ####

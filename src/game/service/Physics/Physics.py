@@ -47,13 +47,41 @@ class Physics():
     @staticmethod
     def isInCircle(x1,x2,y1,y2,radius):
         """
-        Returns wether a point (x1,y1) is inside a circle (x2,y2,radius).
+        Returns whether a point (x1,y1) is inside a circle (x2,y2,radius).
         """
         return Physics.instance.isInCircle(x1,x2,y1,y2,radius)
 
     @staticmethod
     def rectIntersectsCircle(x1,y1,w,h,x2,y2,radius):
         """
-        Returns wether a rect (x1,y1,w,h) is inside a circle (x2,y2,radius).
+        Returns whether a rect (x1,y1,w,h) is inside a circle (x2,y2,radius).
         """
         return Physics.instance.rectIntersectsCircle(x1,y1,w,h,x2,y2,radius)
+    
+    @staticmethod
+    def polygonIntersectsRect(vertices, rx, ry, rw, rh):
+        """
+        Returns whether a polygon (vertices : list((x,y))) intersects or is inside a rectangle (x,y,w,h)
+        """
+        return Physics.instance.polygonIntersectsRect(vertices, rx, ry, rw, rh)
+
+    @staticmethod
+    def lineIntersectsRect(x1, y1, x2, y2, rx, ry, rw, rh):
+        """
+        Returns whether a line (x1,y1,x2,y2) intersects a rectangle (x,y,w,h)
+        """
+        return Physics.instance.lineIntersectsRect(x1, y1, x2, y2, rx, ry, rw, rh)
+
+    @staticmethod
+    def lineIntersectsLine(x1, y1, x2, y2, x3, y3, x4, y4):
+        """
+        Returns whether a line (x1,y1,x2,y2) intersects with another line (x3,y3,x4,y4)
+        """
+        return Physics.instance.lineIntersectsLine(x1, y1, x2, y2, x3, y3, x4, y4)
+
+    @staticmethod
+    def pointInsidePolygon(vertices, x, y):
+        """
+        Returns whether a point (x,y) is inside a polygon (vertices : list((x,y)))
+        """
+        return Physics.instance.pointInsidePolygon(vertices, x, y)

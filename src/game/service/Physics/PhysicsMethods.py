@@ -21,3 +21,15 @@ class PhysicsMethods:
 
     def rectIntersectsCircle(self,x1,y1,w,h,x2,y2,radius):
         pass
+    
+    def polygonIntersectsRect(self, vertices, rx, ry, rw, rh):
+        pass
+
+    def lineIntersectsRect(self, x1, y1, x2, y2, rx, ry, rw, rh):
+        pass
+
+    def lineIntersectsLine(self, x1, y1, x2, y2, x3, y3, x4, y4):
+        pass    
+
+    def pointInsidePolygon(self, vertices, x, y):
+        pass

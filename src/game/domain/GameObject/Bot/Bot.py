@@ -40,6 +40,7 @@ class Bot(GameObject):
         self.fov = None
         self.view_distance = None
 
+        self.hitbox = list() # list of vertices, example:  ((x1,y1),(x2,y2),(x3,y3)) is a triangle
         self.color = None
         ###
 

@@ -30,13 +30,11 @@ class DictBuilder(ArgBuilder):
         self._finished = True
 
 
-    def add_bot(self, bot):
+    def add_bot(self, bot, bot_id):
         if self._current_bot_id >= int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("To many bots in this argument")
         
-        bot_identifier = str(bot.player) + "_" + str(self._current_bot_id)
-        
-        self._dico["bots"][bot_identifier] = {
+        self._dico["bots"][bot_id] = {
             "current_position" : (bot.x, bot.y, bot.angle, bot.speed),
             "life": bot.health,
             "flag": bot.flag(),

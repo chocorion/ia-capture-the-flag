@@ -21,7 +21,7 @@ class PhysicsMethods:
 
     def rectIntersectsCircle(self,x1,y1,w,h,x2,y2,radius):
         pass
-    
+
     def polygonIntersectsRect(self, vertices, rx, ry, rw, rh):
         pass
 
@@ -32,4 +32,7 @@ class PhysicsMethods:
         pass    
 
     def pointInsidePolygon(self, vertices, x, y):
+        pass
+
+    def createCirclePolygon(self, nb_vertices):
         pass

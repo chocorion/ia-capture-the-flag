@@ -1,6 +1,6 @@
 from service.Physics import PhysicsMethods
 
-from math import sqrt, atan2, cos, sin, degrees, radians
+from math import sqrt, atan2, cos, sin, degrees, radians, pi
 
 class PythonPhysics(PhysicsMethods):
     """
@@ -102,3 +102,14 @@ class PythonPhysics(PhysicsMethods):
                     collision = not collision
             
         return collision
+
+    def createCirclePolygon(self, nb_vertices):
+        polygon = list()
+
+        (x,y) = (0,0)
+        angle = 0
+        for v in range(0,nb_vertices):
+            polygon.append((x+cos(angle),y+sin(angle)))
+            angle += 2 * pi / nb_vertices
+
+        return polygon

@@ -143,8 +143,8 @@ class GameModel(Model):
             # Start to build the pollindData
             self._argBuilder.begin_argument()
 
-            for bot in self._teams[team_id]["bots"].values():
-                self._argBuilder.add_bot(bot)
+            for bot_id in self._teams[team_id]["bots"].keys():
+                self._argBuilder.add_bot(self._teams[team_id]["bots"][bot_id], bot_id)
 
             self._argBuilder.end_argument()
 

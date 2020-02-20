@@ -85,3 +85,10 @@ class Physics():
         Returns whether a point (x,y) is inside a polygon (vertices : list((x,y)))
         """
         return Physics.instance.pointInsidePolygon(vertices, x, y)
+
+    @staticmethod
+    def createCirclePolygon(nb_vertices):
+        """
+        Returns a new polygon with (nb_vertices) equal sides.
+        """
+        return Physics.instance.createCirclePolygon(nb_vertices)

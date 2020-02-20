@@ -214,7 +214,7 @@ class GameModel(Model):
 
                     # Apply movement
                     (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                    (new_x,new_y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y)
+                    (new_x,new_y) = self._engine.checkCollision(bot.x,bot.y,real_x,real_y,target_x,target_y)
 
                     bot.move(new_x - bot.x, new_y - bot.y)
 

@@ -69,7 +69,7 @@ class PhysicsEngine(Physics):
         """
         return (self.deltaTime / (1000 / (30 * Config.TimeRate())))
 
-    def checkCollision(self, x, y, target_x, target_y):
+    def checkCollision(self, x, y, target_x, target_y, cap_x = None, cap_y = None):
         """
         Checks whether a target's path collides with the map.
 
@@ -97,6 +97,9 @@ class PhysicsEngine(Physics):
         dy *= 2
         
         for i in range(n, 0, -1):
+
+            if cap_x != None and cap_y != None and cap_x == last_x and cap_y == last_y:
+                return (last_x,last_y)
             
             if self._map.blocks[int(current_x // self._map.BLOCKSIZE)][int(current_y // self._map.BLOCKSIZE)].solid:
                 return (last_x, last_y)

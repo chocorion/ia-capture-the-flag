@@ -139,14 +139,14 @@ class myPlayer(Player):
     """
 
     def incrementIndex(self, bot_id, current_position):
-
+        rayonBot = 36
         if bot_id in self._currentPath and bot_id in self._currentIndex and self._currentPath[bot_id] != None :
             
             posInPath    = self.getNextPos(bot_id)
             lengthPath   = len(self._currentPath[bot_id]) -1
             distancePath = self._distance(current_position, posInPath)
             distanceOld  = self._distance(current_position,self._lastPosition[bot_id])
-            if distanceOld - distancePath > -35 and self._currentIndex[bot_id] != lengthPath :
+            if distanceOld - distancePath > -rayonBot and self._currentIndex[bot_id] != lengthPath :
                 self._currentIndex[bot_id] += 1
             
 

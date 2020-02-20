@@ -36,6 +36,10 @@ class myPlayer(Player):
     """
     
     def __init__(self, _map, rules):
+        # vvvvvvvvvvv
+        RegularMap(_map) # <----- use this for the map
+        # ^^^^^^^^^^^
+
         # map and rules are python objects, need to make them JSON
         self._map          = _map
         self._rules        = rules

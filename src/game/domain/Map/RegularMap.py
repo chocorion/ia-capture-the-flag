@@ -22,6 +22,7 @@ class RegularMap(Map):
             flags (list):       List of Flag objects
             spawns (list):      List of Spawn objects
         """
+        Map.BLOCKSIZE = mapData["blocksize"]
         self.blockHeight = mapData["blockHeight"]
         self.blockWidth = mapData["blockWidth"]
         self.height = mapData["height"]
@@ -62,10 +63,13 @@ class RegularMap(Map):
         with open(filename, "r") as file:
             lines = file.readlines()
 
-            mapDefinitionLines = 2 # The amount of lines before the map tiling
+            mapDefinitionLines = 3 # The amount of lines before the map tiling
 
-            data["blockWidth"] = int(lines[0].split(":")[1])
-            data["blockHeight"] = int(lines[1].split(":")[1])
+            data["blocksize"] = int(lines[0].split(":")[1])
+            Map.BLOCKSIZE = data["blocksize"]
+
+            data["blockWidth"] = int(lines[1].split(":")[1])
+            data["blockHeight"] = int(lines[2].split(":")[1])
 
             data["height"] = data["blockHeight"] * Map.BLOCKSIZE
             data["width"] = data["blockWidth"] * Map.BLOCKSIZE

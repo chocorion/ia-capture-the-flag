@@ -16,7 +16,7 @@ class Map:
         bots (list):        The player's bots
     """
 
-    BLOCKSIZE = 100
+    BLOCKSIZE = None # Given in mapdata
 
     def __init__(self, mapData):
         """

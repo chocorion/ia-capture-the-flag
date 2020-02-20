@@ -11,7 +11,7 @@ class Player:
     SHOOT = 1
     DROP_FLAG = 2
 
-    def __init__(self, map, rules):
+    def __init__(self, map, rules, team):
         raise NotImplementedError
 
 

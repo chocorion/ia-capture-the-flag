@@ -7,7 +7,7 @@ class myPlayer(Player):
     Your AI must also be named 'myPlayer' and implement 'Player'.
     """
 
-    def __init__(self, map, rules):
+    def __init__(self, map, rules, team):
         # map and rules are python objects, need to make them JSON
         print("Bonjour! Je suis un joueur :))) avec {} bots".format(rules["BotsCount"]))
 

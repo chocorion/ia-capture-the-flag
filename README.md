@@ -4,7 +4,7 @@ Capture the Flag sandbox opposing AI teams
 
 # Running
 
-### Running
+### Run examples
 
 `./Game.py`
 
@@ -45,3 +45,10 @@ Be careful : Your player's class must always be named 'myPlayer', and has to ext
 From the game directory :
 
 `./tests/run_tests.py`
+
+### Visually
+
+Use these default key bindings to toggle different Debug views :
+
+- A : Toggle collision map preview for the default bots
+- Z : Display the coordinates of the currently hovered block in the top left of the screen

@@ -95,7 +95,7 @@ class GameModel(Model):
             (-1, -1)
         ]
 
-    def getengine(self):
+    def getEngine(self):
         return self._engine
 
     def tick(self, deltaTime):
@@ -306,9 +306,16 @@ class GameModel(Model):
         del self._players[team_id]
 
     def updateLastFlagPosition(self):
+        """
+        Updates the last position of each flag
+        """
         for i in range(2):
             self._last_flag_position[i] = (self._map.flags[i].x, self._map.flags[i].y)
+            # TODO: If the flag is inside a base, switch to endscreen
 
     def stop(self):
+        """
+        Ends the game and terminates child processes
+        """
         for playerProcess in self._playerProcesses.values():
             playerProcess.kill()

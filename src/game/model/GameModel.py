@@ -26,7 +26,7 @@ class GameModel(Model):
         cooldownremaining (int) : time in milliseconds since end of start cooldown.
     """
 
-    def __init__(self, Player1, Player2):
+    def __init__(self, Player1, Player2, map_file = './maps/map_00.txt'):
         """
         Initialize game data.
   
@@ -34,7 +34,7 @@ class GameModel(Model):
            Player1 (Player): The player in control of the Red team.
            Player2 (Player): The player in control of the Blue team.
         """
-        mapData = RegularMap.loadMapData('./maps/map_00.txt')
+        mapData = RegularMap.loadMapData(map_file)
 
         # Generate an empty map and send it to the players
         # The bots starting positions will be sent at the first polling
@@ -52,9 +52,9 @@ class GameModel(Model):
 
         self._playerProcesses = dict()
 
-        self._turn = 0
+        self.turn = 0
 
-        self._stopwatch = TimeManager()
+        self.stopwatch = TimeManager()
         
         self.cooldownremaining = self._ruleset["StartCountdownSeconds"] * 1000
 
@@ -110,17 +110,17 @@ class GameModel(Model):
         self.deltaTime = deltaTime
 
 
-        if self._turn >= 0 and self._turn != 1 :
+        if self.turn >= 0 and self.turn != 1 :
             # Called before the start of the countdown and each turn after (not including) the first turn
             self.handlePlayerPolling()
             self.updateLastFlagPosition()
 
-        if self._turn > 0:
+        if self.turn > 0:
             # Call each turn to handle physics and player response
             self.handleNormalTurn()
 
         # In this condition, we wemove ThinkTimeMs because it is already slept during player polling
-        elif self._stopwatch.PeekDeltaTimeMs() > int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]):
+        elif self.stopwatch.PeekDeltaTimeMs() > int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]):
             # Call once to finish countdown
             self.handleFirstTurn()
 
@@ -137,9 +137,9 @@ class GameModel(Model):
 
         # This timer will run for the whole game
         # Setting the turn to -1 will make us able to know we are in the initial countdown phase
-        if self._turn == 0:
-            self._stopwatch.StartTimer()
-            self._turn = -1
+        if self.turn == 0:
+            self.stopwatch.StartTimer()
+            self.turn = -1
 
         # The data is reset each time to make sure we don't perform outdated player actions
         self.teams_data = {
@@ -192,7 +192,7 @@ class GameModel(Model):
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()
                 
-        self._turn += 1
+        self.turn += 1
 
         # Interpret players orders
         for team_id in self.teams_data.keys():
@@ -244,7 +244,7 @@ class GameModel(Model):
         """
         Handles the end of the countdown and sets the turn to 1. This causes the turn to be handled without asking for new data, since it is collected during countdown.
         """
-        self._turn = 1
+        self.turn = 1
         self.cooldownremaining = 0
 
         for playerProcess in self._playerProcesses.values():
@@ -254,7 +254,7 @@ class GameModel(Model):
         """
         Handles the countdown phase by always checking for a response without giving new data.
         """
-        self.cooldownremaining = int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self._stopwatch.PeekDeltaTimeMs()
+        self.cooldownremaining = int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self.stopwatch.PeekDeltaTimeMs()
 
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()
@@ -308,3 +308,7 @@ class GameModel(Model):
     def updateLastFlagPosition(self):
         for i in range(2):
             self._last_flag_position[i] = (self._map.flags[i].x, self._map.flags[i].y)
+
+    def stop(self):
+        for playerProcess in self._playerProcesses.values():
+            playerProcess.kill()

@@ -25,7 +25,5 @@ class RegularBot(Bot):
 
         self.color = (255, 0, 0, 255) if player == 1 else (0, 0, 255, 255)
 
-        print("New bot in team {} | x: {}, y: {}".format(player,x,y))
-
     def isIn(self, x, y):
         return Physics.isInCircle(self.x, self.y, x, y, self.radius)

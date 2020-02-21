@@ -43,7 +43,7 @@ class PythonPhysics(PhysicsMethods):
             # get the PVectors at our current position
             # this makes our if statement a little cleaner
             (vcx,vcy) = vertices[current];    # c for "current"
-            (vnx,vny) = vertices[next];       # n for "next"
+            (vnx,vny) = vertices[next_];       # n for "next"
 
             # check against all four sides of the rectangle
             if self.lineIntersectsLine(vcx,vcy,vnx,vny, rx,ry,rw,rh):

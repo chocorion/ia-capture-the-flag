@@ -11,7 +11,7 @@ class PythonPhysics(PhysicsMethods):
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
     def angularDistance(self,a,b):
-        p = abs(b - a)
+        p = abs(b - a) % 360
         return 360 - p if p > 180 else p
 
     def getAngle(self, x, y, target_x, target_y):

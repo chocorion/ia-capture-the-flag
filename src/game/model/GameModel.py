@@ -60,12 +60,12 @@ class GameModel(Model):
 
         #### Implementation Simu ####
         try:
-            self._players["1"] = Player1(mapData, self._ruleset)
+            self._players["1"] = Player1(mapData, self._ruleset, team=1)
         except:
             print("Player 1 can't be evaluated because it failed to initialize")
 
         try:
-            self._players["2"] = Player2(mapData, self._ruleset)
+            self._players["2"] = Player2(mapData, self._ruleset, team=2)
         except:
             print("Player 2 can't be evaluated because it failed to initialize")
         ####
@@ -219,7 +219,7 @@ class GameModel(Model):
 
                 # Apply movement
                 (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                (new_x,new_y) = self._engine.checkCollision("RegularBot",bot.x,bot.y,real_x,real_y)
+                (new_x,new_y) = self._engine.checkCollision("RegularBot",bot.x,bot.y,real_x,real_y,target_x,target_y)
 
                 bot.move(new_x - bot.x, new_y - bot.y)
 

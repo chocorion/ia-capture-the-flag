@@ -35,7 +35,11 @@ class myPlayer(Player):
             _blocked_bots: List of the blocked bots : bot_id is add to list if the bot is blocked
     """
     
-    def __init__(self, _map, rules):
+    def __init__(self, _map, rules, team):
+        # vvvvvvvvvvv
+        RegularMap(_map) # <----- use this for the map
+        # ^^^^^^^^^^^
+
         # map and rules are python objects, need to make them JSON
         self._map          = _map
         self._rules        = rules
@@ -46,6 +50,8 @@ class myPlayer(Player):
         self._lastPosition = {}
         self._canSend      = False
         self._blocked_bots = list()
+
+        self._team = team
         #print("Bonjour! Je suis un joueur :))) avec {} bots".format(rules["BotsCount"]))
 
     """

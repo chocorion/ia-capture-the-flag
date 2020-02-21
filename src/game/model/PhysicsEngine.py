@@ -73,7 +73,7 @@ class PhysicsEngine(Physics):
         """
         return (self.deltaTime / (1000 / (30 * Config.TimeRate())))
 
-    def checkCollision(self, collision_map, x, y, target_x, target_y):
+    def checkCollision(self, collision_map, x, y, target_x, target_y, cap_x, cap_y):
         """
         Checks whether a target's path collides with the map.
 
@@ -101,6 +101,9 @@ class PhysicsEngine(Physics):
         dy *= 2
         
         for i in range(n, 0, -1):
+
+            if cap_x != None and cap_y != None and cap_x == last_x and cap_y == last_y:
+                return (last_x,last_y)
             
             if self.collisions_maps[collision_map][int(current_x // self.collisions_maps_dividers[collision_map])][int(current_y // self.collisions_maps_dividers[collision_map])]:
                 return (last_x, last_y)

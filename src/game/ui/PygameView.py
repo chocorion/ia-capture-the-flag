@@ -17,6 +17,9 @@ class PygameView(View):
         map (Map)       : The Map object from Model, for easier access.
     """
 
+    DEBUG_COLLISIONMAP = 0
+    DEBUG_CELL_COORDS = 1
+
     def __init__(self, model):
         """ 
         The constructor for PygameView.
@@ -34,7 +37,8 @@ class PygameView(View):
 
         pygame.init()
 
-        self._defaultFontBig = pygame.font.Font(pygame.font.get_default_font(), 64) 
+        self._defaultFontSmall = pygame.font.Font(pygame.font.get_default_font(), 24) 
+        self._default_font_big = pygame.font.Font(pygame.font.get_default_font(), 64) 
         self._defaultFontBigOutline = pygame.font.Font(pygame.font.get_default_font(), 64) 
 
         self._windowRect = (self._map.blockWidth * self._cellSize, self._map.blockHeight * self._cellSize)
@@ -46,10 +50,15 @@ class PygameView(View):
 
         self._refreshMap = True
 
-        self.lastDisplayedTimer = None
+        self.last_displayed_timer = None
+        self.last_displayed_aimed = None
+
+        self.countdownEnd = None
+
+        self.debug = [False]*2
 
 
-    def getMultFactor(self):
+    def get_mult_factor(self):
         """ 
         Getter for multFactor.
 
@@ -75,16 +84,21 @@ class PygameView(View):
         """
         self._surface.fill((0, 0, 0, 0))
 
-        if self._refreshMap:
+        if self._refreshMap or self.debug[PygameView.DEBUG_COLLISIONMAP]:
             self._refreshMap = False
 
             self._displayMap() 
-
+                
         self._displayBots()
         self._displayFlags()
         self._displayCountdown()
-        
-        #self.displayCollisionMap("RegularBot")
+
+        if self.debug[PygameView.DEBUG_COLLISIONMAP]:
+            self.displayCollisionMap("RegularBot")
+
+        if self.debug[PygameView.DEBUG_CELL_COORDS]:
+            self.displayAimed()
+
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
 
@@ -99,17 +113,21 @@ class PygameView(View):
         self._displayTiles(0,0,self._map.blockWidth - 1,self._map.blockHeight - 1)
 
     def _displayCountdown(self):
+        """
+        Displays the remaining countdown time in seconds in the middle of the screen.
+        """
         if self._model.cooldownremaining > 0:
             self.countdownEnd = False
             toDisplay = ceil(self._model.cooldownremaining / 1000)
 
             # refresh timer surface only if it changes
-            if self.lastDisplayedTimer != toDisplay: 
+            if self.last_displayed_timer != toDisplay: 
                 toDisplay = '{}'.format(toDisplay)
-                self.lastDisplayedTimerText = self._defaultFontBig.render(toDisplay, True, (255,0,0,255))
+                self.lastDisplayedTimerText = self._default_font_big.render(toDisplay, True, (255,0,255,255))
 
                 self.lastDisplayedTimerTextOutline = self._defaultFontBigOutline.render(toDisplay, True, (0,0,0,255))
 
+                # TODO: refactor
                 self.lastDisplayedTimerTextRect = self.lastDisplayedTimerText.get_rect()
                 self.lastDisplayedTimerTextOutlineRect1 = self.lastDisplayedTimerText.get_rect()
                 self.lastDisplayedTimerTextOutlineRect2 = self.lastDisplayedTimerText.get_rect()
@@ -132,6 +150,7 @@ class PygameView(View):
                 self.lastDisplayedTimerTextOutlineRect7.center = (self._windowRect[0] // 2 - outlineMargin, self._windowRect[1] // 2 + outlineMargin)
                 self.lastDisplayedTimerTextOutlineRect8.center = (self._windowRect[0] // 2 - outlineMargin, self._windowRect[1] // 2 - outlineMargin)
 
+            # TODO: refactor
             self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect1)
             self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect2)
             self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect3)
@@ -147,27 +166,54 @@ class PygameView(View):
             self._refreshMap = True
             
     def displayCollisionMap(self, name):
-        collisionMap = self._model.getengine().collisionsMaps[name]
-        divider = self._model.getengine().collisionsMapsDividers[name]
+        """
+        Displays a collision map.
 
-        (x,y) = (0,0)
-        for line in collisionMap:
-            for dot in line:
-                if dot:
+        Parameters:
+            name (string) : The identifier of this collision map. Example: "RegularBot"
+        """
+        try:
 
-                    currentRect = pygame.Rect(
-                        x * self._cellSize // divider,
-                        y * self._cellSize // divider,
-                        self._cellSize // divider,
-                        self._cellSize // divider
-                    )
-                    
-                    (r, g, b, a) = (255,0,0,0)
+            self._window.blit(self.collisionSurface, (0, 0))
+        except:
+            collision_map = self._model.getEngine().collisions_maps[name]
+            divider = self._model.getEngine().collisionsMapsDividers[name]
 
-                    pygame.draw.rect(self._window, pygame.Color(r, g, b, a), currentRect)
-                y += 1
-            x += 1
-            y = 0
+            self.collisionSurface = pygame.Surface(self._windowRect, pygame.SRCALPHA)
+
+            (x,y) = (0,0)
+            for line in collision_map:
+                for dot in line:
+                    if dot:
+
+                        currentRect = pygame.Rect(
+                            int(x * self._cellSize // divider),
+                            int(y * self._cellSize // divider),
+                            round(self._cellSize / divider),
+                            round(self._cellSize / divider)
+                        )
+                        
+                        (r, g, b, a) = (255,0,0,60)
+
+                        pygame.draw.rect(self.collisionSurface, pygame.Color(r, g, b, a), currentRect)
+                    y += 1
+                x += 1
+                y = 0
+            
+
+    def displayAimed(self):
+        """
+        DEBUG: Displays the coordinates of the currently hovered block.
+        """
+        # refresh aimed cell only if changed
+        toDisplay = (self._model.mouseCoords[0] // self._cellSize,self._model.mouseCoords[1] // self._cellSize)
+
+        if self.last_displayed_aimed != toDisplay: 
+            toDisplay = '(x{},y{})'.format(toDisplay[0],toDisplay[1])
+            self.last_displayed_aimed_text = self._defaultFontSmall.render(toDisplay, True, (0,0,0,255))
+            self._refreshMap = True
+
+        self._window.blit(self.last_displayed_aimed_text, self.last_displayed_aimed_text.get_rect())
 
 
     def _displayTiles(self, startX, startY, endX, endY):
@@ -329,3 +375,7 @@ class PygameView(View):
 
         self._window.blit(self.coneSurface, (oldX - length, oldY - length))
 
+
+    def debug_switch(self, debugmode):
+        self.debug[debugmode] = not self.debug[debugmode]
+        self._refreshMap = True

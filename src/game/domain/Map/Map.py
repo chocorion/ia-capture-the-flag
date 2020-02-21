@@ -16,7 +16,10 @@ class Map:
         bots (list):        The player's bots
     """
 
-    BLOCKSIZE = None # Given in mapdata
+    BLOCKSIZE = None # TODO: Make this a normal attribute
+    """
+    The size of each block of the map. This static variable has to be set in the initialization of the map.
+    """
 
     def __init__(self, mapData):
         """

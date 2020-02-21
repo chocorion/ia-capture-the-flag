@@ -32,7 +32,7 @@ class TestGameModel(unittest.TestCase):
         Config.Initialize()
         Ruleset.Initialize()
         
-        TestGameModel.Model = GameModel(myPlayer, myPlayer, 'game/maps/test_map.txt')
+        TestGameModel.Model = GameModel(myPlayer, myPlayer, 'src/game/maps/test_map.txt')
 
         # Override the model stopwatch to test reaction to time
         def getTimeMs(self):

@@ -65,10 +65,18 @@ class TestPythonPhysics(unittest.TestCase):
             assert(Physics.isInCircle(cos(radians(i)), sin(radians(i)), 0, 0, 1)) # Points on the circle's perimetre
 
     def test_rectIntersectsCircle(self):
-        assert(True)
+        assert(not Physics.rectIntersectsCircle(-1, 1, 2, 2, 0, 0, 1))  # Circle inside Rectangle
+        assert(Physics.rectIntersectsCircle(-1, 1, 2, 2, 0, 0, 4))      # Rectangle inside Circle
+        assert(Physics.rectIntersectsCircle(-1.2, 1.2, 1, 1, 0, 0, 1))  # Bottom-Right corner inside Circle
+        assert(Physics.rectIntersectsCircle(-1.2, -0.6, 1, 1, 0, 0, 1)) # Top-Right corner inside Circle
+        assert(Physics.rectIntersectsCircle(0.6, 1.2 , 1, 1, 0, 0, 1))  # Bottom-Left corner inside Circle
+        assert(Physics.rectIntersectsCircle(0.6, -0.6, 1, 1, 0, 0, 1))  # Top-Left corner inside Circle
+        assert(Physics.rectIntersectsCircle(0.6, 2, 1, 3, 0, 0, 1))     # No corner inside Circle, just a line crosses
 
     def test_polygonIntersectsRect(self):
-        assert(True)
+        assert(Physics.polygonIntersectsRect([(0, 0), (1, 1), (1, 0)], 0.75, 0.25, 1, 1))              # Rectangle hit by Triangle
+        assert(not Physics.polygonIntersectsRect([(0, 0), (1, 1), (2, 1), (2, -1)], 0.75, 0.25, 1, 1)) # Same Rectangle wrapped by polygon (no intersect)
+        assert(not Physics.polygonIntersectsRect([(1, 1), (1.5, 1.5), (1.5, 1)], 0.75, 0.25, 1, 1))    # Same Rectangle with polygon inside (no intersect)
 
     def test_lineIntersectsRect(self):
         assert(True)

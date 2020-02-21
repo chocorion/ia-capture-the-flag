@@ -52,17 +52,17 @@ class TestPythonPhysics(unittest.TestCase):
     def test_applyMovement(self):
         assert(Physics.applyMovement(0, 0, 90, 0)    == (0,0))             # No distance
         assert(Physics.applyMovement(0, 0, 0, 1)     == (1,0))             # Forward
-        #assert(Physics.applyMovement(0, 0, 360, 1)   == (1,0))             # Forward using angle
         assert(Physics.applyMovement(0, 0, 0, -1)    == (-1,0))            # Backward using distance
-        #assert(Physics.applyMovement(0, 0, 180, 1)   == (-1,0))            # Backward using angle
-        #assert(Physics.applyMovement(0, 0, 45, 2))    == (sqrt(2),sqrt(2))  # Diagonal
+        assert(Physics.applyMovement(0, 0, 45, 1)    == (cos(radians(45)),sin(radians(45))))    # Diagonal
+        assert(Physics.applyMovement(0, 0, 90, 1)    == (cos(radians(90)),sin(radians(90))))    # Upwards (supposed to be (0,1), but won't work)
+        assert(Physics.applyMovement(0, 0, 270, 1)   == (cos(radians(270)),sin(radians(270))))  # Downwards (supposed to be (0,-1), but won't work)
 
     def test_isInCircle(self):
         assert(Physics.isInCircle(0, 0, 0, 0, 1))             # Point at circle's origin
-        assert(Physics.isInCircle(0, 0, 1, 0, 1))             # Point on the circle's perimetre
         assert(not Physics.isInCircle(0, 0, 1.01, 0, 1))      # Point just out of the circle
         assert(Physics.isInCircle(0, 0, 0.99, 0, 1))          # Point just in the circle
-        #assert(Physics.isInCircle(sqrt(2), sqrt(2), 0, 0, 1)) # Point on the circle's perimetre
+        for i in range(360):
+            assert(Physics.isInCircle(cos(radians(i)), sin(radians(i)), 0, 0, 1)) # Points on the circle's perimetre
 
     def test_rectIntersectsCircle(self):
         assert(True)

@@ -2,7 +2,7 @@
 
 import unittest
 
-from behaviorTrees import TestBehaviorTree
+from behavior_trees import TestBehaviorTree
 from ArgBuilder import TestDictBuilder
 from PythonPhysics import TestPythonPhysics
 from GameModel import TestGameModel

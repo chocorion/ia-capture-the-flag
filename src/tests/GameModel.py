@@ -38,6 +38,7 @@ class TestGameModel(unittest.TestCase):
         def getTimeMs(self):
             return self.overriden_time
         
+        TimeManager.oldGetTimeMs = TimeManager.GetTimeMs
         TimeManager.GetTimeMs = getTimeMs
         TimeManager.overriden_time = 0
 
@@ -70,5 +71,8 @@ class TestGameModel(unittest.TestCase):
     # Need to run this a the end to stop player Processes (or it hangs)
     def testend(self):
         TestGameModel.Model.stop()
+
+        # restore timemanager for other tests
+        TimeManager.GetTimeMs = TimeManager.oldGetTimeMs
 
         assert(True)

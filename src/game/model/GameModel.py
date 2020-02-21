@@ -58,6 +58,8 @@ class GameModel(Model):
         
         self.cooldownremaining = self._ruleset["StartCountdownSeconds"] * 1000
 
+        self.mouse_coords = (0,0)
+
         #### Implementation Simu ####
         try:
             self._players["1"] = Player1(mapData, self._ruleset, team=1)

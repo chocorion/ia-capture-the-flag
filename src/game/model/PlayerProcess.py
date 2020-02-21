@@ -92,7 +92,7 @@ class PlayerProcess():
         """
         self._process.start()
 
-    def join(self, timeout):
+    def join(self, timeout = None):
         """
         Waits until process termination.
         """

@@ -10,6 +10,14 @@ Capture the Flag sandbox opposing AI teams
 
 This starts a game with the default AI on both sides.
 
+`make runExample`
+
+This also starts a game with the default AI on both sides, but maybe you prefer using make. :)
+
+`make runAstar`
+
+This starts a game with two AIs using A*.
+
 ### Run your own AI :
 
 The program can be started with :

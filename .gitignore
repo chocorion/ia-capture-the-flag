@@ -2,3 +2,7 @@
 __pycache__/*.py*
 __pycache__/
 src/doc/
+
+src/config.ini
+
+src/rulesets.ini

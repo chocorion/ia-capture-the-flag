@@ -1,5 +1,6 @@
 from service.Physics import Physics
 from service.Config import Config
+from domain.Map import Map
 
 class PhysicsEngine(Physics):
     """
@@ -14,6 +15,9 @@ class PhysicsEngine(Physics):
     def __init__(self, ruleset, map_):
         self._ruleset = ruleset
         self._map = map_
+
+        self.collisions_maps = dict()
+        self.collisions_maps_dividers = dict()
 
 
     def tick(self, deltaTime):
@@ -69,7 +73,7 @@ class PhysicsEngine(Physics):
         """
         return (self.deltaTime / (1000 / (30 * Config.TimeRate())))
 
-    def checkCollision(self, x, y, target_x, target_y, cap_x = None, cap_y = None):
+    def checkCollision(self, collision_map, x, y, target_x, target_y, cap_x, cap_y):
         """
         Checks whether a target's path collides with the map.
 
@@ -101,7 +105,7 @@ class PhysicsEngine(Physics):
             if cap_x != None and cap_y != None and cap_x == last_x and cap_y == last_y:
                 return (last_x,last_y)
             
-            if self._map.blocks[int(current_x // self._map.BLOCKSIZE)][int(current_y // self._map.BLOCKSIZE)].solid:
+            if self.collisions_maps[collision_map][int(current_x // self.collisions_maps_dividers[collision_map])][int(current_y // self.collisions_maps_dividers[collision_map])]:
                 return (last_x, last_y)
 
             last_x = current_x
@@ -121,3 +125,33 @@ class PhysicsEngine(Physics):
                 n -= 1
                 
         return (target_x, target_y)
+
+    def createCollisionMap(self, name, padding):
+
+        divider = 10 # 1 / round(Map.BLOCKSIZE / padding)
+        self.collisions_maps_dividers[name] = divider
+
+        collisions_map_padding = int(padding // (Map.BLOCKSIZE // divider))
+        collisions_map_width = int(self._map.blockWidth * divider)
+        collisions_map_height = int(self._map.blockHeight * divider)
+
+        self.collisions_maps[name] = [[False for i in range(0,collisions_map_height)] for j in range(0,collisions_map_width)]
+
+        block_size_factored = int(Map.BLOCKSIZE // divider)
+
+        (x,y) = (0,0)
+        for blockline in self._map.blocks:
+            for block in blockline:
+                if block.solid:
+                    for rx in range(- collisions_map_padding, block_size_factored + collisions_map_padding):
+                        for ry in range(- collisions_map_padding, block_size_factored + collisions_map_padding):
+                            nx = int(x + rx)
+                            ny = int(y + ry)
+                            
+                            if nx >= 0 and ny >= 0 and nx < collisions_map_width and ny < collisions_map_height:
+                                # print("{} {}".format(nx,ny))
+                                self.collisions_maps[name][nx][ny] = True
+
+                y += block_size_factored
+            y = 0
+            x += block_size_factored

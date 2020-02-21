@@ -53,6 +53,8 @@ class PygameView(View):
         self.last_displayed_timer = None
         self.last_displayed_aimed = None
 
+        self.countdown_end = None
+
         self.debug = [False]*2
 
 
@@ -111,6 +113,9 @@ class PygameView(View):
         self._display_tiles(0,0,self._map.blockWidth - 1,self._map.blockHeight - 1)
 
     def _display_countdown(self):
+        """
+        Displays the remaining countdown time in seconds in the middle of the screen.
+        """
         if self._model.cooldownremaining > 0:
             self.countdown_end = False
             to_display = ceil(self._model.cooldownremaining / 1000)
@@ -118,10 +123,11 @@ class PygameView(View):
             # refresh timer surface only if it changes
             if self.last_displayed_timer != to_display: 
                 to_display = '{}'.format(to_display)
-                self.last_displayed_timer_text = self._default_font_big.render(to_display, True, (255,0,0,255))
+                self.last_displayed_timer_text = self._default_font_big.render(to_display, True, (255,0,255,255))
 
                 self.last_displayed_timer_text_outline = self._default_font_big_outline.render(to_display, True, (0,0,0,255))
 
+                # TODO: refactor
                 self.last_displayed_timer_text_rect = self.last_displayed_timer_text.get_rect()
                 self.last_displayed_timer_text_outline_rect1 = self.last_displayed_timer_text.get_rect()
                 self.last_displayed_timer_text_outline_rect2 = self.last_displayed_timer_text.get_rect()
@@ -144,6 +150,7 @@ class PygameView(View):
                 self.last_displayed_timer_text_outline_rect7.center = (self._window_rect[0] // 2 - outline_margin, self._window_rect[1] // 2 + outline_margin)
                 self.last_displayed_timer_text_outline_rect8.center = (self._window_rect[0] // 2 - outline_margin, self._window_rect[1] // 2 - outline_margin)
 
+            # TODO: refactor
             self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect1)
             self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect2)
             self._window.blit(self.last_displayed_timer_text_outline, self.last_displayed_timer_text_outline_rect3)
@@ -159,6 +166,12 @@ class PygameView(View):
             self._refresh_map = True
             
     def display_collision_map(self, name):
+        """
+        Displays a collision map.
+
+        Parameters:
+            name (string) : The identifier of this collision map. Example: "RegularBot"
+        """
         try:
 
             self._window.blit(self.collision_surface, (0, 0))
@@ -189,6 +202,9 @@ class PygameView(View):
             
 
     def display_aimed(self):
+        """
+        DEBUG: Displays the coordinates of the currently hovered block.
+        """
         # refresh aimed cell only if changed
         to_display = (self._model.mouse_coords[0] // self._cell_size,self._model.mouse_coords[1] // self._cell_size)
 

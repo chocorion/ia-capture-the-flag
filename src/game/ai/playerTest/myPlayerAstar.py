@@ -39,7 +39,7 @@ class myPlayer(Player):
         # vvvvvvvvvvv
         RegularMap(_map) # <----- use this for the map
         # ^^^^^^^^^^^
-
+        
         # map and rules are python objects, need to make them JSON
         self._map          = _map
         self._rules        = rules
@@ -145,14 +145,15 @@ class myPlayer(Player):
     """
 
     def incrementIndex(self, bot_id, current_position):
-        rayonBot = 36
+        radiusBot = 36
         if bot_id in self._currentPath and bot_id in self._currentIndex and self._currentPath[bot_id] != None :
             
             posInPath    = self.getNextPos(bot_id)
             lengthPath   = len(self._currentPath[bot_id]) -1
             distancePath = self._distance(current_position, posInPath)
             distanceOld  = self._distance(current_position,self._lastPosition[bot_id])
-            if distanceOld - distancePath > -rayonBot and self._currentIndex[bot_id] != lengthPath :
+
+            if distanceOld - distancePath > -radiusBot and self._currentIndex[bot_id] != lengthPath :
                 self._currentIndex[bot_id] += 1
             
 
@@ -230,19 +231,12 @@ class myPlayer(Player):
         for bot_id in self._pollingData["bots"].keys():
             self.initCurrentIndex(bot_id)
             current_position = self._pollingData["bots"][bot_id]["current_position"]
-            tmp_x, tmp_y = int(current_position[0]), int(current_position[1])
+            tmp_x, tmp_y     = int(current_position[0]), int(current_position[1])
             current_position = (tmp_x, tmp_y, current_position[2], current_position[3])
-            #cas de test random pos
+            
+            #Test case random pos
             if pos == None :
                 pos = (5600, 2500, current_position[2], 0)
-
-            # would be to remove the path if done: not implemented
-            # if (bot_id in self._currentIndex and bot_id in self._currentPath and self._currentPath[bot_id] != None
-            #     and self._currentIndex[bot_id] == len(self._currentPath[bot_id])-1):
-
-            #     remove =self._currentPath.pop(bot_id)
-            #     del remove
-            #     self._currentIndex[bot_id] = 0
 
             self.getPath(bot_id, current_position, pos)
             
@@ -280,12 +274,12 @@ class myPlayer(Player):
                     if self.isBlocked(current_position, bot_id):
                         if not bot_id in self._blocked_bots:
                             self._blocked_bots.append(bot_id)
-                        #print("[DEBUG] {} est blocké".format(bot_id))
+                        
 
                     if bot_id in self._blocked_bots:
-                        #print("[DEBUG] {} est dans la liste des blockés".format(bot_id))
+                        
                         if self._distance(current_position, self._lastPosition[bot_id]) > maxDistance:
-                            #print("[DEBUG] il se débloque")
+                            
                             self._blocked_bots.remove(bot_id)
                             self._lastPosition[bot_id] = current_position
                         else:
@@ -301,14 +295,15 @@ class myPlayer(Player):
                     returnData["bots"][bot_id] = { "target_position" : (xInPath, yInPath, speed), "actions" : 0 }
                 else:
                     if bot_id in self._currentPath and bot_id in self._currentIndex and self._currentIndex[bot_id] == lengthPath:
+
                         currentPosInPath = self._currentPath[bot_id][self._currentIndex[bot_id]]
                         xInPath          = currentPosInPath[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
                         yInPath          = currentPosInPath[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
+
                         if self.distance(xInPath, yInPath, current_position[0], current_position[1]) > 10:
                             returnData["bots"][bot_id] = {"target_position" : (xInPath, yInPath, 100),"actions" : 0 }
                     else:
                         returnData["bots"][bot_id] = {"target_position" : (current_position[0], current_position[1], 0),"actions" : 0 }
-            #print(current_position)
         return returnData
 
 
@@ -350,13 +345,6 @@ class myPlayer(Player):
     """
     def poll(self, pollingData):
         self._pollingData = pollingData
-
-        # if "flags" in pollingData["events"].keys():
-        #     print("Flag position update !")
-
-        #     for flag in pollingData["events"]["flags"]:
-        #         print("\t{} -> {}:{}".format(flag["team"], flag["position"][0], flag["position"][1]))
-
         self.initPathFinder()
         self.pathWithPollingData()
         return self.getReturnPoll()

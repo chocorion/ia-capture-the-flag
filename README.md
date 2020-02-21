@@ -42,9 +42,7 @@ Be careful : Your player's class must always be named 'myPlayer', and has to ext
 
 ### Run Unit tests
 
-From the game directory :
-
-`./tests/run_tests.py`
+`make tests`
 
 ### Visually
 

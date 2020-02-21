@@ -8,7 +8,7 @@ from ai.pathFinding.base.Graph import Graph
 
 from domain.Map import Map
 
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 import math
 import random
@@ -23,26 +23,23 @@ NodeResultToString = {
 def distance(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-def points_distance(p1, p2):
-    return distance(p1[0], p1[1], p2[0], p2[1])
-
 class myPlayer(Player):
     
-    def debug(self, bot_id, message):
-        if int(bot_id.split("_")[1]) == 0:
+    def debug(self, botId, message):
+        if int(botId.split("_")[1]) == 0:
             print("[LITTLE_PLAYER] " + message)
 
 
-    def __init__(self, game_map, rules, team):
+    def __init__(self, gameMap, rules, team):
         self._team         = team
-        self._map          = RegularMap(game_map)
+        self._map          = RegularMap(gameMap)
         self._rules        = rules
         self._pathFinder   = Astar(Graph(self.buildNodeList(), [], None))
 
         self._init = True
 
 
-        self._bot_data = {"bots": dict()}
+        self._botData = {"bots": dict()}
 
 
     def buildNodeList(self):
@@ -57,11 +54,11 @@ class myPlayer(Player):
     def _build_response(self):
         response = {"bots": dict()}
 
-        for bot_id in self._bot_data["bots"].keys():
-            dest = self._bot_data["bots"][bot_id]["destination"]
+        for botId in self._botData["bots"].keys():
+            dest = self._botData["bots"][botId]["destination"]
 
-            response["bots"][bot_id] = {
-                "target_position": (
+            response["bots"][botId] = {
+                "targetPosition": (
                     dest[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
                     dest[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
                     100
@@ -71,27 +68,27 @@ class myPlayer(Player):
 
         return response
 
-    def _update_data(self, polling_data):
-        for bot_id in polling_data["bots"].keys():
-            self._bot_data["bots"][bot_id]["current_position"] = polling_data["bots"][bot_id]["current_position"]
+    def _updateData(self, pollingData):
+        for botId in pollingData["bots"].keys():
+            self._botData["bots"][botId]["currentPosition"] = pollingData["bots"][botId]["currentPosition"]
 
     def poll(self, pollingData):
         if self._init:
             
-            for bot_id in pollingData["bots"]:
-                self._bot_data["bots"][bot_id] = pollingData["bots"][bot_id]
-                self._bot_data["bots"][bot_id]["behavior"] = self.build_stupid_bot_behavior(bot_id)
+            for botId in pollingData["bots"]:
+                self._botData["bots"][botId] = pollingData["bots"][botId]
+                self._botData["bots"][botId]["behavior"] = self.buildStupidBotBehavior(botId)
 
             for flag in pollingData["events"]["flags"]:
                 if flag["team"] != self._team:
-                    self._bot_data["enemy_flag"] = flag["position"]
+                    self._botData["enemy_flag"] = flag["position"]
             
             self._init = False
 
-        self._update_data(pollingData)
+        self._updateData(pollingData)
 
-        for bot_id in self._bot_data["bots"].keys():
-            result = self._bot_data["bots"][bot_id]["behavior"].tick(0)
+        for botId in self._botData["bots"].keys():
+            result = self._botData["bots"][botId]["behavior"].tick(0)
 
         return self._build_response()
 
@@ -100,60 +97,60 @@ class myPlayer(Player):
     # Bot behavior part
     #######################
 
-    def bot_fun_find_path_to_flag(self, bot_id):
+    def botFunFindPathToFlag(self, botId):
         def f(dt):
             path = self._pathFinder.getPath(
                 (
-                    self._bot_data["bots"][bot_id]["current_position"][0],
-                    self._bot_data["bots"][bot_id]["current_position"][1]
+                    self._botData["bots"][botId]["currentPosition"][0],
+                    self._botData["bots"][botId]["currentPosition"][1]
                 ),
-                self._bot_data["enemy_flag"] # temporary
+                self._botData["enemy_flag"] # temporary
             )
-            self._bot_data["bots"][bot_id]["path"]        = path
-            self._bot_data["bots"][bot_id]["path_length"] = len(path)
-            self._bot_data["bots"][bot_id]["path_index"]  = 0
+            self._botData["bots"][botId]["path"]        = path
+            self._botData["bots"][botId]["pathLength"] = len(path)
+            self._botData["bots"][botId]["pathIndex"]   = 0
 
             return NodeTree.SUCCESS
 
         return f
 
 
-    def bot_fun_follow_current_path(self, bot_id):
+    def botFunFollowCurrentPath(self, botId):
         def f(dt):
-            current_index   = self._bot_data["bots"][bot_id]["path_index"]
-            path            = self._bot_data["bots"][bot_id]["path"]
-            bot_position    = self._bot_data["bots"][bot_id]["current_position"]
+            currentIndex = self._botData["bots"][botId]["pathIndex"]
+            path         = self._botData["bots"][botId]["path"]
+            botPosition  = self._botData["bots"][botId]["currentPosition"]
 
-            if current_index == self._bot_data["bots"][bot_id]["path_length"] - 1:
+            if currentIndex == self._botData["bots"][botId]["pathLength"] - 1:
                 return NodeTree.SUCCESS
 
             
-            if distance(path[current_index][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[current_index][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, bot_position[0], bot_position[1]) <= 80:
-                self._bot_data["bots"][bot_id]["destination"] = path[current_index + 1]
-                self._bot_data["bots"][bot_id]["path_index"] += 1
+            if distance(path[currentIndex][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[currentIndex][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, botPosition[0], botPosition[1]) <= 80:
+                self._botData["bots"][botId]["destination"] = path[currentIndex + 1]
+                self._botData["bots"][botId]["pathIndex"] += 1
 
                 return NodeTree.RUNNING
 
-            self._bot_data["bots"][bot_id]["destination"] = path[current_index]
+            self._botData["bots"][botId]["destination"] = path[currentIndex]
             return NodeTree.RUNNING
             
         return f
 
-    def bot_fun_find_path_to_home(self, bot_id):
+    def botFunFindPathToHome(self, botId):
         def f(dt):
-            random_home_pos = self._map.GetRandomPositionInSpawn(self._team, margin = 20)
+            randomHomePos = self._map.GetRandomPositionInSpawn(self._team, margin = 20)
             
             path = self._pathFinder.getPath(
                 (
-                    self._bot_data["bots"][bot_id]["current_position"][0],
-                    self._bot_data["bots"][bot_id]["current_position"][1]
+                    self._botData["bots"][botId]["currentPosition"][0],
+                    self._botData["bots"][botId]["currentPosition"][1]
                 ),
-                random_home_pos
+                randomHomePos
             )
 
-            self._bot_data["bots"][bot_id]["path"]        = path
-            self._bot_data["bots"][bot_id]["path_length"] = len(path)
-            self._bot_data["bots"][bot_id]["path_index"]  = 0
+            self._botData["bots"][botId]["path"]        = path
+            self._botData["bots"][botId]["pathLength"]  = len(path)
+            self._botData["bots"][botId]["pathIndex"]   = 0
 
             return NodeTree.SUCCESS
 
@@ -161,12 +158,12 @@ class myPlayer(Player):
 
 
 
-    def build_stupid_bot_behavior(self, bot_id):
+    def buildStupidBotBehavior(self, botId):
         root_node = Sequence()
 
-        root_node.append_node(Leaf(self.bot_fun_find_path_to_flag(bot_id)))
-        root_node.append_node(Leaf(self.bot_fun_follow_current_path(bot_id)))
-        root_node.append_node(Leaf(self.bot_fun_find_path_to_home(bot_id)))
-        root_node.append_node(Leaf(self.bot_fun_follow_current_path(bot_id)))
+        root_node.appendNode(Leaf(self.botFunFindPathToFlag(botId)))
+        root_node.appendNode(Leaf(self.botFunFollowCurrentPath(botId)))
+        root_node.appendNode(Leaf(self.botFunFindPathToHome(botId)))
+        root_node.appendNode(Leaf(self.botFunFollowCurrentPath(botId)))
 
         return root_node

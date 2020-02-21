@@ -9,7 +9,7 @@ BOARD_WIDTH = 0
 NeighborMap = {}
 
 # Read board config from txt file and returns a list with all nodes
-def read_from_txt(filename):
+def readFromTxt(filename):
     global BOARD_HEIGHT     
     global BOARD_WIDTH
 
@@ -36,7 +36,7 @@ def insertNode(x, y, char, nodeGraph):
 
 
 # Creates neighbors list for a node
-def create_neighbors(node, nodeGraph):
+def createNeighbors(node, nodeGraph):
     #If you want diagonals put in dirs : [-1,-1], [1,1], [1, -1], [-1,1]]
     dirs = [[1,0], [0,1], [-1, 0], [0,-1]]
             
@@ -63,7 +63,7 @@ def create_neighbors(node, nodeGraph):
         NeighborMap[pos] = node.neighbors
 
 # Get board color based on content
-def get_color(content):
+def getColor(content):
     # Water
     if content is 'w':
         return '#0000ff' # Blue
@@ -100,14 +100,14 @@ def get_color(content):
     return 'white'
 
 # Draw board with path, border and closed nodes.
-def draw_board(path, border, closed, nodeGraph, filename):
+def drawBoard(path, border, closed, nodeGraph, filename):
     im = Image.new('RGB', (BOARD_WIDTH*100,BOARD_HEIGHT*100), (255,255,255))
     dr = ImageDraw.Draw(im)
     font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 25)
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             node = list(filter(lambda n: n.x == i and n.y == j, nodeGraph))[0]
-            dr.rectangle([(0+j*100,0+i*100), (100+j*100,100+i*100)], fill=get_color(node.cellContent), outline = "black")
+            dr.rectangle([(0+j*100,0+i*100), (100+j*100,100+i*100)], fill=getColor(node.cellContent), outline = "black")
 
             # White circle indicates that this node was in border list
             if node in border and node not in path:

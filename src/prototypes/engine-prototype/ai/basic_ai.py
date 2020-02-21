@@ -8,21 +8,21 @@ import math
 def distance(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-def build_graph(game_map):
+def build_graph(gameMap):
     nodeGraph = []
-    for x in range(game_map.get_width()):
-        for y in range(game_map.get_height()):
-            insertNode(x, y, str(game_map.get_tile(x,y)), nodeGraph)
+    for x in range(gameMap.get_width()):
+        for y in range(gameMap.get_height()):
+            insertNode(x, y, str(gameMap.get_tile(x,y)), nodeGraph)
 
     return nodeGraph
 
 class Basic_AI(AI):
-    def __init__(self, team, number_of_bots, game_map):
-        super().__init__(team, number_of_bots, game_map)
+    def __init__(self, team, number_of_bots, gameMap):
+        super().__init__(team, number_of_bots, gameMap)
 
-        game_map = super().get_map()
+        gameMap = super().get_map()
 
-        self._bots = [Bot(game_map) for i in range(number_of_bots)]
+        self._bots = [Bot(gameMap) for i in range(number_of_bots)]
 
         for bot_index in range(len(self._bots)):
             self._bot_set_random_dest(bot_index)
@@ -32,14 +32,14 @@ class Basic_AI(AI):
 
 
     def _bot_set_random_dest(self, bot_index):
-        map_cell_size = super().get_map().get_cell_size()
+        map_cellSize = super().get_map().get_cellSize()
         map_width  = super().get_map().get_width()
         map_height = super().get_map().get_height()
 
 
         self._bots[bot_index].set_dest(
-            randrange(map_cell_size, map_width * map_cell_size),
-            randrange(map_cell_size, map_height * map_cell_size)
+            randrange(map_cellSize, map_width * map_cellSize),
+            randrange(map_cellSize, map_height * map_cellSize)
         )
 
 
@@ -52,7 +52,7 @@ class Basic_AI(AI):
 
             # print(dest)
 
-            (last_pos_x, last_pos_y) = self._bots[bot_index].get_saved_pos()
+            (last_posX, last_posY) = self._bots[bot_index].get_saved_pos()
 
 
             if dest != None:

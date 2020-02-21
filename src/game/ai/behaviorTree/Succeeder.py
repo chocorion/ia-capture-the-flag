@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 class Succeeder(NodeTreeSingleChild):
     """
@@ -25,7 +25,7 @@ class Succeeder(NodeTreeSingleChild):
             State (int) : Must be NodeTree.RUNNING or NodeTree.SUCCESS.
         """
 
-        status = super().get_child().tick(dt)
+        status = super().getChild().tick(dt)
 
         if status == NodeTree.RUNNING:
             return status

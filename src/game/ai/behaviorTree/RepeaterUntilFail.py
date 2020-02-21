@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 
 class RepeaterUntilFail(NodeTreeSingleChild):
@@ -28,7 +28,7 @@ class RepeaterUntilFail(NodeTreeSingleChild):
         """
 
         while True:
-            status = super().get_child().tick(dt)
+            status = super().getChild().tick(dt)
 
             if status == NodeTree.RUNNING:
                 return status

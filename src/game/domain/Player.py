@@ -23,9 +23,9 @@ class Player:
             pollingData :
             {
                 "bots" : {
-                    "<bot_identifier>" : { 
-                        "attributes"        : ( <life> , <flag> , <shoot_cooldown> ),
-                        "current_position"  : ( <x> , <y> , <angle>, <speed> ),
+                    "<botIdentifier>" : { 
+                        "attributes"        : ( <life> , <flag> , <shootCooldown> ),
+                        "currentPosition"  : ( <x> , <y> , <angle>, <speed> ),
                     },
                     ...
                 },
@@ -37,7 +37,7 @@ class Player:
         Returns:
             {
                 "bots": {
-                    "<bot_identifier>" : { "target_position" : ( <x> , <y>, <speed> ), "actions" : <bitwise_actions> },
+                    "<botIdentifier>" : { "targetPosition" : ( <x> , <y>, <speed> ), "actions" : <bitwiseActions> },
                     ...
                 }
             }

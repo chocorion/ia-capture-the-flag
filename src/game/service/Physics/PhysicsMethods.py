@@ -10,7 +10,7 @@ class PhysicsMethods:
     def angularDistance(self,a,b):
         pass
 
-    def getAngle(self, x, y, target_x, target_y):
+    def getAngle(self, x, y, targetX, targetY):
         pass
 
     def applyMovement(self, x, y, angle, distance):
@@ -34,5 +34,5 @@ class PhysicsMethods:
     def pointInsidePolygon(self, vertices, x, y):
         pass
 
-    def createCirclePolygon(self, nb_vertices):
+    def createCirclePolygon(self, nbVertices):
         pass

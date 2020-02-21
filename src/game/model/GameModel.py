@@ -71,26 +71,26 @@ class GameModel(Model):
         ####
 
         self._teams = dict()
-        self._team_fails = dict()
+        self._teamFails = dict()
 
         for team in range(1,3): # 2 Players
-            team_id = str(team)
+            teamId = str(team)
 
-            self._team_fails[team_id] = 0 # Keep track of each failure to respond from players
+            self._teamFails[teamId] = 0 # Keep track of each failure to respond from players
 
-            self._teams[team_id] = { "bots": {} }
+            self._teams[teamId] = { "bots": {} }
 
             for i in range(0,int(self._ruleset["BotsCount"])):
-                bot_id = team_id + "_" + str(i) # Bot identifier is <team>_<number>
+                botId = teamId + "_" + str(i) # Bot identifier is <team>_<number>
 
                 (x, y) = self._map.GetRandomPositionInSpawn(team, 36)
-                self._teams[team_id]["bots"][bot_id] = RegularBot(team, x, y)
+                self._teams[teamId]["bots"][botId] = RegularBot(team, x, y)
 
             
-            self._playerProcesses[team_id] = PlayerProcess(self, team_id, self._players[team_id])
-            self._playerProcesses[team_id].start()
+            self._playerProcesses[teamId] = PlayerProcess(self, teamId, self._players[teamId])
+            self._playerProcesses[teamId].start()
 
-        self._last_flag_position = [
+        self._lastFlagPosition = [
             (-1, -1),
             (-1, -1)
         ]
@@ -142,36 +142,36 @@ class GameModel(Model):
             self.turn = -1
 
         # The data is reset each time to make sure we don't perform outdated player actions
-        self.teams_data = {
+        self.teamsData = {
             "1" : None,
             "2" : None,
         }
 
         # Send polling data to each player and get their response
-        for team_id in self._players.keys():
-            player = self._players[team_id]
+        for teamId in self._players.keys():
+            player = self._players[teamId]
 
             # Start to build the pollindData
-            self._argBuilder.begin_argument()
+            self._argBuilder.beginArgument()
 
             for i in range(2):
-                old_flag_x, old_flag_y = self._last_flag_position[i]
+                oldFlagX, oldFlagY = self._lastFlagPosition[i]
                 
-                flag_x = self._map.flags[i].x
-                flag_y = self._map.flags[i].y
+                flagX = self._map.flags[i].x
+                flagY = self._map.flags[i].y
 
 
-                if flag_x != old_flag_x or flag_y != old_flag_y:
-                    self._argBuilder.add_flag(self._map.flags[i].team, (flag_x, flag_y))
+                if flagX != oldFlagX or flagY != oldFlagY:
+                    self._argBuilder.addFlag(self._map.flags[i].team, (flagX, flagY))
 
-            for bot_id in self._teams[team_id]["bots"].keys():
-                self._argBuilder.add_bot(self._teams[team_id]["bots"][bot_id], bot_id)
+            for botId in self._teams[teamId]["bots"].keys():
+                self._argBuilder.addBot(self._teams[teamId]["bots"][botId], botId)
 
-            self._argBuilder.end_argument()
+            self._argBuilder.endArgument()
 
-            pollingData = self._argBuilder.get_result()
+            pollingData = self._argBuilder.getResult()
 
-            self._playerProcesses[team_id].setData(pollingData)
+            self._playerProcesses[teamId].setData(pollingData)
             
         # Start each player's computation and sleep while they should be processing
         # After we are done sleeping, two things can occur:
@@ -195,50 +195,50 @@ class GameModel(Model):
         self.turn += 1
 
         # Interpret players orders
-        for team_id in self.teams_data.keys():
-            if(self.teams_data[team_id] == None):
-                print("Did not get a response from player {}".format(team_id))
-                self._team_fails[team_id] += 1
+        for teamId in self.teamsData.keys():
+            if(self.teamsData[teamId] == None):
+                print("Did not get a response from player {}".format(teamId))
+                self._teamFails[teamId] += 1
                 continue
 
             # try:
-            data = self.teams_data[team_id]
-            for bot_id in data["bots"].keys():
-                bot = self._teams[team_id]["bots"][bot_id]
+            data = self.teamsData[teamId]
+            for botId in data["bots"].keys():
+                bot = self._teams[teamId]["bots"][botId]
 
                 # Unpack target
-                target_x = data["bots"][bot_id]["target_position"][0]
-                target_y = data["bots"][bot_id]["target_position"][1]
-                target_speed = data["bots"][bot_id]["target_position"][2]
+                targetX = data["bots"][botId]["targetPosition"][0]
+                targetY = data["bots"][botId]["targetPosition"][1]
+                targetSpeed = data["bots"][botId]["targetPosition"][2]
                 
                 # Perform checks                    
-                bot.angle = self._engine.checkAngle(bot, target_x, target_y)
-                bot.speed = self._engine.checkSpeed(bot, target_speed)
+                bot.angle = self._engine.checkAngle(bot, targetX, targetY)
+                bot.speed = self._engine.checkSpeed(bot, targetSpeed)
 
                 bot.speed = bot.speed * self._engine.getDeltaTimeModifier()
 
                 # Apply movement
-                (real_x, real_y) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
-                (new_x,new_y) = self._engine.checkCollision("RegularBot",bot.x,bot.y,real_x,real_y,target_x,target_y)
+                (realX, realY) = Physics.applyMovement(bot.x, bot.y, bot.angle, bot.speed)
+                (newX,newY) = self._engine.checkCollision("RegularBot",bot.x,bot.y,realX,realY,targetX,targetY)
 
-                bot.move(new_x - bot.x, new_y - bot.y)
+                bot.move(newX - bot.x, newY - bot.y)
 
                 # bitwise comparison for actions
-                actions = bin(data["bots"][bot_id]["actions"])
+                actions = bin(data["bots"][botId]["actions"])
 
                 if actions[0]: # SHOOT
                     pass
                 if actions[1]: # DROP_FLAG
                     pass
             # except:
-            #     print("Invalid response from player {} : {}".format(team_id,sys.exc_info()[0]))
-            #     self._team_fails[team_id] += 1
+            #     print("Invalid response from player {} : {}".format(teamId,sys.exc_info()[0]))
+            #     self._teamFails[teamId] += 1
 
-        for team_id in self._team_fails.keys():
-            if self._team_fails[team_id] >= Config.InvalidResponsesKick():
-                print("Player {} is disqualified for failing to provide consistent responses.".format(team_id))
-                self.kick(team_id)
-                self._team_fails[team_id] = -1
+        for teamId in self._teamFails.keys():
+            if self._teamFails[teamId] >= Config.InvalidResponsesKick():
+                print("Player {} is disqualified for failing to provide consistent responses.".format(teamId))
+                self.kick(teamId)
+                self._teamFails[teamId] = -1
 
     def handleFirstTurn(self):
         """
@@ -265,8 +265,8 @@ class GameModel(Model):
         """
         allBots = self.getBots()
 
-        for bot_id in allBots.keys():
-            bot = allBots[bot_id]
+        for botId in allBots.keys():
+            bot = allBots[botId]
             for flag in self._map.flags:
                 if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius):
                     bot.pickUp(flag)
@@ -299,15 +299,15 @@ class GameModel(Model):
        
         pass
 
-    def kick(self, team_id):
+    def kick(self, teamId):
         """
         Kick a player from the game.
         """
-        del self._players[team_id]
+        del self._players[teamId]
 
     def updateLastFlagPosition(self):
         for i in range(2):
-            self._last_flag_position[i] = (self._map.flags[i].x, self._map.flags[i].y)
+            self._lastFlagPosition[i] = (self._map.flags[i].x, self._map.flags[i].y)
 
     def stop(self):
         for playerProcess in self._playerProcesses.values():

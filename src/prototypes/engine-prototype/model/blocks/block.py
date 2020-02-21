@@ -6,7 +6,7 @@ class Block:
         self._name = name
         self._color = color
 
-    def get_color(self):
+    def getColor(self):
         return self._color
 
     def is_solid(self):

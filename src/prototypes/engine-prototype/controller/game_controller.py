@@ -14,8 +14,8 @@ class Game_controller:
         
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 (x, y) = pygame.mouse.get_pos()
-                x = int(x//self._view.get_mult_factor())
-                y = int(y//self._view.get_mult_factor())
+                x = int(x//self._view.getMultFactor())
+                y = int(y//self._view.getMultFactor())
 
 
                 if pygame.mouse.get_pressed()[0]:

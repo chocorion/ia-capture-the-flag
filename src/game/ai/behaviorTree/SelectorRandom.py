@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 from random import shuffle
 
@@ -8,8 +8,8 @@ class SelectorRandom(NodeTree):
     """
     def __init__(self):
         super().__init__()
-        self._currently_running_index = -1
-        self._saved_shuffle = None
+        self._currentlyRunningIndex = -1
+        self._savedShuffle = None
 
 
     def tick(self, dt):
@@ -29,22 +29,22 @@ class SelectorRandom(NodeTree):
 
         start = 0
 
-        if self._currently_running_index != -1:
-            start = self._currently_running_index
-            nodes = self._saved_shuffle
+        if self._currentlyRunningIndex != -1:
+            start = self._currentlyRunningIndex
+            nodes = self._savedShuffle
 
-            self._currently_running_index = -1
-            self._saved_shuffle = None
+            self._currentlyRunningIndex = -1
+            self._savedShuffle = None
         else:
-            nodes = super().get_nodes()
+            nodes = super().getNodes()
             shuffle(nodes)
 
-        for node_index in range(start, len(nodes)):
-            status = nodes[node_index].tick(dt)
+        for nodeIndex in range(start, len(nodes)):
+            status = nodes[nodeIndex].tick(dt)
 
             if status == NodeTree.RUNNING:
-                self._currently_running_index = node_index
-                self._saved_shuffle = nodes
+                self._currentlyRunningIndex = nodeIndex
+                self._savedShuffle = nodes
 
                 return NodeTree.RUNNING
 

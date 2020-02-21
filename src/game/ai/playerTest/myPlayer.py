@@ -19,7 +19,7 @@ class myPlayer(Player):
             pollingData :
             {
                 "bots" : {
-                    "<bot_identifier>" : { "current_position" : ( <x> , <y> , <angle>, <speed> ) },
+                    "<botIdentifier>" : { "currentPosition" : ( <x> , <y> , <angle>, <speed> ) },
                     ...
                 },
                 "events" : {
@@ -30,7 +30,7 @@ class myPlayer(Player):
         Returns:
             {
                 "bots": {
-                    "<bot_identifier>" : { "target_position" : ( <x> , <y>, <speed> ), "actions" : <bitwise_actions> },
+                    "<botIdentifier>" : { "targetPosition" : ( <x> , <y>, <speed> ), "actions" : <bitwiseActions> },
                     ...
                 }
             }
@@ -49,9 +49,9 @@ class myPlayer(Player):
 
         returnData = { "bots": { } }
 
-        for bot_id in pollingData["bots"].keys():
-            current_position = pollingData["bots"][bot_id]["current_position"]
+        for botId in pollingData["bots"].keys():
+            currentPosition = pollingData["bots"][botId]["currentPosition"]
             
-            returnData["bots"][bot_id] = { "target_position" : (2000, 1000 , 100), "actions" : 0 }
+            returnData["bots"][botId] = { "targetPosition" : (2000, 1000 , 100), "actions" : 0 }
 
         return returnData

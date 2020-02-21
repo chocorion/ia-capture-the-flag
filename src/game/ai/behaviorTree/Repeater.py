@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 
 class Repeater(NodeTreeSingleChild):
@@ -30,24 +30,24 @@ class Repeater(NodeTreeSingleChild):
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
         start = 0
-        if self._currently_processing != None:
-            status = self._currently_processing.tick(dt)
+        if self._currentlyProcessing != None:
+            status = self._currentlyProcessing.tick(dt)
 
             if status != NodeTree.RUNNING:
-                self._currently_processing = None
+                self._currentlyProcessing = None
 
             if status != NodeTree.SUCCESS:
                 return status
                 
-            start = self._current_start + 1
+            start = self._currentStart + 1
 
 
         for i in range(start, self._iteration):
-            status = super().get_child().tick(dt)
+            status = super().getChild().tick(dt)
 
             if status == NodeTree.RUNNING:
-                self._currently_processing = super().get_child()
-                self._current_start = i
+                self._currentlyProcessing = super().getChild()
+                self._currentStart = i
                 return status
 
             elif status == NodeTree.FAILURE:

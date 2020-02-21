@@ -14,8 +14,8 @@ class PythonPhysics(PhysicsMethods):
         p = abs(b - a) % 360
         return 360 - p if p > 180 else p
 
-    def getAngle(self, x, y, target_x, target_y):
-        return degrees(atan2(target_y - y, target_x - x))
+    def getAngle(self, x, y, targetX, targetY):
+        return degrees(atan2(targetY - y, targetX - x))
 
     def applyMovement(self, x, y, angle, distance):
         return (x + distance * cos(radians(angle)),y + distance * sin(radians(angle)))
@@ -103,13 +103,13 @@ class PythonPhysics(PhysicsMethods):
             
         return collision
 
-    def createCirclePolygon(self, nb_vertices):
+    def createCirclePolygon(self, nbVertices):
         polygon = list()
 
         (x,y) = (0,0)
         angle = 0
-        for v in range(0,nb_vertices):
+        for v in range(0,nbVertices):
             polygon.append((x+cos(angle),y+sin(angle)))
-            angle += 2 * pi / nb_vertices
+            angle += 2 * pi / nbVertices
 
         return polygon

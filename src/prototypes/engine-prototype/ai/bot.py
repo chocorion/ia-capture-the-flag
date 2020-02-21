@@ -11,23 +11,23 @@ def distance(x1, y1, x2, y2):
 Bot for user AI.
 '''
 class Bot:
-    def __init__(self, game_map=None, x=0., y=0., angle=0.):
+    def __init__(self, gameMap=None, x=0., y=0., angle=0.):
         self._x = x
         self._y = y
         self._angle = angle
 
         self._current_dest = ()
-        self._map = game_map
+        self._map = gameMap
 
-        self._path_index = -1
+        self._pathIndex = -1
         self._path = None
 
 
     def set_dest(self, x, y, node_graph=None):
         if node_graph != None:
-            cell_size = self._map.get_cell_size()
+            cell_size = self._map.get_cellSize()
             print("Bot compute A*...")
-            print("I'm from ", self._x // self._map.get_cell_size(), self._y // self._map.get_cell_size())
+            print("I'm from ", self._x // self._map.get_cellSize(), self._y // self._map.get_cellSize())
             result = a_star(
                 Node(
                     self._x // cell_size,
@@ -44,7 +44,7 @@ class Bot:
                 path.append((node.x * cell_size + cell_size//2, node.y * cell_size + cell_size//2))
 
             self._path = path
-            self._path_index = 0
+            self._pathIndex = 0
 
         self._dest = (x, y)
 
@@ -59,14 +59,14 @@ class Bot:
         ''' Return the next position of the bot'''
 
         # Basic situation, bot don't use A*
-        if self._path_index == -1:
+        if self._pathIndex == -1:
             return self._dest
 
-        (dest_x, dest_y) = self._path[self._path_index]
+        (dest_x, dest_y) = self._path[self._pathIndex]
 
         if self.is_position_check(dest_x, dest_y):
-            if self._path_index + 1 < len(self._path):
-                self._path_index += 1
+            if self._pathIndex + 1 < len(self._path):
+                self._pathIndex += 1
 
                 return self.get_next_dest()
 

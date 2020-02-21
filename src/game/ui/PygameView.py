@@ -176,13 +176,13 @@ class PygameView(View):
 
             self._window.blit(self.collisionSurface, (0, 0))
         except:
-            collision_map = self._model.getEngine().collisions_maps[name]
+            collisionMap = self._model.getEngine().collisionsMaps[name]
             divider = self._model.getEngine().collisionsMapsDividers[name]
 
             self.collisionSurface = pygame.Surface(self._windowRect, pygame.SRCALPHA)
 
             (x,y) = (0,0)
-            for line in collision_map:
+            for line in collisionMap:
                 for dot in line:
                     if dot:
 

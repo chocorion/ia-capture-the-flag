@@ -7,8 +7,8 @@ class PygameFactory(UiFactory):
     class __PygameFactory(UiFactory):
         def __init__(self, model):
             super().__init__()
-            self.controller = PygameController()
             self.view = PygameView(model)
+            self.controller = PygameController(model, self.view)
 
         def getController(self):
             return self.controller

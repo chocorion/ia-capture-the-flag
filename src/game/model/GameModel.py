@@ -95,7 +95,7 @@ class GameModel(Model):
             (-1, -1)
         ]
 
-    def getengine(self):
+    def getEngine(self):
         return self._engine
 
     def tick(self, deltaTime):

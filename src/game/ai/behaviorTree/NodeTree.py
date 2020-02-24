@@ -8,7 +8,7 @@ class NodeTree(metaclass=ABCMeta):
 
     Attributes:
         _nodes (Node) : List of children.
-        _currently_processing (Node): As a node can take many tick to processing task,
+        _currentlyProcessing (Node): As a node can take many tick to processing task,
             node store the currently processing node. It's faster than looking in all
             the tree for the active node.
 
@@ -24,7 +24,7 @@ class NodeTree(metaclass=ABCMeta):
     
     def __init__(self):
         self._nodes = list()
-        self._currently_processing = None
+        self._currentlyProcessing = None
 
     @abstractmethod
     def tick(self, dt):
@@ -40,7 +40,7 @@ class NodeTree(metaclass=ABCMeta):
         ...
 
 
-    def append_node(self, node):
+    def appendNode(self, node):
         """
         Append node to the end of the node list.
 
@@ -63,7 +63,7 @@ class NodeTree(metaclass=ABCMeta):
         self._nodes.insert(index, node)
 
 
-    def get_nodes(self):
+    def getNodes(self):
         """
         Return the list of all direct child of the node.
         """

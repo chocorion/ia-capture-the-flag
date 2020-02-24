@@ -1,9 +1,9 @@
 class AI:
 
-    def __init__(self, team, number_of_bots, game_map):
+    def __init__(self, team, number_of_bots, gameMap):
         self._team = team
         self._number_of_bots = number_of_bots
-        self._map = game_map
+        self._map = gameMap
 
     
     def tick(self, datas):

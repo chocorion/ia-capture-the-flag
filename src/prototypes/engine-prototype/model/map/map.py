@@ -14,7 +14,7 @@ class Map:
     def __init__(self, filename, cell_size):
         self._filename = filename
         self._load_from_file(filename)
-        self._cell_size = cell_size
+        self._cellSize = cell_size
         
 
     def _load_from_file(self, filename):
@@ -75,8 +75,8 @@ class Map:
     def get_tile(self, x, y):
         return self._map[y][x]
 
-    def get_cell_size(self):
-        return self._cell_size
+    def get_cellSize(self):
+        return self._cellSize
 
     def mark_start_cell(self, x, y):
         self._map[y][x] = Start()

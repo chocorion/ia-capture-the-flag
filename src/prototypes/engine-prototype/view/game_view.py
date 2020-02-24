@@ -24,22 +24,22 @@ class Game_view:
         self._model = model
         current_map = model.get_map()
 
-        self._cell_size = min(WIDTH//current_map.get_width(), HEIGHT//current_map.get_height())
+        self._cellSize = min(WIDTH//current_map.get_width(), HEIGHT//current_map.get_height())
 
-        self._mult_factor = self._cell_size/model.get_cell_size() # may find a better name latter
+        self._multFactor = self._cellSize/model.get_cellSize() # may find a better name latter
 
-        self._display_map()
+        self._displayMap()
 
 
-    def get_mult_factor(self):
-        return self._mult_factor
+    def getMultFactor(self):
+        return self._multFactor
 
     def tick(self, dt):
         self._display()
 
     def _display(self):
-        #self._display_map() # a desactiver si opti 
-        self._display_bots()
+        #self._displayMap() # a desactiver si opti 
+        self._displayBots()
         
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
@@ -47,80 +47,80 @@ class Game_view:
 
 
 
-    def _display_map(self):
+    def _displayMap(self):
         pygame.draw.rect(self._window, pygame.Color(255, 255, 255, 255), pygame.Rect(0, 0, WIDTH, HEIGHT))
 
         current_map = self._model.get_map()
         
-        self._display_tiles(0,0,current_map.get_width() - 1,current_map.get_height() - 1)
+        self._displayTiles(0,0,current_map.get_width() - 1,current_map.get_height() - 1)
 
 
-    def _display_tiles(self, start_x, start_y, end_x, end_y):
+    def _displayTiles(self, startX, startY, endX, endY):
         current_map = self._model.get_map() # Store it as attribute ?
 
-        for y in range(start_y, end_y + 1):
-            for x in range(start_x, end_x + 1):
-                current_rect = pygame.Rect(
-                    x * self._cell_size,
-                    y * self._cell_size,
-                    self._cell_size,
-                    self._cell_size
+        for y in range(startY, endY + 1):
+            for x in range(startX, endX + 1):
+                currentRect = pygame.Rect(
+                    x * self._cellSize,
+                    y * self._cellSize,
+                    self._cellSize,
+                    self._cellSize
                 )
 
-                (r, g, b, a) = current_map.get_tile(x, y).get_color()
+                (r, g, b, a) = current_map.get_tile(x, y).getColor()
 
-                pygame.draw.rect(self._window, pygame.Color(r, g, b, a), current_rect)
+                pygame.draw.rect(self._window, pygame.Color(r, g, b, a), currentRect)
 
 
-    def _display_bots(self):
+    def _displayBots(self):
         bots = self._model.get_bots()
         current_map = self._model.get_map()
 
-        tiles_to_refresh = dict()
+        tilesToRefresh = dict()
 
         for bot in bots:
             (x, y) = bot.get_coord()
 
-            x_tile = int(x // self._model.get_cell_size())
-            y_tile = int(y // self._model.get_cell_size())
+            xTile = int(x // self._model.get_cellSize())
+            yTile = int(y // self._model.get_cellSize())
 
-            if not x_tile in tiles_to_refresh.keys():
-                tiles_to_refresh[x_tile] = dict()
-            tiles_to_refresh[x_tile][y_tile] = 1
+            if not xTile in tilesToRefresh.keys():
+                tilesToRefresh[xTile] = dict()
+            tilesToRefresh[xTile][yTile] = 1
 
-        for x_tile in tiles_to_refresh.keys():
-            for y_tile in tiles_to_refresh[x_tile].keys():
+        for xTile in tilesToRefresh.keys():
+            for yTile in tilesToRefresh[xTile].keys():
 
-                start_x = x_tile - 4
-                start_y = y_tile - 4
-                end_x = x_tile + 4
-                end_y = y_tile + 4
+                startX = xTile - 4
+                startY = yTile - 4
+                endX = xTile + 4
+                endY = yTile + 4
 
-                if(start_x < 0):
-                    start_x = 0
-                if(start_y < 0):
-                    start_y = 0
-                if(end_x >= current_map._width):
-                    end_x = current_map._width - 1
-                if(end_y >= current_map._height):
-                    end_y = current_map._height - 1
+                if(startX < 0):
+                    startX = 0
+                if(startY < 0):
+                    startY = 0
+                if(endX >= current_map._width):
+                    endX = current_map._width - 1
+                if(endY >= current_map._height):
+                    endY = current_map._height - 1
 
-                self._display_tiles(start_x,start_y,end_x,end_y)
+                self._displayTiles(startX,startY,endX,endY)
 
         for bot in bots:
-            (r, g, b, a) = bot.get_color()
+            (r, g, b, a) = bot.getColor()
             
-            bot_radius = int(bot.get_radius() * self._mult_factor)
+            botRadius = int(bot.get_radius() * self._multFactor)
             (x, y) = bot.get_coord()
 
-            x *= self._mult_factor
-            y *= self._mult_factor
+            x *= self._multFactor
+            y *= self._multFactor
 
-            self._draw_cone(
+            self._drawCone(
                 x,
                 y, 
                 pygame.Color(r, g, b, 70),
-                10 * bot_radius,
+                10 * botRadius,
                 int(bot.get_angle() - 20),
                 int(bot.get_angle() + 20),
                 10
@@ -130,7 +130,7 @@ class Game_view:
                 self._window,
                 int(x),
                 int(y),
-                bot_radius,
+                botRadius,
                 pygame.Color(r, g, b)
             )
 
@@ -139,25 +139,25 @@ class Game_view:
                 pygame.Color(r, g, b),
                 (int(x), int(y)),
                 (
-                    int(x + cos(radians(bot.get_angle())) * 1.5 * bot_radius),
-                    int(y + sin(radians(bot.get_angle())) * 1.5 * bot_radius)
+                    int(x + cos(radians(bot.get_angle())) * 1.5 * botRadius),
+                    int(y + sin(radians(bot.get_angle())) * 1.5 * botRadius)
                 )
             )
 
-    def _draw_cone(self, x, y, color, length, angle_start, angle_end, step = 1):
-        angle_start = float(angle_start)
-        angle_end = float (angle_end)
+    def _drawCone(self, x, y, color, length, angleStart, angleEnd, step = 1):
+        angleStart = float(angleStart)
+        angleEnd = float (angleEnd)
 
-        angle_step = 0 if step <= 0 else (angle_end -  angle_start)/step
+        angleStep = 0 if step <= 0 else (angleEnd -  angleStart)/step
 
-        points = [(x, y), (x + cos(radians(angle_start)) * length, y + sin(radians(angle_start)) * length)]
+        points = [(x, y), (x + cos(radians(angleStart)) * length, y + sin(radians(angleStart)) * length)]
 
         for i in range(step):
             points.append(
-                (x + cos(radians(angle_start + angle_step * i)) * length, y + sin(radians(angle_start + angle_step * i)) * length)
+                (x + cos(radians(angleStart + angleStep * i)) * length, y + sin(radians(angleStart + angleStep * i)) * length)
             )
 
-        points.append((x + cos(radians(angle_end)) * length, y + sin(radians(angle_end)) * length))
+        points.append((x + cos(radians(angleEnd)) * length, y + sin(radians(angleEnd)) * length))
         points.append((x, y))
 
         pygame.draw.polygon(

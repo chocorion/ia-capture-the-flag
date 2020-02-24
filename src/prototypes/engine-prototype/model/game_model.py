@@ -17,15 +17,15 @@ class Game_model:
 
     def __init__(self, map_filename):
         # Model need an inner representation of the game
-        self._cell_size = 100
-        self._default_bot_radius = 40
+        self._cellSize = 100
+        self._default_botRadius = 40
 
         # While initializing players
         self._current_team_registration = 0
 
         self._teams = dict()
 
-        self._map = Map(filename=map_filename, cell_size=self._cell_size)
+        self._map = Map(filename=map_filename, cell_size=self._cellSize)
         self._physic_engine = Physic_engine(self)
         self._generate_bots(bots_per_squad=ruleset["TEAM_SIZE"])
 
@@ -47,16 +47,16 @@ class Game_model:
             [2] + spawn_zones[2]
         )
 
-        margin = self._default_bot_radius/self._cell_size
+        margin = self._default_botRadius/self._cellSize
 
         for i in range(bots_per_squad):
             for (team, x, y, w, h) in infos:
                 self._bots[team - 1].append(
                     Bot(
                         team=team,
-                        x = round(uniform(x + margin, x + w - margin), 2) * self._cell_size,
-                        y = round(uniform(y + margin, y + h - margin), 2) * self._cell_size,
-                        radius=self._default_bot_radius
+                        x = round(uniform(x + margin, x + w - margin), 2) * self._cellSize,
+                        y = round(uniform(y + margin, y + h - margin), 2) * self._cellSize,
+                        radius=self._default_botRadius
                     )
                 )
     
@@ -97,8 +97,8 @@ class Game_model:
         # Must verify index
         return self._bots[team - 1]
 
-    def get_cell_size(self):
-        return self._cell_size
+    def get_cellSize(self):
+        return self._cellSize
 
     def build_graph(self):
         nodeGraph = []
@@ -121,8 +121,8 @@ class Game_model:
 
     
     def mark_start_cell(self, x, y):
-        cell_x = x // self._cell_size
-        cell_y = y // self._cell_size
+        cell_x = x // self._cellSize
+        cell_y = y // self._cellSize
 
         if not self._map.is_empty(cell_x, cell_y):
             return
@@ -141,8 +141,8 @@ class Game_model:
 
 
     def mark_end_cell(self, x, y):
-        cell_x = x // self._cell_size
-        cell_y = y // self._cell_size
+        cell_x = x // self._cellSize
+        cell_y = y // self._cellSize
 
         if not self._map.is_empty(cell_x, cell_y):
             return
@@ -161,8 +161,8 @@ class Game_model:
 
 
     def set_ai_destination(self, x, y):
-        x = int(x//self._cell_size)
-        y = int(y//self._cell_size)
+        x = int(x//self._cellSize)
+        y = int(y//self._cellSize)
 
         if not self._map.is_solid(x, y):
             self._ai_destination = (x, y)

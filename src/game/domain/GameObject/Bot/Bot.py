@@ -14,10 +14,10 @@ class Bot(GameObject):
 
         player (int) : Player/Team number
         
-        max_speed (int) : The maximum speed this bot can reach.
-        max_rotate (int) : Max rotation in degrees
+        maxSpeed (int) : The maximum speed this bot can reach.
+        maxRotate (int) : Max rotation in degrees
         fov (int) : Field of View of the bot.
-        view_distance (int) : Distance to which the bot can see.
+        viewDistance (int) : Distance to which the bot can see.
 
         color (rgba) : Color of the bot (Needs to be moved in View somehow)
 
@@ -34,13 +34,13 @@ class Bot(GameObject):
         self.player = player
         self.speed = None
         
-        self.max_speed = None
-        self.max_rotate = None
+        self.maxSpeed = None
+        self.maxRotate = None
         
         self.fov = None
-        self.view_distance = None
+        self.viewDistance = None
 
-        self.hitbox = list() # list of vertices, example:  ((x1,y1),(x2,y2),(x3,y3)) is a triangle
+        # self.hitbox = list() # list of vertices, example:  ((x1,y1),(x2,y2),(x3,y3)) is a triangle
         self.color = None
         ###
 

@@ -14,41 +14,41 @@ class PlayerProcess():
 
         data (any) : The data to be sent to the Process
         
-        data_queue (Queue) : The queue used to send data to the process
-        result_queue (Queue) : The queue used to get the result from the process
+        dataQueue (Queue) : The queue used to send data to the process
+        resultQueue (Queue) : The queue used to get the result from the process
 
-        model (Model) : The game model, containing teams_data in which we place the response
-        team_id (string) : The team identifier, for placing the result in the correct teams_data
+        model (Model) : The game model, containing teamsData in which we place the response
+        teamId (string) : The team identifier, for placing the result in the correct teamsData
 
         stopwatch (TimeManager) : Used to monitor process response time
     """
 
-    def __init__(self, model, team_id, player):
+    def __init__(self, model, teamId, player):
         """
         Creates a new process to run a player's tick.
 
         Arguments:
             model (Model) : Access to the model of the game
-            team_id (string) : The team to operate
+            teamId (string) : The team to operate
             player (Player) : The player to call
         """
 
         self._target = runPlayerProcess
 
         self._data = None
-        self._data_queue = Queue()
-        self._result_queue = Queue()
+        self._dataQueue = Queue()
+        self._resultQueue = Queue()
 
         self._model = model
-        self._team_id = team_id
+        self._teamId = teamId
 
         self._stopwatch = TimeManager()
 
-        self._args = (self._data_queue, self._result_queue, player)
+        self._args = (self._dataQueue, self._resultQueue, player)
 
         self._process = Process(target=self._target, args=self._args)
 
-        self.last_response_time = None
+        self.lastResponseTime = None
 
     def setData(self, pollingData):
         """
@@ -66,25 +66,25 @@ class PlayerProcess():
         Use setData to change what will be read by the player.
         """
         self._stopwatch.StartTimer()
-        self._data_queue.put(self._data)
+        self._dataQueue.put(self._data)
 
     def check(self):
         """
-        Checks if the player has sent a response, and places it in teams_data[team]
+        Checks if the player has sent a response, and places it in teamsData[team]
 
         If no response is given, None is placed.
         """
         try: 
-            result = self._result_queue.get(False)
-            self.last_response_time = self._stopwatch.DeltaTimeMs()
+            result = self._resultQueue.get(False)
+            self.lastResponseTime = self._stopwatch.DeltaTimeMs()
             
         except:
-            if self._model.teams_data[self._team_id] == None:
+            if self._model.teamsData[self._teamId] == None:
                 result = None
             else:
-                result = self._model.teams_data[self._team_id]
+                result = self._model.teamsData[self._teamId]
 
-        self._model.teams_data[self._team_id] = result
+        self._model.teamsData[self._teamId] = result
 
     def start(self):
         """
@@ -92,7 +92,7 @@ class PlayerProcess():
         """
         self._process.start()
 
-    def join(self, timeout):
+    def join(self, timeout = None):
         """
         Waits until process termination.
         """
@@ -104,7 +104,7 @@ class PlayerProcess():
         """
         self._process.kill()
 
-def runPlayerProcess(data_queue, result_queue, player):
+def runPlayerProcess(dataQueue, resultQueue, player):
         while True:
-            pollingData = data_queue.get()
-            result_queue.put(player.poll(pollingData))
+            pollingData = dataQueue.get()
+            resultQueue.put(player.poll(pollingData))

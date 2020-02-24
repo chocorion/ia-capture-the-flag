@@ -1,7 +1,7 @@
 import os
 import sys
 import timeit
-from board import read_from_txt, create_neighbors, draw_board
+from board import readFromTxt, createNeighbors, drawBoard
 from a_star import a_star
 
 # Read board number from command line
@@ -17,11 +17,11 @@ file_dir = os.path.dirname(os.path.realpath('__file__'))
 filename = os.path.join(file_dir, 'boards/board-{0}-{1}.txt'.format(board, number))
 
 # Create list with nodes
-nodeGraph = read_from_txt(filename)
+nodeGraph = readFromTxt(filename)
 
 # Create neighbor list for all nodes (no need now)
 #for node in nodeGraph:
-#   create_neighbors(node, nodeGraph)
+#   createNeighbors(node, nodeGraph)
 
 # Get start and goal node
 start = list(filter(lambda n: n.cellContent == 'A', nodeGraph))[0]
@@ -37,5 +37,5 @@ starttime = timeit.default_timer()
 print("The time difference for A STAR is :", timeit.default_timer()-starttime)
 
 # Get visualization of path
-draw_board(res_a_star.path, res_a_star.border, res_a_star.closed, nodeGraph,'A-star-board-{0}-{1}'.format(board, number))
+drawBoard(res_a_star.path, res_a_star.border, res_a_star.closed, nodeGraph,'A-star-board-{0}-{1}'.format(board, number))
 

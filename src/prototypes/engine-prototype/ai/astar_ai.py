@@ -8,8 +8,8 @@ def distance(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 class Astar_AI(AI):
-    def __init__(self, team, number_of_bots, game_map):
-        super().__init__(team, number_of_bots, game_map)
+    def __init__(self, team, number_of_bots, gameMap):
+        super().__init__(team, number_of_bots, gameMap)
         #Only one path for all bots actually
         self._res_a_star = []
         self._bots = [Bot() for i in range(number_of_bots)]
@@ -29,17 +29,17 @@ class Astar_AI(AI):
 
     #Just for initialize a random position
     def _bot_set_random_dest(self, bot_index):
-        map_cell_size = super().get_map().get_cell_size()
+        map_cellSize = super().get_map().get_cellSize()
         map_width     = super().get_map().get_width()
         map_height    = super().get_map().get_height()
 
         self._bots[bot_index].set_dest(
-            randrange(map_cell_size, map_width * map_cell_size),
-            randrange(map_cell_size, map_height * map_cell_size)
+            randrange(map_cellSize, map_width * map_cellSize),
+            randrange(map_cellSize, map_height * map_cellSize)
         )
     
     def _bot_set_astar_dest(self,bot_index,x,y):
-        map_cell_size = super().get_map().get_cell_size()
+        map_cellSize = super().get_map().get_cellSize()
         map_width     = super().get_map().get_width()
         map_height    = super().get_map().get_height()
 
@@ -49,7 +49,7 @@ class Astar_AI(AI):
             #Find a random goal
             nodeGraph = self.build_graph(map_width, map_height)
             start = self.find_start(nodeGraph,bot_index)
-            goal  = self.find_goal(map_height, map_width, map_cell_size, nodeGraph)
+            goal  = self.find_goal(map_height, map_width, map_cellSize, nodeGraph)
 
             #If a_star is not null (no path)
             res = a_star(start, goal, nodeGraph)
@@ -69,7 +69,7 @@ class Astar_AI(AI):
                 node = self._res_a_star[0][0]
                 (dest_x, dest_y) = node.x, node.y
                 #Send the destination with the good coordinates
-                self._bots[bot_index].set_dest(dest_x * map_cell_size,dest_y * map_cell_size)
+                self._bots[bot_index].set_dest(dest_x * map_cellSize,dest_y * map_cellSize)
                 to_delete =self._res_a_star[0].pop(0)
                 del to_delete
             #Finally if the path is empty, reset the astar 
@@ -77,7 +77,7 @@ class Astar_AI(AI):
                 del self._res_a_star
                 self._res_a_star = []
 
-    def find_goal(self,map_height, map_width, map_cell_size,nodeGraph):
+    def find_goal(self,map_height, map_width, map_cellSize,nodeGraph):
         check = False
         while(not check):
             x = randrange(map_width)
@@ -90,14 +90,14 @@ class Astar_AI(AI):
         return goal
 
     def find_start(self, nodeGraph, bot_index):
-        map_cell_size = super().get_map().get_cell_size()
-        (last_pos_x, last_pos_y) = self._bots[bot_index].get_saved_pos()
+        map_cellSize = super().get_map().get_cellSize()
+        (last_posX, last_posY) = self._bots[bot_index].get_saved_pos()
         
-        x, y = (last_pos_x // map_cell_size,
-                last_pos_y // map_cell_size)
+        x, y = (last_posX // map_cellSize,
+                last_posY // map_cellSize)
         
         for node in nodeGraph:
-            if (node.x == last_pos_x and node.y == last_pos_y):
+            if (node.x == last_posX and node.y == last_posY):
                 return node
 
         #I think this return is complete mess, avoid an error, must correct it        
@@ -112,11 +112,11 @@ class Astar_AI(AI):
             self._bots[bot_index].update(x, y, angle)
 
             # Get old position and destination
-            (last_pos_x, last_pos_y) = self._bots[bot_index].get_saved_pos()
+            (last_posX, last_posY) = self._bots[bot_index].get_saved_pos()
             (dest_x, dest_y) = self._bots[bot_index].get_dest()
             
             #New Astar or continue the one calculated if exist
-            if distance(x, y, last_pos_x, last_pos_y) < 3:
+            if distance(x, y, last_posX, last_posY) < 3:
                 self._bot_set_astar_dest(bot_index, x, y)
                 
             elif distance(x, y, dest_x, dest_y) < 30:

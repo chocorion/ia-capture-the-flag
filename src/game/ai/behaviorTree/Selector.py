@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 
 class Selector(NodeTree):
@@ -6,7 +6,7 @@ class Selector(NodeTree):
     Implementation of NodeTree, this class represent a control node, the selector.
     """
     def __init__(self):
-        self._currently_processing_index = -1
+        self._currentlyProcessingIndex = -1
         super().__init__()
 
 
@@ -24,18 +24,18 @@ class Selector(NodeTree):
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
 
-        nodes = super().get_nodes()
+        nodes = super().getNodes()
         start = 0
 
-        if self._currently_processing_index != -1:
-            start = self._currently_processing_index
-            self._currently_processing_index = -1
+        if self._currentlyProcessingIndex != -1:
+            start = self._currentlyProcessingIndex
+            self._currentlyProcessingIndex = -1
 
-        for node_index in range(start, len(nodes)):
-            status = nodes[node_index].tick(dt)
+        for nodeIndex in range(start, len(nodes)):
+            status = nodes[nodeIndex].tick(dt)
 
             if status == NodeTree.RUNNING:
-                self._currently_processing_index = node_index
+                self._currentlyProcessingIndex = nodeIndex
                 return NodeTree.RUNNING
 
             if status == NodeTree.SUCCESS:

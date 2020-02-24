@@ -31,11 +31,11 @@ class Physics():
         return Physics.instance.angularDistance(a,b)
 
     @staticmethod
-    def getAngle(x, y, target_x, target_y):
+    def getAngle(x, y, targetX, targetY):
         """
         Returns the angle in degrees needed to face a direction from a certain point of reference.
         """
-        return Physics.instance.getAngle(x, y, target_x, target_y)
+        return Physics.instance.getAngle(x, y, targetX, targetY)
 
     @staticmethod
     def applyMovement(x, y, angle, distance):
@@ -87,8 +87,8 @@ class Physics():
         return Physics.instance.pointInsidePolygon(vertices, x, y)
 
     @staticmethod
-    def createCirclePolygon(nb_vertices):
+    def createCirclePolygon(nbVertices):
         """
-        Returns a new polygon with (nb_vertices) equal sides.
+        Returns a new polygon with (nbVertices) equal sides.
         """
-        return Physics.instance.createCirclePolygon(nb_vertices)
+        return Physics.instance.createCirclePolygon(nbVertices)

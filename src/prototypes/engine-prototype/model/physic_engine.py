@@ -3,8 +3,8 @@ from model import *
 import math, sys
 
 # Bots can't rotate more from 18°
-MAX_ANGLE = 18
-MAX_SPEED = 100
+maxAngle = 18
+maxSpeed = 100
 
 REAL_SPEED = 600
 
@@ -30,50 +30,50 @@ class Physic_engine:
 
                 (dest_x, dest_y, speed) = bots_movement[team][i]
 
-                speed = MAX_SPEED if speed > MAX_SPEED else speed
-                speed = (speed * REAL_SPEED)/MAX_SPEED
+                speed = maxSpeed if speed > maxSpeed else speed
+                speed = (speed * REAL_SPEED)/maxSpeed
 
 
                 (x, y) = bots[i].get_coord()
                 angle = bots[i].get_angle()
 
-                new_angle = self._rotate(x, y, angle, dest_x, dest_y)
+                newAngle = self._rotate(x, y, angle, dest_x, dest_y)
 
-                dx = math.cos(math.radians(new_angle))
-                dy = math.sin(math.radians(new_angle))
+                dx = math.cos(math.radians(newAngle))
+                dy = math.sin(math.radians(newAngle))
 
-                new_x = x + dx * float(speed) * dt/1000
-                new_y = y + dy * float(speed) * dt/1000
+                newX = x + dx * float(speed) * dt/1000
+                newY = y + dy * float(speed) * dt/1000
 
-                bot_radius = bots[i].get_radius()
+                botRadius = bots[i].get_radius()
                 
                 # Check collision with the border of the circle
-                collision = self._check_collision_map(
-                    x + dx * bot_radius,
-                    y + dy * bot_radius,
-                    new_x + dx * bot_radius,
-                    new_y + dy * bot_radius
+                collision = self._check_collisionMap(
+                    x + dx * botRadius,
+                    y + dy * botRadius,
+                    newX + dx * botRadius,
+                    newY + dy * botRadius
                 )
                 
-                new_x = new_x if collision[0] == -1 else collision[0] - dx * bot_radius
-                new_y = new_y if collision[1] == -1 else collision[1] - dy * bot_radius
+                newX = newX if collision[0] == -1 else collision[0] - dx * botRadius
+                newY = newY if collision[1] == -1 else collision[1] - dy * botRadius
 
-                bots[i].move(new_x, new_y, new_angle)
+                bots[i].move(newX, newY, newAngle)
 
 
-    def _check_collision_map(self, x, y, dest_x, dest_y):
-        cell_size = self._model.get_cell_size()
+    def _check_collisionMap(self, x, y, dest_x, dest_y):
+        cell_size = self._model.get_cellSize()
 
         dx = abs(dest_x - x)
         dy = abs(dest_y - y)
 
-        current_x = x
-        current_y = y
+        currentX = x
+        currentY = y
 
         n = int(1 + dx + dy)
 
-        x_inc = 1 if (dest_x > x) else -1
-        y_inc = 1 if (dest_y > y) else -1
+        xInc = 1 if (dest_x > x) else -1
+        yInc = 1 if (dest_y > y) else -1
 
         error = dx - dy
 
@@ -82,18 +82,18 @@ class Physic_engine:
         
         for i in range(n,0,-1):
             
-            if self._model.get_map().is_solid(int(current_x // cell_size), int(current_y // cell_size)):
-                return (current_x, current_y)
+            if self._model.get_map().is_solid(int(currentX // cell_size), int(currentY // cell_size)):
+                return (currentX, currentY)
 
             if error > 0:
-                current_x += x_inc
+                currentX += xInc
                 error -= dy
             elif error < 0:
-                current_y += y_inc
+                currentY += yInc
                 error += dx
             elif error == 0:
-                current_x += x_inc
-                current_y += y_inc
+                currentX += xInc
+                currentY += yInc
                 error -= dy
                 error += dx
                 n -= 1
@@ -117,15 +117,15 @@ class Physic_engine:
 
     def _rotate(self, x, y, angle, dest_x, dest_y):
         if x == dest_x and y == dest_y:
-            new_angle = 0.
+            newAngle = 0.
         else:
-            new_angle = self._get_angle(x, y, dest_x, dest_y)
+            newAngle = self._get_angle(x, y, dest_x, dest_y)
 
-        diff = round(new_angle - angle, 2)
+        diff = round(newAngle - angle, 2)
 
         if DISPLAY:
             print("({}, {}) -> ({}, {})".format(x, y, dest_x, dest_y))
-            print("Angle -> {} | new angle -> {} | DIFF -> {}".format(angle, new_angle, diff))
+            print("Angle -> {} | new angle -> {} | DIFF -> {}".format(angle, newAngle, diff))
 
         if diff > 180:
             diff = diff - 360
@@ -133,11 +133,11 @@ class Physic_engine:
         elif diff < -180:
             diff = 360 + diff
 
-        if diff > MAX_ANGLE:
-            diff = MAX_ANGLE
+        if diff > maxAngle:
+            diff = maxAngle
 
-        elif diff < -MAX_ANGLE:
-            diff = -MAX_ANGLE
+        elif diff < -maxAngle:
+            diff = -maxAngle
 
         angle += diff
 

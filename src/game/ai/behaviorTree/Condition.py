@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 class Condition(NodeTreeSingleChild):
     """
@@ -15,19 +15,19 @@ class Condition(NodeTreeSingleChild):
 
     def tick(self, dt):
         # Don't repeat condition if child was already running
-        if self._currently_processing != None:
-            status = self._currently_processing.tick(dt)
+        if self._currentlyProcessing != None:
+            status = self._currentlyProcessing.tick(dt)
 
             if status != NodeTree.RUNNING:
-                self._currently_processing = None
+                self._currentlyProcessing = None
 
             return status
 
         if self._condition():
-            status = super().get_child().tick(dt)
+            status = super().getChild().tick(dt)
 
             if status == NodeTree.RUNNING:
-                self._currently_processing = super().get_child()
+                self._currentlyProcessing = super().getChild()
             else:
                 return status
 

@@ -7,7 +7,7 @@ PACKAGE_PARENT = '../game'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 DEFAULT_TICK = 100
 
@@ -68,10 +68,10 @@ class TestBehaviorTree(unittest.TestCase):
 
         selector = Selector()
 
-        selector.append_node(Leaf(test_fun_success))
-        selector.append_node(Leaf(test_fun_failure))
+        selector.appendNode(Leaf(test_fun_success))
+        selector.appendNode(Leaf(test_fun_failure))
 
-        root_node.append_node(selector)
+        root_node.appendNode(selector)
 
         root_node.tick(DEFAULT_TICK)
 
@@ -86,10 +86,10 @@ class TestBehaviorTree(unittest.TestCase):
 
         selector = Selector()
 
-        selector.append_node(Leaf(test_fun_failure))
-        selector.append_node(Leaf(test_fun_success))
+        selector.appendNode(Leaf(test_fun_failure))
+        selector.appendNode(Leaf(test_fun_success))
 
-        root_node.append_node(selector)
+        root_node.appendNode(selector)
 
         root_node.tick(DEFAULT_TICK)
 
@@ -102,7 +102,7 @@ class TestBehaviorTree(unittest.TestCase):
         TEST_COUNT = 0
 
         root_node = Repeater(42)
-        root_node.append_node(Leaf(increment_count_success))
+        root_node.appendNode(Leaf(increment_count_success))
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -127,7 +127,7 @@ class TestBehaviorTree(unittest.TestCase):
             return NodeTree.SUCCESS
 
         root_node = RepeaterUntilFail()
-        root_node.append_node(Leaf(f))
+        root_node.appendNode(Leaf(f))
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -143,10 +143,10 @@ class TestBehaviorTree(unittest.TestCase):
 
         leaf = Leaf(test_fun_success)
 
-        single_childe.append_node(leaf)
+        single_childe.appendNode(leaf)
 
         with self.assertRaises(Exception):
-            single_childe.append_node(leaf)
+            single_childe.appendNode(leaf)
 
         with self.assertRaises(Exception):
             single_childe.insert_node(leaf)
@@ -156,7 +156,7 @@ class TestBehaviorTree(unittest.TestCase):
         root_node = Inverter()
         leaf = Leaf(test_fun_failure)
 
-        root_node.append_node(leaf)
+        root_node.appendNode(leaf)
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -167,7 +167,7 @@ class TestBehaviorTree(unittest.TestCase):
         root_node = Inverter()
         leaf = Leaf(test_fun_success)
 
-        root_node.append_node(leaf)
+        root_node.appendNode(leaf)
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -178,7 +178,7 @@ class TestBehaviorTree(unittest.TestCase):
         root_node = Succeeder()
         leaf = Leaf(test_fun_failure)
 
-        root_node.append_node(leaf)
+        root_node.appendNode(leaf)
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -189,7 +189,7 @@ class TestBehaviorTree(unittest.TestCase):
         root_node = Succeeder()
         leaf = Leaf(test_fun_success)
 
-        root_node.append_node(leaf)
+        root_node.appendNode(leaf)
 
         status = root_node.tick(DEFAULT_TICK)
 
@@ -204,7 +204,7 @@ class TestBehaviorTree(unittest.TestCase):
             return True
 
         root_node = Condition(fun)
-        root_node.append_node(Leaf(set_value_to_one))
+        root_node.appendNode(Leaf(set_value_to_one))
 
         root_node.tick(DEFAULT_TICK)
 
@@ -219,7 +219,7 @@ class TestBehaviorTree(unittest.TestCase):
             return False
 
         root_node = Condition(fun)
-        root_node.append_node(Leaf(set_value_to_one))
+        root_node.appendNode(Leaf(set_value_to_one))
 
         root_node.tick(DEFAULT_TICK)
 
@@ -231,8 +231,8 @@ class TestBehaviorTree(unittest.TestCase):
         TEST_COUNT = 0
 
         root_node = Sequence()
-        root_node.append_node(Leaf(increment_count_success))
-        root_node.append_node(Leaf(increment_count_running))
+        root_node.appendNode(Leaf(increment_count_success))
+        root_node.appendNode(Leaf(increment_count_running))
 
         root_node.tick(DEFAULT_TICK)
         root_node.tick(DEFAULT_TICK)
@@ -246,8 +246,8 @@ class TestBehaviorTree(unittest.TestCase):
         TEST_COUNT = 0
 
         root_node = Selector()
-        root_node.append_node(Leaf(increment_count_failure))
-        root_node.append_node(Leaf(increment_count_running))
+        root_node.appendNode(Leaf(increment_count_failure))
+        root_node.appendNode(Leaf(increment_count_running))
 
         root_node.tick(DEFAULT_TICK)
         root_node.tick(DEFAULT_TICK)

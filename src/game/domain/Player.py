@@ -5,11 +5,19 @@ class Player:
 
     This class interacts with the game by returning it's targets and actions during the poll function.
     You are free to do whatever you want as long as you respond !
+
+    Actions available to the player are described in the enumeration in class variables.
     """
 
-    # Value in bitwise comparison
+
     SHOOT = 1
+    """
+    Bots can fire a weapon and damage the health of other bots. There is a cooldown of X milliseconds.
+    """
     DROP_FLAG = 2
+    """
+    If they are holding a flag, bots can drop it next to their current location for other to pick it up.
+    """
 
     def __init__(self, map, rules, team):
         raise NotImplementedError
@@ -23,9 +31,9 @@ class Player:
             pollingData :
             {
                 "bots" : {
-                    "<bot_identifier>" : { 
-                        "attributes"        : ( <life> , <flag> , <shoot_cooldown> ),
-                        "current_position"  : ( <x> , <y> , <angle>, <speed> ),
+                    "<botIdentifier>" : { 
+                        "attributes"        : ( <life> , <flag> , <shootCooldown> ),
+                        "currentPosition"  : ( <x> , <y> , <angle>, <speed> ),
                     },
                     ...
                 },
@@ -37,7 +45,7 @@ class Player:
         Returns:
             {
                 "bots": {
-                    "<bot_identifier>" : { "target_position" : ( <x> , <y>, <speed> ), "actions" : <bitwise_actions> },
+                    "<botIdentifier>" : { "targetPosition" : ( <x> , <y>, <speed> ), "actions" : <bitwiseActions> },
                     ...
                 }
             }

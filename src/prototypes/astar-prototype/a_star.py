@@ -79,7 +79,7 @@ def a_star(start, goal, nodeGraph):
         # Remove current from border and add it to closed list
         del border[0]
         closed.append(current)
-        board.create_neighbors(current, nodeGraph)
+        board.createNeighbors(current, nodeGraph)
         visitNeighbor(current, closed, border, goal)
         
     

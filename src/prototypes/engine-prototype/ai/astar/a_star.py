@@ -104,6 +104,6 @@ def a_star(start, goal, nodeGraph):
         del border[0]
         #closed.append(current)
         closed.insert(0,current) #opti
-        create_neighbors(current, nodeGraph)
+        createNeighbors(current, nodeGraph)
         visitNeighbor(current, closed, border, goal)
 

@@ -1,5 +1,6 @@
 from service.Physics import Physics
 from service.Config import Config
+from domain.Map import Map
 
 class PhysicsEngine(Physics):
     """
@@ -15,6 +16,9 @@ class PhysicsEngine(Physics):
         self._ruleset = ruleset
         self._map = map_
 
+        self.collisionsMaps = dict()
+        self.collisionsMapsDividers = dict()
+
 
     def tick(self, deltaTime):
         """
@@ -22,46 +26,46 @@ class PhysicsEngine(Physics):
         """
         self.deltaTime = deltaTime
 
-    def checkSpeed(self, bot, target_speed):
+    def checkSpeed(self, bot, targetSpeed):
         """
         Checks whether a target speed is correct for a bot.
 
         Returns:
-            target_speed (int) : A correct target speed for this bot.
+            targetSpeed (int) : A correct target speed for this bot.
         """
-        max_speed = float(self._ruleset["SpeedMultiplier"]) * bot.max_speed
+        maxSpeed = float(self._ruleset["SpeedMultiplier"]) * bot.maxSpeed
 
-        if target_speed > max_speed:
-            target_speed = max_speed
-        if target_speed < 0:
-            target_speed = 0
+        if targetSpeed > maxSpeed:
+            targetSpeed = maxSpeed
+        if targetSpeed < 0:
+            targetSpeed = 0
 
-        return target_speed
+        return targetSpeed
 
-    def checkAngle(self, bot, target_x, target_y):
+    def checkAngle(self, bot, targetX, targetY):
         """
         Checks whether a target point is correct for a bot.
 
         Returns:
             target_angle (int) : A correct target angle for this bot.
         """
-        new_angle = Physics.getAngle( bot.x, bot.y, target_x, target_y)
+        newAngle = Physics.getAngle( bot.x, bot.y, targetX, targetY)
 
-        delta_angle = new_angle - bot.angle
+        deltaAngle = newAngle - bot.angle
 
-        if delta_angle > 180:
-            delta_angle = delta_angle - 360
+        if deltaAngle > 180:
+            deltaAngle = deltaAngle - 360
 
-        elif delta_angle < -180:
-            delta_angle = 360 + delta_angle
+        elif deltaAngle < -180:
+            deltaAngle = 360 + deltaAngle
         
-        max_angle = float(self._ruleset["RotationMultiplier"]) * bot.max_rotate
-        max_angle = max_angle * self.getDeltaTimeModifier()
+        maxAngle = float(self._ruleset["RotationMultiplier"]) * bot.maxRotate
+        maxAngle = maxAngle * self.getDeltaTimeModifier()
 
-        if abs(delta_angle) > max_angle :
-            delta_angle = max_angle if delta_angle > 0 else -max_angle
+        if abs(deltaAngle) > maxAngle :
+            deltaAngle = maxAngle if deltaAngle > 0 else -maxAngle
             
-        return bot.angle + delta_angle
+        return bot.angle + deltaAngle
 
     def getDeltaTimeModifier(self):
         """
@@ -69,7 +73,7 @@ class PhysicsEngine(Physics):
         """
         return (self.deltaTime / (1000 / (30 * Config.TimeRate())))
 
-    def checkCollision(self, x, y, target_x, target_y, cap_x = None, cap_y = None):
+    def checkCollision(self, collisionMap, x, y, targetX, targetY, capX, capY):
         """
         Checks whether a target's path collides with the map.
 
@@ -77,19 +81,19 @@ class PhysicsEngine(Physics):
             position (int,int) : The first valid position.
         """
         
-        dx = abs(target_x - x)
-        dy = abs(target_y - y)
+        dx = abs(targetX - x)
+        dy = abs(targetY - y)
 
-        current_x = x
-        current_y = y
+        currentX = x
+        currentY = y
 
-        last_x = x
-        last_y = y
+        lastX = x
+        lastY = y
 
         n = int(1 + dx + dy)
 
-        x_inc = 1 if (target_x > x) else -1
-        y_inc = 1 if (target_y > y) else -1
+        xInc = 1 if (targetX > x) else -1
+        yInc = 1 if (targetY > y) else -1
 
         error = dx - dy
 
@@ -98,26 +102,56 @@ class PhysicsEngine(Physics):
         
         for i in range(n, 0, -1):
 
-            if cap_x != None and cap_y != None and cap_x == last_x and cap_y == last_y:
-                return (last_x,last_y)
+            if capX != None and capY != None and capX == lastX and capY == lastY:
+                return (lastX,lastY)
             
-            if self._map.blocks[int(current_x // self._map.BLOCKSIZE)][int(current_y // self._map.BLOCKSIZE)].solid:
-                return (last_x, last_y)
+            if self.collisionsMaps[collisionMap][int(currentX // self.collisionsMapsDividers[collisionMap])][int(currentY // self.collisionsMapsDividers[collisionMap])]:
+                return (lastX, lastY)
 
-            last_x = current_x
-            last_y = current_y
+            lastX = currentX
+            lastY = currentY
 
             if error > 0:
-                current_x += x_inc
+                currentX += xInc
                 error -= dy
             elif error < 0:
-                current_y += y_inc
+                currentY += yInc
                 error += dx
             elif error == 0:
-                current_x += x_inc
-                current_y += y_inc
+                currentX += xInc
+                currentY += yInc
                 error -= dy
                 error += dx
                 n -= 1
                 
-        return (target_x, target_y)
+        return (targetX, targetY)
+
+    def createCollisionMap(self, name, padding):
+
+        divider = 10 # 1 / round(Map.BLOCKSIZE / padding)
+        self.collisionsMapsDividers[name] = divider
+
+        collisionsMapPadding = int(padding // (Map.BLOCKSIZE // divider))
+        collisionsMapWidth = int(self._map.blockWidth * divider)
+        collisionsMapHeight = int(self._map.blockHeight * divider)
+
+        self.collisionsMaps[name] = [[False for i in range(0,collisionsMapHeight)] for j in range(0,collisionsMapWidth)]
+
+        blockSizeFactored = int(Map.BLOCKSIZE // divider)
+
+        (x,y) = (0,0)
+        for blockline in self._map.blocks:
+            for block in blockline:
+                if block.solid:
+                    for rx in range(- collisionsMapPadding, blockSizeFactored + collisionsMapPadding):
+                        for ry in range(- collisionsMapPadding, blockSizeFactored + collisionsMapPadding):
+                            nx = int(x + rx)
+                            ny = int(y + ry)
+                            
+                            if nx >= 0 and ny >= 0 and nx < collisionsMapWidth and ny < collisionsMapHeight:
+                                # print("{} {}".format(nx,ny))
+                                self.collisionsMaps[name][nx][ny] = True
+
+                y += blockSizeFactored
+            y = 0
+            x += blockSizeFactored

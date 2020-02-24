@@ -1,4 +1,4 @@
-from ai.behavior_tree import *
+from ai.behaviorTree import *
 
 class Inverter(NodeTreeSingleChild):
     """
@@ -29,7 +29,7 @@ class Inverter(NodeTreeSingleChild):
             State (int) : Must be NodeTree.RUNNING, NodeTree.SUCCESS or NodeTree.FAILURE.
         """
 
-        status = super().get_child().tick(dt)
+        status = super().getChild().tick(dt)
 
         if status == NodeTree.RUNNING:
             return status

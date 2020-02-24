@@ -6,24 +6,24 @@ import json
 
 class JSONBuilder(ArgBuilder):
     
-    def get_result(self):
+    def getResult(self):
         """
         Return the argument built by this builder.
 
         Return :
             json (string) : string in JSON format
         """
-        return json.dumps(self._dictBuilder.get_result())
+        return json.dumps(self._dictBuilder.getResult())
 
 
-    def begin_argument(self):
+    def beginArgument(self):
         self._dictBuilder = DictBuilder()
-        self._dictBuilder.begin_argument()
+        self._dictBuilder.beginArgument()
 
 
-    def end_argument(self):
-        self._dictBuilder.end_argument()
+    def endArgument(self):
+        self._dictBuilder.endArgument()
 
 
-    def add_bot(self, bot):
-        self._dictBuilder.add_bot(bot)
+    def addBot(self, bot):
+        self._dictBuilder.addBot(bot)

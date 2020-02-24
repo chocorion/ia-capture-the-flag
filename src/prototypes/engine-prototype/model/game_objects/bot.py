@@ -24,16 +24,16 @@ class Bot(Game_object):
     def get_radius(self):
         return self._radius
 
-    def get_color(self):
+    def getColor(self):
         return self._color
 
     def get_angle(self):
         return self._angle
 
-    def move(self, new_x, new_y, new_angle):
-        self._x = new_x
-        self._y = new_y
-        self._angle = new_angle
+    def move(self, newX, newY, newAngle):
+        self._x = newX
+        self._y = newY
+        self._angle = newAngle
 
     def __repr__(self):
         return "Bot({}, {}, {}, {})".format(self._team, self._x, self._y, self._radius)

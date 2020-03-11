@@ -125,7 +125,7 @@ class myPlayer(Player):
                 return NodeTree.SUCCESS
 
             
-            if distance(path[currentIndex][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[currentIndex][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, botPosition[0], botPosition[1]) <= 80:
+            if distance(path[currentIndex][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, path[currentIndex][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2, botPosition[0], botPosition[1]) <= 50:
                 self._botData["bots"][botId]["destination"] = path[currentIndex + 1]
                 self._botData["bots"][botId]["pathIndex"] += 1
 
@@ -135,6 +135,7 @@ class myPlayer(Player):
             return NodeTree.RUNNING
             
         return f
+
 
     def botFunFindPathToHome(self, botId):
         def f(dt):

@@ -12,3 +12,6 @@ runExample:
 
 runAstar:
 	bash -c "cd src/game; ./Game.py ai.playerTest.myPlayerAstar ai.playerTest.myPlayerAstar"
+
+runBehavior:
+	bash -c "cd src/game; ./Game.py ai.playerTest.myLittlePlayer ai.playerTest.myLittlePlayer"

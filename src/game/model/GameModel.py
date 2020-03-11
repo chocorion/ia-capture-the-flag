@@ -23,7 +23,7 @@ class GameModel(Model):
         players (list(Player)) : The players that will be polled each tick.
         teams (dict) : Contains player informations to be sent to them.
 
-        cooldownremaining (int) : time in milliseconds since end of start cooldown.
+        countdownremaining (int) : time in milliseconds since end of start countdownremaining.
     """
 
     def __init__(self, Player1, Player2, map_file = './maps/map_00.txt'):
@@ -56,9 +56,11 @@ class GameModel(Model):
 
         self.stopwatch = TimeManager()
         
-        self.cooldownremaining = self._ruleset["StartCountdownSeconds"] * 1000
+        self.countdownremaining = self._ruleset["StartCountdownSeconds"] * 1000
 
         self.game_over = False
+
+        self.winner = None
 
         self.mouse_coords = (0,0)
 
@@ -139,7 +141,8 @@ class GameModel(Model):
         flagInSpawn = self._map.FlagInSpawn()
         if flagInSpawn != 0:
             self.game_over = True
-            print(flagInSpawn)
+            self.countdownremaining = 0
+            self.winner = flagInSpawn
 
     def handlePlayerPolling(self):
         """
@@ -256,7 +259,7 @@ class GameModel(Model):
         Handles the end of the countdown and sets the turn to 1. This causes the turn to be handled without asking for new data, since it is collected during countdown.
         """
         self.turn = 1
-        self.cooldownremaining = 0
+        self.countdownremaining = 0
 
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()
@@ -265,7 +268,7 @@ class GameModel(Model):
         """
         Handles the countdown phase by always checking for a response without giving new data.
         """
-        self.cooldownremaining = int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self.stopwatch.PeekDeltaTimeMs()
+        self.countdownremaining = int(self._ruleset["StartCountdownSeconds"]) * 1000 - int(self._ruleset["ThinkTimeMs"]) - self.stopwatch.PeekDeltaTimeMs()
 
         for playerProcess in self._playerProcesses.values():
             playerProcess.check()

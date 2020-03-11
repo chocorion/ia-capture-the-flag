@@ -50,6 +50,8 @@ class PygameView(View):
 
         self._refreshMap = True
 
+        self._texts = dict()
+
         self.last_displayed_timer = None
         self.last_displayed_aimed = None
 
@@ -92,6 +94,7 @@ class PygameView(View):
         self._displayBots()
         self._displayFlags()
         self._displayCountdown()
+        self._displayGameOver()
 
         if self.debug[PygameView.DEBUG_COLLISIONMAP]:
             self.displayCollisionMap("RegularBot")
@@ -112,54 +115,75 @@ class PygameView(View):
         
         self._displayTiles(0,0,self._map.blockWidth - 1,self._map.blockHeight - 1)
 
+    def _displayGameOver(self):
+        """
+        Displays the winner in the middle of the screen.
+        """
+        if self._model.game_over and self._model.winner != None:
+            self._displayOutlinedText("game_over", "Red wins !" if self._model.winner == 1 else "Blue wins !", 5, (255,0,0,255) if self._model.winner == 1 else (0,0,255,255))
+
+    def _displayOutlinedText(self, id, text, outline, color):
+        """
+        Displays a text with an outline and creates it if not already created.
+        """
+        if not id in self._texts.keys():
+            self._texts[id] = { "text" : None, "outline" : None, "color" : None, "displays" : dict()}
+
+        outlines = 8
+
+        toDisplay = '{}'.format(text)
+        if self._texts[id]["text"] != toDisplay or self._texts[id]["outline"] != outline or self._texts[id]["color"] != color:
+            self._texts[id]["text"] = toDisplay
+            self._texts[id]["outline"] = outline
+            self._texts[id]["color"] = color
+
+            self._texts[id]["displays"]["main"] = self._default_font_big.render(self._texts[id]["text"], True, self._texts[id]["color"])
+            self._texts[id]["displays"]["main_rect"] = self._texts[id]["displays"]["main"].get_rect()
+            self._texts[id]["displays"]["main_rect"].center = (self._windowRect[0] // 2, self._windowRect[1] // 2)
+
+            self._texts[id]["displays"]["outline"] = self._defaultFontBigOutline.render(self._texts[id]["text"], True, (0,0,0,255))
+            
+            self._texts[id]["displays"]["outline_rects"] = []
+            for i in range(0,outlines):
+                new_rect = self._texts[id]["displays"]["main"].get_rect()
+                new_rect.center = (self._windowRect[0] // 2, self._windowRect[1] // 2)
+                self._texts[id]["displays"]["outline_rects"].append(new_rect)
+
+            for i in range(0,outlines):
+                if i < 3:
+                    self._texts[id]["displays"]["outline_rects"][i].x += self._texts[id]["outline"]
+                    if i == 0:
+                        self._texts[id]["displays"]["outline_rects"][i].y += self._texts[id]["outline"]
+                    elif i == 1:
+                        self._texts[id]["displays"]["outline_rects"][i].y -= self._texts[id]["outline"]
+                        
+                elif i < 6:
+                    self._texts[id]["displays"]["outline_rects"][i].x -= self._texts[id]["outline"]
+                    if i == 3:
+                        self._texts[id]["displays"]["outline_rects"][i].y += self._texts[id]["outline"]
+                    elif i == 4:
+                        self._texts[id]["displays"]["outline_rects"][i].y -= self._texts[id]["outline"]
+                        
+                else:
+                    if i == 6:
+                        self._texts[id]["displays"]["outline_rects"][i].y += self._texts[id]["outline"]
+                    else:
+                        self._texts[id]["displays"]["outline_rects"][i].y -= self._texts[id]["outline"]
+
+        for rect in self._texts[id]["displays"]["outline_rects"]:
+            self._window.blit(self._texts[id]["displays"]["outline"], rect)
+        self._window.blit(self._texts[id]["displays"]["main"], self._texts[id]["displays"]["main_rect"])
+
+
     def _displayCountdown(self):
         """
         Displays the remaining countdown time in seconds in the middle of the screen.
         """
-        if self._model.cooldownremaining > 0:
+        if self._model.countdownremaining > 0:
             self.countdownEnd = False
-            toDisplay = ceil(self._model.cooldownremaining / 1000)
+            toDisplay = ceil(self._model.countdownremaining / 1000)
 
-            # refresh timer surface only if it changes
-            if self.last_displayed_timer != toDisplay: 
-                toDisplay = '{}'.format(toDisplay)
-                self.lastDisplayedTimerText = self._default_font_big.render(toDisplay, True, (255,0,255,255))
-
-                self.lastDisplayedTimerTextOutline = self._defaultFontBigOutline.render(toDisplay, True, (0,0,0,255))
-
-                # TODO: refactor
-                self.lastDisplayedTimerTextRect = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect1 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect2 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect3 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect4 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect5 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect6 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect7 = self.lastDisplayedTimerText.get_rect()
-                self.lastDisplayedTimerTextOutlineRect8 = self.lastDisplayedTimerText.get_rect()
-
-                self.lastDisplayedTimerTextRect.center = (self._windowRect[0] // 2, self._windowRect[1] // 2)
-
-                outlineMargin = 5
-                self.lastDisplayedTimerTextOutlineRect1.center = (self._windowRect[0] // 2 + outlineMargin, self._windowRect[1] // 2)
-                self.lastDisplayedTimerTextOutlineRect2.center = (self._windowRect[0] // 2, self._windowRect[1] // 2 + outlineMargin)
-                self.lastDisplayedTimerTextOutlineRect3.center = (self._windowRect[0] // 2 - outlineMargin, self._windowRect[1] // 2)
-                self.lastDisplayedTimerTextOutlineRect4.center = (self._windowRect[0] // 2, self._windowRect[1] // 2 - outlineMargin)
-                self.lastDisplayedTimerTextOutlineRect5.center = (self._windowRect[0] // 2 + outlineMargin, self._windowRect[1] // 2 + outlineMargin)
-                self.lastDisplayedTimerTextOutlineRect6.center = (self._windowRect[0] // 2 + outlineMargin, self._windowRect[1] // 2 - outlineMargin)
-                self.lastDisplayedTimerTextOutlineRect7.center = (self._windowRect[0] // 2 - outlineMargin, self._windowRect[1] // 2 + outlineMargin)
-                self.lastDisplayedTimerTextOutlineRect8.center = (self._windowRect[0] // 2 - outlineMargin, self._windowRect[1] // 2 - outlineMargin)
-
-            # TODO: refactor
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect1)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect2)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect3)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect4)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect5)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect6)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect7)
-            self._window.blit(self.lastDisplayedTimerTextOutline, self.lastDisplayedTimerTextOutlineRect8)
-            self._window.blit(self.lastDisplayedTimerText, self.lastDisplayedTimerTextRect)
+            self._displayOutlinedText("countdown", toDisplay, 5, (255,0,255,255))
             self._refreshMap = True
         elif not self.countdownEnd:
             self.countdownEnd = True

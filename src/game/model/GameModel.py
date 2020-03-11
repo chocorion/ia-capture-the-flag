@@ -58,6 +58,8 @@ class GameModel(Model):
         
         self.cooldownremaining = self._ruleset["StartCountdownSeconds"] * 1000
 
+        self.game_over = False
+
         self.mouse_coords = (0,0)
 
         #### Implementation Simu ####
@@ -111,6 +113,8 @@ class GameModel(Model):
         self._engine.tick(deltaTime)
         self.deltaTime = deltaTime
 
+        if self.game_over:
+            return
 
         if self.turn >= 0 and self.turn != 1 :
             # Called before the start of the countdown and each turn after (not including) the first turn
@@ -131,6 +135,11 @@ class GameModel(Model):
             self.handleStartingCountdown()
 
         self.checkItemsPickup()
+
+        flagInSpawn = self._map.FlagInSpawn()
+        if flagInSpawn != 0:
+            self.game_over = True
+            print(flagInSpawn)
 
     def handlePlayerPolling(self):
         """

@@ -120,3 +120,24 @@ class RegularMap(Map):
             point (x,y): A point located in the spawn of a said team.
         """
         return Map.GetRandomPositionInBlock(choice(self._spawns[team]), margin)
+
+    def IsObjectInTile(self, gameobject, block):
+        """
+        Returns whether the object is within a block
+        """
+        return gameobject.x // Map.BLOCKSIZE == block.x // Map.BLOCKSIZE and gameobject.y // Map.BLOCKSIZE == block.y // Map.BLOCKSIZE
+
+
+    def FlagInSpawn(self):
+        """
+        Checks if a flag is in a correct spawn.
+
+        Returns:
+            result (int): 0: None, 1: Red, 2: Blue
+        """
+        for flag in self.flags:
+            for block in self._spawns[flag.team]:
+                if self.IsObjectInTile(flag,block):
+                    return flag.team
+        
+        return 0

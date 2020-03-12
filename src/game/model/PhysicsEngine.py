@@ -126,6 +126,56 @@ class PhysicsEngine(Physics):
                 
         return (targetX, targetY)
 
+    def viewBlocked(self, x, y, targetX, targetY):
+        """
+        Checks whether a line is obstruated by a solid block.
+
+        Returns:
+            blocked (bool) : True if blocked, False if not blocked
+        """
+        
+        dx = abs(targetX - x)
+        dy = abs(targetY - y)
+
+        currentX = x
+        currentY = y
+
+        lastX = x
+        lastY = y
+
+        n = int(1 + dx + dy)
+
+        xInc = 1 if (targetX > x) else -1
+        yInc = 1 if (targetY > y) else -1
+
+        error = dx - dy
+
+        dx *= 2
+        dy *= 2
+        
+        for i in range(n, 0, -1):
+            
+            if not self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].transparent:
+                return False
+
+            lastX = currentX
+            lastY = currentY
+
+            if error > 0:
+                currentX += xInc
+                error -= dy
+            elif error < 0:
+                currentY += yInc
+                error += dx
+            elif error == 0:
+                currentX += xInc
+                currentY += yInc
+                error -= dy
+                error += dx
+                n -= 1
+                
+        return False
+
     def createCollisionMap(self, name, padding):
 
         divider = 10 # 1 / round(Map.BLOCKSIZE / padding)
@@ -155,3 +205,10 @@ class PhysicsEngine(Physics):
                 y += blockSizeFactored
             y = 0
             x += blockSizeFactored
+
+    def sees(self, bot1, bot2):
+        print(Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y))
+        if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
+            return False
+        
+        return True#self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

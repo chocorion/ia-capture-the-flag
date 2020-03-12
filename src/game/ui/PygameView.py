@@ -19,6 +19,7 @@ class PygameView(View):
 
     DEBUG_COLLISIONMAP = 0
     DEBUG_CELL_COORDS = 1
+    DEBUG_SEEN = 2
 
     def __init__(self, model):
         """ 
@@ -57,7 +58,7 @@ class PygameView(View):
 
         self.countdownEnd = None
 
-        self.debug = [False]*2
+        self.debug = [False]*3
 
 
     def get_mult_factor(self):
@@ -101,6 +102,9 @@ class PygameView(View):
 
         if self.debug[PygameView.DEBUG_CELL_COORDS]:
             self.displayAimed()
+
+        if self.debug[PygameView.DEBUG_SEEN]:
+            self.displaySeen()
 
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
@@ -225,6 +229,27 @@ class PygameView(View):
                 y = 0
             
 
+    def displaySeen(self):
+        """
+        DEBUG: Dislpays a line when a bot sees an ennemy bot
+        """
+        for bot1 in self._model.getBots(1).values():
+            for bot2 in self._model.getBots(2).values():
+                if(self._model.getEngine().sees(bot1,bot2)):
+                    pygame.draw.line(
+                        self._window,
+                        pygame.Color(255,0,0,255),
+                        (bot1.x * self.get_mult_factor(), bot1.y * self.get_mult_factor()),
+                        (bot2.x * self.get_mult_factor(), bot2.y * self.get_mult_factor()),
+                    )
+                if(self._model.getEngine().sees(bot2,bot1)):
+                    pygame.draw.line(
+                        self._window,
+                        pygame.Color(0,0,255,255),
+                        (bot1.x * self.get_mult_factor(), bot1.y * self.get_mult_factor()),
+                        (bot2.x * self.get_mult_factor(), bot2.y * self.get_mult_factor()),
+                    )
+
     def displayAimed(self):
         """
         DEBUG: Displays the coordinates of the currently hovered block.
@@ -331,7 +356,7 @@ class PygameView(View):
                 x,
                 y, 
                 pygame.Color(r, g, b, 70),
-                bot.viewDistance * 2,
+                bot.viewDistance * self.get_mult_factor(),
                 int(bot.angle - bot.fov),
                 int(bot.angle + bot.fov),
                 10

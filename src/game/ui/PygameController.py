@@ -29,6 +29,8 @@ class PygameController(Controller):
                     self._view.debug_switch(PygameView.DEBUG_COLLISIONMAP)
                 if event.key == pygame.K_z:
                     self._view.debug_switch(PygameView.DEBUG_CELL_COORDS)
+                if event.key == pygame.K_s:
+                    self._view.debug_switch(PygameView.DEBUG_SEEN)
                 # if event.key == pygame.K_e:
                 #     self._view.debug_switch(PygameView.DEBUG_VERTICES)
                 # if event.key == pygame.K_r:

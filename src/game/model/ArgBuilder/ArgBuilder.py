@@ -39,3 +39,14 @@ class ArgBuilder(metaclass=ABCMeta):
             team (int): flag owner
             currentPosition (int, int): x and y coord of the flag
         """
+        ...
+
+    @abstractmethod
+    def addMissedTicks(self, missedTicks):
+        """
+        Add the number of missed ticks to the argument.
+
+        Parameters : 
+            missedTicks (int): number of missed ticks.
+        """
+        ...

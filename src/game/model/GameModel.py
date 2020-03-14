@@ -78,11 +78,13 @@ class GameModel(Model):
 
         self._teams = dict()
         self._teamFails = dict()
+        self._teamMissedTicks = dict()
 
         for team in range(1,3): # 2 Players
             teamId = str(team)
 
             self._teamFails[teamId] = 0 # Keep track of each failure to respond from players
+            self._teamMissedTicks[teamId] = 0
 
             self._teams[teamId] = { "bots": {} }
 
@@ -181,6 +183,7 @@ class GameModel(Model):
             for botId in self._teams[teamId]["bots"].keys():
                 self._argBuilder.addBot(self._teams[teamId]["bots"][botId], botId)
 
+            self._argBuilder.addMissedTicks(self._teamMissedTicks[teamId])
             self._argBuilder.endArgument()
 
             pollingData = self._argBuilder.getResult()
@@ -213,7 +216,13 @@ class GameModel(Model):
             if(self.teamsData[teamId] == None):
                 print("Did not get a response from player {}".format(teamId))
                 self._teamFails[teamId] += 1
+                self._teamMissedTicks[teamId] += 1
                 continue
+            elif self.teamsData[teamId] == {}:
+                # Empty response, player pass turn
+                continue
+            else:
+                self._teamMissedTicks[teamId] = 0
 
             # try:
             data = self.teamsData[teamId]

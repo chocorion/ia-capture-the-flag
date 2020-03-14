@@ -76,6 +76,11 @@ class PlayerProcess():
         """
         try: 
             result = self._resultQueue.get(False)
+
+            # In case of player pass turn
+            while not self._resultQueue.empty() and result == {}:
+                result = self._resultQueue.get(False)
+
             self.lastResponseTime = self._stopwatch.DeltaTimeMs()
             
         except:
@@ -107,4 +112,5 @@ class PlayerProcess():
 def runPlayerProcess(dataQueue, resultQueue, player):
         while True:
             pollingData = dataQueue.get()
+
             resultQueue.put(player.poll(pollingData))

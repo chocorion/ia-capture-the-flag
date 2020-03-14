@@ -35,7 +35,7 @@ class myPlayer(Player):
             message (String): message to display
         """
 
-        if int(botId.split("_")[1]) == 0:
+        if int(botId.split("_")[1]) == 0 and int(botId.split("_")[0]) == 1:
             print("[LITTLE_PLAYER]({})".format(botId) + message)
 
 
@@ -121,6 +121,10 @@ class myPlayer(Player):
                     self._botData["enemy_flag"] = flag["position"]
             
             self._init = False
+
+        if pollingData["missedTicks"] != 0:
+            # print("Return empty answer")
+            return {}
 
         self._updateData(pollingData)
 

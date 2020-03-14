@@ -39,7 +39,8 @@ class Player:
                 },
                 "events" : {
                     ...
-                }
+                },
+                "missedTicks": <number missed ticks>
             }
         
         Returns:

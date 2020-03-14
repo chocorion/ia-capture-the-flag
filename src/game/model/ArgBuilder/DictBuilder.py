@@ -48,3 +48,6 @@ class DictBuilder(ArgBuilder):
             self._dico["events"]["flags"] = list()
 
         self._dico["events"]["flags"].append({"team": team, "position": (currentPosition[0], currentPosition[1])})
+
+    def addMissedTicks(self, missedTicks):
+        self._dico["missedTicks"] = missedTicks

@@ -27,3 +27,7 @@ class JSONBuilder(ArgBuilder):
 
     def addBot(self, bot):
         self._dictBuilder.addBot(bot)
+
+
+    def addMissedTicks(self, missedTicks):
+        self._dictBuilder.addMissedTicks(missedTicks)

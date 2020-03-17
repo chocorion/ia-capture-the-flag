@@ -102,7 +102,7 @@ class PhysicsEngine(Physics):
         
         for i in range(n, 0, -1):
 
-            if capX != None and capY != None and capX == lastX and capY == lastY:
+            if capX != None and capY != None and capX == currentX and capY == currentY:
                 return (lastX,lastY)
             
             if self.collisionsMaps[collisionMap][int(currentX // self.collisionsMapsDividers[collisionMap])][int(currentY // self.collisionsMapsDividers[collisionMap])]:

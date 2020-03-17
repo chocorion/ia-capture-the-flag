@@ -210,7 +210,7 @@ class PhysicsEngine(Physics):
         if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
             return False
 
-        if Physics.vectorAngularDistance(bot1.x,bot1.y,bot1.angle,bot2.x,bot2.y) > bot.fov / 2:
+        if Physics.vectorAngularDistance(bot1.x,bot1.y,bot1.angle,bot2.x,bot2.y) > bot1.fov / 2:
             return False
-            
+
         return True#self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

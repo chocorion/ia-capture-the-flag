@@ -207,8 +207,10 @@ class PhysicsEngine(Physics):
             x += blockSizeFactored
 
     def sees(self, bot1, bot2):
-        print(Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y))
         if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
             return False
-        
+
+        if Physics.vectorAngularDistance(bot1.x,bot1.y,bot1.angle,bot2.x,bot2.y) > bot.fov / 2:
+            return False
+            
         return True#self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

@@ -121,4 +121,4 @@ class PythonPhysics(PhysicsMethods):
         N = self.distance(x1,x2,y1,y2)
         O = self.distance(x2,x3,y2,y3)
         
-        return degrees(abs((M*M+N*N-O*O)/(2*M*O)))
+        return degrees((M*M+N*N-O*O)/(2*M*O))

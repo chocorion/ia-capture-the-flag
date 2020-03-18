@@ -113,12 +113,3 @@ class PythonPhysics(PhysicsMethods):
             angle += 2 * pi / nbVertices
 
         return polygon
-
-    def vectorAngularDistance(self, x1, y1, angle, x2, y2):
-        x3 = cos(radians(angle))
-        y3 = sin(radians(angle))
-        M = self.distance(x1,x3,y1,y3)
-        N = self.distance(x1,x2,y1,y2)
-        O = self.distance(x2,x3,y2,y3)
-        
-        return degrees((M*M+N*N-O*O)/(2*M*O))

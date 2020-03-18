@@ -36,6 +36,3 @@ class PhysicsMethods:
 
     def createCirclePolygon(self, nbVertices):
         pass
-
-    def vectorAngularDistance(self, x1, y1, angle, x2, y2):
-        pass

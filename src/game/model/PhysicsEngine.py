@@ -49,6 +49,9 @@ class PhysicsEngine(Physics):
         Returns:
             target_angle (int) : A correct target angle for this bot.
         """
+        if (bot.x == targetX and bot.y == targetY):
+            return bot.angle
+
         newAngle = Physics.getAngle( bot.x, bot.y, targetX, targetY)
 
         deltaAngle = newAngle - bot.angle
@@ -58,14 +61,14 @@ class PhysicsEngine(Physics):
 
         elif deltaAngle < -180:
             deltaAngle = 360 + deltaAngle
-        
+            
         maxAngle = float(self._ruleset["RotationMultiplier"]) * bot.maxRotate
         maxAngle = maxAngle * self.getDeltaTimeModifier()
 
         if abs(deltaAngle) > maxAngle :
             deltaAngle = maxAngle if deltaAngle > 0 else -maxAngle
             
-        return bot.angle + deltaAngle
+        return (bot.angle + deltaAngle) % 360
 
     def getDeltaTimeModifier(self):
         """
@@ -102,7 +105,7 @@ class PhysicsEngine(Physics):
         
         for i in range(n, 0, -1):
 
-            if capX != None and capY != None and capX == lastX and capY == lastY:
+            if capX != None and capY != None and capX == currentX and capY == currentY:
                 return (lastX,lastY)
             
             if self.collisionsMaps[collisionMap][int(currentX // self.collisionsMapsDividers[collisionMap])][int(currentY // self.collisionsMapsDividers[collisionMap])]:
@@ -210,7 +213,14 @@ class PhysicsEngine(Physics):
         if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
             return False
 
-        if Physics.vectorAngularDistance(bot1.x,bot1.y,bot1.angle,bot2.x,bot2.y) > bot1.fov / 2:
-            return False
+        deltaAngle = Physics.getAngle(bot1.x,bot1.y,bot2.x,bot2.y) - bot1.angle
 
+        if deltaAngle > 180:
+            deltaAngle = deltaAngle - 360
+
+        elif deltaAngle < -180:
+            deltaAngle = 360 + deltaAngle
+        if abs(deltaAngle) > bot1.fov:
+            return False
+            
         return True#self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

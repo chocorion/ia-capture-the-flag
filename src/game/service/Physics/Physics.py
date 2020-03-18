@@ -92,10 +92,3 @@ class Physics():
         Returns a new polygon with (nbVertices) equal sides.
         """
         return Physics.instance.createCirclePolygon(nbVertices)
-        
-    @staticmethod
-    def vectorAngularDistance(x1, y1, angle, x2, y2):
-        """
-        Returns the angle between a vector and a point.
-        """
-        return Physics.instance.vectorAngularDistance(x1, y1, angle, x2, y2)

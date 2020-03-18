@@ -277,7 +277,7 @@ class GameModel(Model):
                         targetY,
                         self.getBots(1 if int(teamId) == 2 else 2)
                     )
-                    print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
+                    # print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
 
                     self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
 

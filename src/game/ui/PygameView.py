@@ -96,6 +96,7 @@ class PygameView(View):
 
             self._displayMap() 
                 
+        self._cleanShoots()
         self._displayBots()
         self._displayFlags()
         self._displayCountdown()
@@ -309,10 +310,10 @@ class PygameView(View):
 
     def _displayShoots(self):
         for shoot in self._model.getShoots():
-            self.shoots.append(shoot)
+            self.shoots.append([shoot, 0])
 
-        for shoot in self.shoots:
-            ((start_x, start_y), (end_x, end_y), team) = shoot
+        for shoot_index in range(len(self.shoots)):
+            (((start_x, start_y), (end_x, end_y), team), nbDisplay) = self.shoots[shoot_index]
             
             pygame.draw.line(
                 self._window,
@@ -320,6 +321,27 @@ class PygameView(View):
                 (int(start_x * self.get_mult_factor()), int(start_y * self.get_mult_factor())),
                 (int(end_x * self.get_mult_factor()), int(end_y * self.get_mult_factor()))
             )
+
+            self.shoots[shoot_index][1] += 1
+
+    def _cleanShoots(self):
+        to_remove = list()
+        for shoot_index in range(len(self.shoots)):
+            (((start_x, start_y), (end_x, end_y), team), nbDisplay) = self.shoots[shoot_index]
+
+            if nbDisplay > 5:
+                pygame.draw.line(
+                    self._window,
+                    pygame.Color(255, 255, 255),
+                    (int(start_x * self.get_mult_factor()), int(start_y * self.get_mult_factor())),
+                    (int(end_x * self.get_mult_factor()), int(end_y * self.get_mult_factor()))
+                )
+
+                to_remove.append(self.shoots[shoot_index])
+
+        print("Cleaning {} shoots...".format(len(to_remove)))
+        for i in to_remove:
+            self.shoots.remove(i)
 
     def _displayFlags(self):
         """

@@ -60,6 +60,8 @@ class PygameView(View):
 
         self.debug = [False]*3
 
+        self.font = pygame.font.SysFont("comicsansms", 22) # Doc
+
 
     def get_mult_factor(self):
         """ 
@@ -86,6 +88,7 @@ class PygameView(View):
         Updates the window with the current representation of the game.
         """
         self._surface.fill((0, 0, 0, 0))
+        refresh_debug_message = self._refreshMap
 
         if self._refreshMap or self.debug[PygameView.DEBUG_COLLISIONMAP]:
             self._refreshMap = False
@@ -97,18 +100,32 @@ class PygameView(View):
         self._displayCountdown()
         self._displayGameOver()
 
+        debug_message = ""
+
         if self.debug[PygameView.DEBUG_COLLISIONMAP]:
             self.displayCollisionMap("RegularBot")
+            debug_message += "Collision map (a) :  ON  "
+        else:
+            debug_message += "Collision map (a) : OFF  "
+
 
         if self.debug[PygameView.DEBUG_CELL_COORDS]:
             self.displayAimed()
+            debug_message += "Cell coord (z) :  ON  "
+        else:
+            debug_message += "Cell coord (z) : OFF  "
 
         if self.debug[PygameView.DEBUG_SEEN]:
             self.displaySeen()
+            debug_message += "Seen (s) :  ON  "
+        else:
+            debug_message += "Seen (s) : OFF  "
+            
+        self._displayTiles(0,self._map.blockHeight - 1,self._map.blockWidth - 1,self._map.blockHeight - 1)
+        self._surface.blit(self.font.render(debug_message, True, (0, 0, 0)), (0, self._windowRect[1] - self._cellSize))
 
         self._window.blit(self._surface, (0, 0))
         pygame.display.flip()
-
 
 
     def _displayMap(self):

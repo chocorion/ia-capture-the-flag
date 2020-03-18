@@ -141,7 +141,7 @@ class GameModel(Model):
         self.checkItemsPickup()
 
         flagInDepot = self._map.FlagInDepot()
-        
+
         if flagInDepot != 0:
             self.game_over = True
             self.countdownremaining = 0
@@ -292,7 +292,7 @@ class GameModel(Model):
         for botId in allBots.keys():
             bot = allBots[botId]
             for flag in self._map.flags:
-                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius):
+                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius + 20):
                     bot.pickUp(flag)
 
 

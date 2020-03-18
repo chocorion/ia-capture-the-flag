@@ -23,6 +23,19 @@ NodeResultToString = {
 def distance(x1, y1, x2, y2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
+
+def convertPath(path):
+    newPath = list()
+
+    for currentIndex in range(len(path)):
+        newPath.append((
+            path[currentIndex][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+            path[currentIndex][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
+        ))
+
+    return newPath
+
+
 class myPlayer(Player):
     
     def debug(self, botId, message):
@@ -91,8 +104,8 @@ class myPlayer(Player):
 
             response["bots"][botId] = {
                 "targetPosition": (
-                    dest[0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
-                    dest[1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2,
+                    dest[0],
+                    dest[1],
                     100
                 ),
                 "actions": 0
@@ -160,20 +173,11 @@ class myPlayer(Player):
                 randomDepotPos
             )
 
-            debug_message = "From ({}:{}) to ({}:{})\n".format(
-                int(self._botData["bots"][botId]["currentPosition"][0]),
-                int(self._botData["bots"][botId]["currentPosition"][1]),
-                randomDepotPos[0],
-                randomDepotPos[1]
-            )
 
-            self._botData["bots"][botId]["path"]        = path
+            self._botData["bots"][botId]["path"]        = convertPath(path)
             self._botData["bots"][botId]["pathLength"]  = len(path)
             self._botData["bots"][botId]["pathIndex"]   = 0
 
-            debug_message += "\n{}".format(path)
-
-            # self.debug(botId, debug_message)
 
             return NodeTree.SUCCESS
 
@@ -199,10 +203,8 @@ class myPlayer(Player):
                 self._botData["enemy_flag"] # temporary
             )
 
-            # self.debug(botId, "Enemy flag position -> {}".format(self._botData["enemy_flag"]))
 
-
-            self._botData["bots"][botId]["path"]        = path
+            self._botData["bots"][botId]["path"]        = convertPath(path)
             self._botData["bots"][botId]["pathLength"]  = len(path)
             self._botData["bots"][botId]["pathIndex"]   = 0
 
@@ -230,14 +232,14 @@ class myPlayer(Player):
             if currentIndex == self._botData["bots"][botId]["pathLength"] - 1:
                 return NodeTree.SUCCESS
 
-            checkpoint_x = path[currentIndex][0] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
-            checkpoint_y = path[currentIndex][1] * Map.BLOCKSIZE + Map.BLOCKSIZE//2
+            checkpoint_x = path[currentIndex][0]
+            checkpoint_y = path[currentIndex][1]
 
-            #self.debug(botId, 
-            #    "Bot in ({}:{}), go to ({}:{})".format(botPosition[0], botPosition[1], checkpoint_x, checkpoint_y)
-            #)
+            margin = 35
+            if currentIndex == self._botData["bots"][botId]["pathLength"] - 2:
+                margin = 10
 
-            if distance(checkpoint_x, checkpoint_y, botPosition[0], botPosition[1]) <= 35:
+            if distance(checkpoint_x, checkpoint_y, botPosition[0], botPosition[1]) <= margin:
                 self._botData["bots"][botId]["destination"] = path[currentIndex + 1]
                 self._botData["bots"][botId]["pathIndex"] += 1
 

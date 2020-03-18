@@ -329,7 +329,7 @@ class PygameView(View):
         for shoot_index in range(len(self.shoots)):
             (((start_x, start_y), (end_x, end_y), team), nbDisplay) = self.shoots[shoot_index]
 
-            if nbDisplay > 2:
+            if nbDisplay > 4:
                 pygame.draw.line(
                     self._window,
                     pygame.Color(255, 255, 255),

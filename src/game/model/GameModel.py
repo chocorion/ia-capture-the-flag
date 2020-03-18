@@ -260,13 +260,15 @@ class GameModel(Model):
 
                 bot.move(newX - bot.x, newY - bot.y)
 
+
                 # bitwise comparison for actions
                 actions = bin(data["bots"][botId]["actions"])
+                actions = actions[::-1] # Reverse action
 
-                if actions[0]: # SHOOT
-                    
+                if int(actions[0]) == 1: # SHOOT
                     if self.stopwatch.GetTimeMs() - self._teams[teamId]["bots"][botId].getCooldown() > int(self._ruleset["BotShootCooldown"]):
                         self._teams[teamId]["bots"][botId].setCooldown(self.stopwatch.GetTimeMs())
+
                         targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
                         targetY = bot_old_y + math.sin(math.radians(bot_old_angle)) * 10000 
 
@@ -282,8 +284,6 @@ class GameModel(Model):
 
                         self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
 
-                        # if shootedBot != None:
-                            # print("{} shoot !".format(shootedBot))
                 if actions[1]: # DROP_FLAG
                     pass
             # except:

@@ -76,4 +76,3 @@ class Bot(GameObject):
 
     def cooldown(self):
         return 0
-        

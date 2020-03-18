@@ -49,6 +49,9 @@ class PhysicsEngine(Physics):
         Returns:
             target_angle (int) : A correct target angle for this bot.
         """
+        if (bot.x == targetX and bot.y == targetY):
+            return bot.angle
+
         newAngle = Physics.getAngle( bot.x, bot.y, targetX, targetY)
 
         deltaAngle = newAngle - bot.angle
@@ -58,14 +61,14 @@ class PhysicsEngine(Physics):
 
         elif deltaAngle < -180:
             deltaAngle = 360 + deltaAngle
-        
+            
         maxAngle = float(self._ruleset["RotationMultiplier"]) * bot.maxRotate
         maxAngle = maxAngle * self.getDeltaTimeModifier()
 
         if abs(deltaAngle) > maxAngle :
             deltaAngle = maxAngle if deltaAngle > 0 else -maxAngle
             
-        return bot.angle + deltaAngle
+        return (bot.angle + deltaAngle) % 360
 
     def getDeltaTimeModifier(self):
         """
@@ -126,6 +129,56 @@ class PhysicsEngine(Physics):
                 
         return (targetX, targetY)
 
+    def viewBlocked(self, x, y, targetX, targetY):
+        """
+        Checks whether a line is obstruated by a solid block.
+
+        Returns:
+            blocked (bool) : True if blocked, False if not blocked
+        """
+        
+        dx = abs(targetX - x)
+        dy = abs(targetY - y)
+
+        currentX = x
+        currentY = y
+
+        lastX = x
+        lastY = y
+
+        n = int(1 + dx + dy)
+
+        xInc = 1 if (targetX > x) else -1
+        yInc = 1 if (targetY > y) else -1
+
+        error = dx - dy
+
+        dx *= 2
+        dy *= 2
+        
+        for i in range(n, 0, -1):
+            
+            if not self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].transparent:
+                return False
+
+            lastX = currentX
+            lastY = currentY
+
+            if error > 0:
+                currentX += xInc
+                error -= dy
+            elif error < 0:
+                currentY += yInc
+                error += dx
+            elif error == 0:
+                currentX += xInc
+                currentY += yInc
+                error -= dy
+                error += dx
+                n -= 1
+                
+        return True
+
     def createCollisionMap(self, name, padding):
 
         divider = 10 # 1 / round(Map.BLOCKSIZE / padding)
@@ -155,3 +208,19 @@ class PhysicsEngine(Physics):
                 y += blockSizeFactored
             y = 0
             x += blockSizeFactored
+
+    def sees(self, bot1, bot2):
+        if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
+            return False
+
+        deltaAngle = Physics.getAngle(bot1.x,bot1.y,bot2.x,bot2.y) - bot1.angle
+
+        if deltaAngle > 180:
+            deltaAngle = deltaAngle - 360
+
+        elif deltaAngle < -180:
+            deltaAngle = 360 + deltaAngle
+        if abs(deltaAngle) > bot1.fov:
+            return False
+            
+        return self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

@@ -19,7 +19,7 @@ class RegularBot(Bot):
         self.maxRotate = 18 # Default max rotation in degrees
         
         self.fov = 50 # Default FOV
-        self.viewDistance = 35 # Default view distance
+        self.viewDistance = 400 # Default view distance
 
         # self.hitbox = Physics.createCirclePolygon(6)
 

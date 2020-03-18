@@ -1,6 +1,6 @@
 from service.Physics import PhysicsMethods
 
-from math import sqrt, atan2, cos, sin, degrees, radians, pi
+from math import sqrt, atan2, cos, sin, degrees, radians, pi, acos
 
 class PythonPhysics(PhysicsMethods):
     """

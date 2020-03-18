@@ -302,9 +302,21 @@ class GameModel(Model):
     def getMap(self):
         return self._map
 
-    def getBots(self):
+    def getBots(self, team = None):
         """ 
-        Update and handle the game data. Poll each player and process their actions.
+        Get bots from one or both teams
+  
+        Returns:
+            bots (list) : The list of requested bots
+        """
+        if team == None:
+            return self.getAllBots()
+            
+        return self._teams[str(team)]["bots"]
+
+    def getAllBots(self):
+        """ 
+        Get bots from both teams
   
         Returns:
             bots (list) : The list of all Bots in the game.

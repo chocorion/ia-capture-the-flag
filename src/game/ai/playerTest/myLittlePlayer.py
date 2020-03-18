@@ -102,13 +102,17 @@ class myPlayer(Player):
         for botId in self._botData["bots"].keys():
             dest = self._botData["bots"][botId]["destination"]
 
+            shoot = random.randint(0, 1000) % 10 == 0
+            if shoot:
+                print("SHOOT")
+
             response["bots"][botId] = {
                 "targetPosition": (
                     dest[0],
                     dest[1],
                     100
                 ),
-                "actions": 0
+                "actions": 1 if shoot else 0
             }
 
         return response

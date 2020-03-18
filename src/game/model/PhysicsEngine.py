@@ -1,6 +1,7 @@
 from service.Physics import Physics
 from service.Config import Config
 from domain.Map import Map
+from domain.GameObject import Bot
 
 class PhysicsEngine(Physics):
     """
@@ -258,8 +259,8 @@ class PhysicsEngine(Physics):
             if self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].solid:
                 return (None, (currentX, currentY))
 
-            for bot in bots:
-                if Physics.distance(bot.x, currentX, bot.y, currentY) < bot.get_radius():
+            for bot in bots.values():
+                if bot.isIn(currentX, currentY):
                     return (bot, (currentX, currentY))
 
             lastX = currentX

@@ -12,7 +12,7 @@ from domain.GameObject.Bot import *
 from domain.Player import Player
 from copy import deepcopy
 
-import sys
+import sys, math
 class GameModel(Model):
     """
     Implements the Game Model.
@@ -26,7 +26,7 @@ class GameModel(Model):
         countdownremaining (int) : time in milliseconds since end of start countdownremaining.
     """
 
-    def __init__(self, Player1, Player2, map_file = './maps/map_01.txt'):
+    def __init__(self, Player1, Player2, map_file = './maps/map_00.txt'):
         """
         Initialize game data.
   
@@ -268,19 +268,21 @@ class GameModel(Model):
                     targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
                     targetY = bot_old_y + math.cos(math.radians(bot_old_angle)) * 10000 
                     
+
                     # First opti : only check bots in front of the bot
                     (shootedBot, (end_x, end_y)) = self._engine.getShootedBot(
                         bot_old_x,
                         bot_old_y,
                         targetX,
                         targetY,
-                        self.getBots(1 if bot.team == 2 else 2)
+                        self.getBots(1 if int(teamId) == 2 else 2)
                     )
+                    print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
 
-                    self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.team))
+                    self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
 
                     if shootedBot != None:
-                        print(shootedBot + " shoot !")
+                        print("{} shoot !".format(shootedBot))
                 if actions[1]: # DROP_FLAG
                     pass
             # except:

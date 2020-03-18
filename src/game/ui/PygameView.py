@@ -61,6 +61,7 @@ class PygameView(View):
         self.debug = [False]*3
 
         self.font = pygame.font.SysFont("comicsansms", 22) # Doc
+        self.shoots = list()
 
 
     def get_mult_factor(self):
@@ -99,6 +100,7 @@ class PygameView(View):
         self._displayFlags()
         self._displayCountdown()
         self._displayGameOver()
+        self._displayShoots()
 
         debug_message = ""
 
@@ -304,6 +306,20 @@ class PygameView(View):
                 (r, g, b, a) = self._map.blocks[x][y].color
 
                 pygame.draw.rect(self._window, pygame.Color(r, g, b, a), currentRect)
+
+    def _displayShoots(self):
+        for shoot in self._model.getShoots():
+            self.shoots.append(shoot)
+
+        for shoot in self.shoots:
+            ((start_x, start_y), (end_x, end_y), team) = shoot
+            
+            pygame.draw.line(
+                self._window,
+                pygame.Color(255, 150, 150) if team == 1 else pygame.Color(150, 150, 255),
+                (int(start_x), int(start_y)),
+                (int(end_x), int(end_y))
+            )
 
     def _displayFlags(self):
         """

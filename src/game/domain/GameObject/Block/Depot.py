@@ -2,7 +2,7 @@ from domain.GameObject.Block import Block
 
 class Depot(Block):
     """
-    Zone in wich IA must bring flag to win.
+    Zone in wich IA must bring the flag to win.
     """
 
     def __init__(self, team, x, y):

@@ -266,7 +266,7 @@ class GameModel(Model):
                     # bot's cooldown ?
 
                     targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
-                    targetY = bot_old_y + math.cos(math.radians(bot_old_angle)) * 10000 
+                    targetY = bot_old_y + math.sin(math.radians(bot_old_angle)) * 10000 
                     
 
                     # First opti : only check bots in front of the bot

@@ -64,6 +64,8 @@ class GameModel(Model):
 
         self.mouse_coords = (0,0)
 
+        self.shoots = [] # all shoots to display, reset each turn.
+
         #### Implementation Simu ####
         try:
             self._players["1"] = Player1(mapData, self._ruleset, team=1)
@@ -214,6 +216,9 @@ class GameModel(Model):
                 
         self.turn += 1
 
+        # reset shoots
+        self.shoots = []
+
         # Interpret players orders
         for teamId in self.teamsData.keys():
             if(self.teamsData[teamId] == None):
@@ -231,6 +236,11 @@ class GameModel(Model):
             data = self.teamsData[teamId]
             for botId in data["bots"].keys():
                 bot = self._teams[teamId]["bots"][botId]
+
+                # Needed for shoot
+                bot_old_x = bot.x
+                bot_old_y = bot.y
+                bot_old_angle = bot.angle
 
                 # Unpack target
                 targetX = data["bots"][botId]["targetPosition"][0]
@@ -253,7 +263,24 @@ class GameModel(Model):
                 actions = bin(data["bots"][botId]["actions"])
 
                 if actions[0]: # SHOOT
-                    pass
+                    # bot's cooldown ?
+
+                    targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
+                    targetY = bot_old_y + math.cos(math.radians(bot_old_angle)) * 10000 
+                    
+                    # First opti : only check bots in front of the bot
+                    (shootedBot, (end_x, end_y)) = self._engine.getShootedBot(
+                        bot_old_x,
+                        bot_old_y,
+                        targetX,
+                        targetY,
+                        self.getBots(1 if bot.team == 2 else 2)
+                    )
+
+                    self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.team))
+
+                    if shootedBot != None:
+                        print(shootedBot + " shoot !")
                 if actions[1]: # DROP_FLAG
                     pass
             # except:
@@ -357,3 +384,6 @@ class GameModel(Model):
         """
         for playerProcess in self._playerProcesses.values():
             playerProcess.kill()
+
+    def getShoots(self):
+        return self.shoots

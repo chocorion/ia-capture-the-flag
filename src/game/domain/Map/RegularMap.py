@@ -108,30 +108,10 @@ class RegularMap(Map):
                         data["depots"][data["blocks"][x][y].team].append(data["blocks"][x][y]) 
 
 
-            pos_flag_1 = Map.GetRandomPositionInBlock(data["flagZones"][1][0], 5)
-            pos_flag_2 = Map.GetRandomPositionInBlock(data["flagZones"][2][0], 5)
-
             data["flags"] = [
                 Flag(1, data["flagZones"][1][0].x, data["flagZones"][1][0].y),
                 Flag(2, data["flagZones"][2][0].x, data["flagZones"][2][0].y)
             ]
-
-            # Load flag from zones
-            #
-            # # Read the remaining info in the file
-            # # starts after the map tiling
-            # for line in lines[data["blockHeight"] + mapDefinitionLines :]:
-            #     # Get the attribute and it's value without '\n' (:-1)
-            #     attributes = line[:-1].split(':')
-
-            #     # flag: team, blockX, blockY
-            #     if attributes[0] == "flag":
-            #         info = attributes[1].split(',')
-
-            #         # Create the new flag while converting the block X and Y to real coordinates
-            #         data["flags"].append(Flag(int(info[0]), int(info[1]) * Map.BLOCKSIZE, int(info[2]) * Map.BLOCKSIZE))
-
-            #         continue
 
         return data
 

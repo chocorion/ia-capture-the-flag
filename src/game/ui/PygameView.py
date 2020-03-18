@@ -317,8 +317,8 @@ class PygameView(View):
             pygame.draw.line(
                 self._window,
                 pygame.Color(255, 150, 150) if team == 1 else pygame.Color(150, 150, 255),
-                (int(start_x), int(start_y)),
-                (int(end_x), int(end_y))
+                (int(start_x * self.get_mult_factor()), int(start_y * self.get_mult_factor())),
+                (int(end_x * self.get_mult_factor()), int(end_y * self.get_mult_factor()))
             )
 
     def _displayFlags(self):

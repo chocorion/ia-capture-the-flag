@@ -140,11 +140,12 @@ class GameModel(Model):
 
         self.checkItemsPickup()
 
-        flagInSpawn = self._map.FlagInSpawn()
-        if flagInSpawn != 0:
+        flagInDepot = self._map.FlagInDepot()
+        
+        if flagInDepot != 0:
             self.game_over = True
             self.countdownremaining = 0
-            self.winner = flagInSpawn
+            self.winner = flagInDepot
 
     def handlePlayerPolling(self):
         """

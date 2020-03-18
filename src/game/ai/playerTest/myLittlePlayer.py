@@ -138,9 +138,9 @@ class myPlayer(Player):
     # Bot behavior part
     #######################
 
-    def botFunFindPathToHome(self, botId):
+    def botFunFindPathToDepot(self, botId):
         """
-        Create function to find path from bot position to team spawm
+        Create function to find path from bot position to team depot
 
         Parameters:
             botId (String): Id of the bot
@@ -149,7 +149,7 @@ class myPlayer(Player):
             f (function()) : Function that take in parameters dt, the delta time used by NodeTree.tick().
         """
         def f(dt):
-            randomHomePos = self._map.GetRandomPositionInSpawn(self._team, margin = 20)
+            randomDepotPos = self._map.GetRandomPositionInDepot(self._team, margin = 20)
 
             
             path = self._pathFinder.getPath(
@@ -157,14 +157,14 @@ class myPlayer(Player):
                     int(self._botData["bots"][botId]["currentPosition"][0]),
                     int(self._botData["bots"][botId]["currentPosition"][1])
                 ),
-                randomHomePos
+                randomDepotPos
             )
 
             debug_message = "From ({}:{}) to ({}:{})\n".format(
                 int(self._botData["bots"][botId]["currentPosition"][0]),
                 int(self._botData["bots"][botId]["currentPosition"][1]),
-                randomHomePos[0],
-                randomHomePos[1]
+                randomDepotPos[0],
+                randomDepotPos[1]
             )
 
             self._botData["bots"][botId]["path"]        = path
@@ -263,7 +263,7 @@ class myPlayer(Player):
 
         root_node.appendNode(Leaf(self.botFunFindPathToFlag(botId)))
         root_node.appendNode(Leaf(self.botFunFollowCurrentPath(botId)))
-        root_node.appendNode(Leaf(self.botFunFindPathToHome(botId)))
+        root_node.appendNode(Leaf(self.botFunFindPathToDepot(botId)))
         root_node.appendNode(Leaf(self.botFunFollowCurrentPath(botId)))
 
         return root_node

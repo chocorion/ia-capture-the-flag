@@ -152,11 +152,11 @@ class RegularMap(Map):
         Returns:
             result (int): 0: None, 1: Red, 2: Blue
         """
+
         for flag in self.flags:
-            for block in self._depots[flag.team]:
+            for block in self._depots[1 if flag.team == 2 else 2]:
                 if self.IsObjectInTile(flag,block):
                     # If red flag in blue zone, blue win
-                    if flag.team != block.team:
-                        return block.team
+                    return block.team
         
         return 0

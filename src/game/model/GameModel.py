@@ -147,6 +147,8 @@ class GameModel(Model):
             self.countdownremaining = 0
             self.winner = flagInDepot
 
+            print("WE HAVE WINNER ")
+
     def handlePlayerPolling(self):
         """
         Creates and starts each Player Process which will process the player's polling function.

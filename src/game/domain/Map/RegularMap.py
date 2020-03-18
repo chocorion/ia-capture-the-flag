@@ -22,14 +22,15 @@ class RegularMap(Map):
             flags (list):       List of Flag objects
             spawns (list):      List of Spawn objects
         """
-        Map.BLOCKSIZE = mapData["blocksize"]
+        Map.BLOCKSIZE    = mapData["blocksize"]
         self.blockHeight = mapData["blockHeight"]
-        self.blockWidth = mapData["blockWidth"]
-        self.height = mapData["height"]
-        self.width = mapData["width"]
-        self.blocks = mapData["blocks"]
-        self.flags = mapData["flags"]
-        self._spawns = mapData["spawns"]
+        self.blockWidth  = mapData["blockWidth"]
+        self.height      = mapData["height"]
+        self.width       = mapData["width"]
+        self.blocks      = mapData["blocks"]
+        self.flags       = mapData["flags"]
+        self._spawns     = mapData["spawns"]
+
         self._bots = list()
 
     @staticmethod
@@ -51,14 +52,21 @@ class RegularMap(Map):
 
         # The format character for each tile and it's constructor call
         blocks = {
-            '#': 'Wall({},{})',
-            '-': 'WallTransparent({},{})',
-            ' ': 'Empty({},{})',
-            '1': 'Spawn(1,{},{})',
-            '2': 'Spawn(2,{},{})'
+            '#': 'Wall({}, {})',
+            '-': 'WallTransparent({}, {})',
+            ' ': 'Empty({}, {})',
+            '1': 'Spawn(1, {}, {})',
+            '2': 'Spawn(2, {}, {})',
+            'u': 'FlagZone(1, {}, {})',
+            'U': 'Depot(1, {}, {})',
+            'd': 'FlagZone(2, {}, {})',
+            'D': 'Depot(2, {}, {})'
         }
 
-        data["spawns"] = { 1: [], 2: [] } # Spawn blocks for each team
+        data["spawns"] = { 1: [], 2: [] } # Spawn  blocks for each team
+        data["flagZones"]  = { 1: [], 2: [] } # Flags  blocks for each team
+        data["depots"] = { 1: [], 2: [] } # Depots blocks for each team
+        
 
         with open(filename, "r") as file:
             lines = file.readlines()
@@ -90,24 +98,40 @@ class RegularMap(Map):
 
                     if(type(data["blocks"][x][y]).__name__ == "Spawn"):
                         # If this is a spawn block, add it to it's team's spawn blocks
-                        data["spawns"][data["blocks"][x][y].team].append(data["blocks"][x][y]) 
+                        data["spawns"][data["blocks"][x][y].team].append(data["blocks"][x][y])
 
-            data["flags"] = list()
+                    elif(type(data["blocks"][x][y]).__name__ == "FlagZone"):
+                        # One flag zone per team ?
+                        data["flagZones"][data["blocks"][x][y].team].append(data["blocks"][x][y])
 
-            # Read the remaining info in the file
-            # starts after the map tiling
-            for line in lines[data["blockHeight"] + mapDefinitionLines :]:
-                # Get the attribute and it's value without '\n' (:-1)
-                attributes = line[:-1].split(':')
+                    elif(type(data["blocks"][x][y]).__name__ == "Depot"):
+                        data["depots"][data["blocks"][x][y].team].append(data["blocks"][x][y]) 
 
-                # flag: team, blockX, blockY
-                if attributes[0] == "flag":
-                    info = attributes[1].split(',')
 
-                    # Create the new flag while converting the block X and Y to real coordinates
-                    data["flags"].append(Flag(int(info[0]), int(info[1]) * Map.BLOCKSIZE, int(info[2]) * Map.BLOCKSIZE))
+            pos_flag_1 = Map.GetRandomPositionInBlock(data["flagZones"][1][0], 5)
+            pos_flag_2 = Map.GetRandomPositionInBlock(data["flagZones"][2][0], 5)
 
-                    continue
+            data["flags"] = [
+                Flag(1, data["flagZones"][1][0].x, data["flagZones"][1][0].y),
+                Flag(2, data["flagZones"][2][0].x, data["flagZones"][2][0].y)
+            ]
+
+            # Load flag from zones
+            #
+            # # Read the remaining info in the file
+            # # starts after the map tiling
+            # for line in lines[data["blockHeight"] + mapDefinitionLines :]:
+            #     # Get the attribute and it's value without '\n' (:-1)
+            #     attributes = line[:-1].split(':')
+
+            #     # flag: team, blockX, blockY
+            #     if attributes[0] == "flag":
+            #         info = attributes[1].split(',')
+
+            #         # Create the new flag while converting the block X and Y to real coordinates
+            #         data["flags"].append(Flag(int(info[0]), int(info[1]) * Map.BLOCKSIZE, int(info[2]) * Map.BLOCKSIZE))
+
+            #         continue
 
         return data
 

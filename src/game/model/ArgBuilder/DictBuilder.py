@@ -30,7 +30,7 @@ class DictBuilder(ArgBuilder):
         self._finished = True
 
 
-    def addBot(self, bot, botId):
+    def addBot(self, bot, botId, seen):
         if self._currentBotId >= int(Ruleset.GetRulesetValue("BotsCount")):
             raise Exception("To many bots in this argument")
         
@@ -38,7 +38,8 @@ class DictBuilder(ArgBuilder):
             "currentPosition" : (bot.x, bot.y, bot.angle, bot.speed),
             "life": bot.health,
             "flag": bot.flag(),
-            "cooldown": bot.cooldown()
+            "cooldown": bot.cooldown(),
+            "seen": seen
         }
         self._currentBotId += 1
 

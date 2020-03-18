@@ -14,8 +14,10 @@ class RegularBot(Bot):
         self.angle = 0
         self.radius = 36 # Default radius of a regular bot
         self.speed = 0
+        self.reach = self.radius + 30
         
-        self.maxSpeed = 15 # Default max speed
+        self._maxSpeed = 15 # Default max speed
+        self.speedmultiplier = 1 # Default speed multiplier
         self.maxRotate = 18 # Default max rotation in degrees
         
         self.fov = 50 # Default FOV
@@ -27,3 +29,6 @@ class RegularBot(Bot):
 
     def isIn(self, x, y):
         return Physics.isInCircle(self.x, self.y, x, y, self.radius)
+
+    def getMaxSpeed(self):
+        return self._maxSpeed * self.speedmultiplier

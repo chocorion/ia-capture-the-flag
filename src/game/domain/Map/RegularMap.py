@@ -1,6 +1,7 @@
 from domain.Map import Map
 from domain.GameObject.Block import *
 from domain.GameObject.Flag import Flag
+from domain.GameObject.PowerUp import SpeedBoost
 from random import *
 
 class RegularMap(Map):
@@ -21,6 +22,9 @@ class RegularMap(Map):
             blocks (list):      2 dimensional array containing the map blocks
             flags (list):       List of Flag objects
             spawns (list):      List of Spawn objects
+            flagZones (list):   List of FlagZone objects
+            depots (list):      List of Depot objects
+            objects (list):     List of GameObjects
         """
         Map.BLOCKSIZE    = mapData["blocksize"]
         self.blockHeight = mapData["blockHeight"]
@@ -31,6 +35,7 @@ class RegularMap(Map):
         self.flags       = mapData["flags"]
         self._spawns     = mapData["spawns"]
         self._depots     = mapData["depots"]
+        self.objects     = mapData["objects"]
 
         self._bots = list()
 
@@ -49,6 +54,9 @@ class RegularMap(Map):
             "blocks": None,         # A two dimensionnal array for storing blocks
             "flags": None,          # The flags for each team to obtain
             "spawns": None,         # Remember the spawn locations for each team
+            "flagZones": None,      # Zone where each team's flag will spawn
+            "depots": None,         # Zone in which the flag of opposite color must be placed
+            "objects": None,        # Various objects intially on the map
         }
 
         # The format character for each tile and it's constructor call
@@ -67,6 +75,7 @@ class RegularMap(Map):
         data["spawns"] = { 1: [], 2: [] } # Spawn  blocks for each team
         data["flagZones"]  = { 1: [], 2: [] } # Flags  blocks for each team
         data["depots"] = { 1: [], 2: [] } # Depots blocks for each team
+        data["objects"] = { "Default": []}
         
 
         with open(filename, "r") as file:
@@ -113,6 +122,17 @@ class RegularMap(Map):
                 Flag(1, data["flagZones"][1][0].x, data["flagZones"][1][0].y),
                 Flag(2, data["flagZones"][2][0].x, data["flagZones"][2][0].y)
             ]
+
+            for obj in lines[data["blockHeight"] + mapDefinitionLines:]:
+                lineSplit = obj.replace("\n","").split(":")
+                gameObject = eval(lineSplit[0]+"("+lineSplit[1]+")")
+                if gameObject.category not in data["objects"].keys():
+                    data["objects"][gameObject.category] = [gameObject]
+                else:
+                    data["objects"][gameObject.category].append(gameObject)
+            
+            for flag in data["flags"]:
+                data["objects"]["Default"].append(flag)
 
         return data
 

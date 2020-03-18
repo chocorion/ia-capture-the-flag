@@ -11,6 +11,7 @@ class Bot(GameObject):
         heldItems (list(GameObject)) : The items held by this bot
         angle (int) : Angle the bot is facing in degrees.
         speed (int) : Current speed of the bot.
+        reach (int) : Distance from which it can grab object.
 
         player (int) : Player/Team number
         
@@ -32,7 +33,8 @@ class Bot(GameObject):
         self.health = None
         self.angle = None
         self.player = player
-        self.speed = None
+        self._speed = None
+        self.reach = None
         
         self.maxSpeed = None
         self.maxRotate = None

@@ -64,6 +64,8 @@ class GameModel(Model):
 
         self.mouse_coords = (0,0)
 
+        self.to_exec = [] # functions to execute at some ms
+
         #### Implementation Simu ####
         try:
             self._players["1"] = Player1(mapData, self._ruleset, team=1)
@@ -120,6 +122,8 @@ class GameModel(Model):
         if self.game_over:
             return
 
+        self.handleEvents()
+
         if self.turn >= 0 and self.turn != 1 :
             # Called before the start of the countdown and each turn after (not including) the first turn
             self.handlePlayerPolling()
@@ -146,8 +150,6 @@ class GameModel(Model):
             self.game_over = True
             self.countdownremaining = 0
             self.winner = flagInDepot
-
-            print("WE HAVE WINNER ")
 
     def handlePlayerPolling(self):
         """
@@ -184,7 +186,18 @@ class GameModel(Model):
                     self._argBuilder.addFlag(self._map.flags[i].team, (flagX, flagY))
 
             for botId in self._teams[teamId]["bots"].keys():
-                self._argBuilder.addBot(self._teams[teamId]["bots"][botId], botId)
+                seen = []
+                bot = self._teams[teamId]["bots"][botId]
+                for enemy in self._teams[str(1 if teamId == 2 else 1)]["bots"].values():
+                    
+                    if self._engine.sees(bot,enemy):
+                        seen.append(enemy)
+                for categ in self._map.objects.values():
+                    for obj in categ:
+                        if self._engine.sees(bot,obj):
+                            seen.append(obj)
+                
+                self._argBuilder.addBot(self._teams[teamId]["bots"][botId], botId, seen)
 
             self._argBuilder.addMissedTicks(self._teamMissedTicks[teamId])
             self._argBuilder.endArgument()
@@ -291,11 +304,14 @@ class GameModel(Model):
         """
         allBots = self.getBots()
 
-        for botId in allBots.keys():
-            bot = allBots[botId]
+        for bot in allBots.values():
             for flag in self._map.flags:
-                if not flag.held and Physics.rectIntersectsCircle(flag.x,flag.y,flag.width,flag.height,bot.x,bot.y,bot.radius + 20):
+                if not flag.held and Physics.distance(flag.x,bot.x,flag.y,bot.y) <= bot.reach:
                     bot.pickUp(flag)
+            for effect in self._map.objects["Effect"]:
+                if not effect.used and Physics.distance(effect.x,bot.x,effect.y,bot.y) <= bot.reach:
+                    effect.apply(bot)
+                    self.queueEvent(effect.wearOut,effect.duration,bot)
 
 
     # (needed by the View) No point in having it private, should change in the future
@@ -357,3 +373,21 @@ class GameModel(Model):
         """
         for playerProcess in self._playerProcesses.values():
             playerProcess.kill()
+
+    def queueEvent(self, function, inMs, args):
+        """
+        Queues a function to be executer in "inMs"" time in milliseconds
+        """
+        self.to_exec.append((function,self.stopwatch.PeekDeltaTimeMs() + inMs,args))
+
+    def handleEvents(self):
+        """
+        Checks for events to consume and consumes them
+        """
+        i = 0
+        while i < len(self.to_exec):
+            if self.stopwatch.PeekDeltaTimeMs() >= self.to_exec[i][1]:
+                self.to_exec[i][0](self.to_exec[i][2])
+                self.to_exec.remove(self.to_exec[i])
+                i -= 1
+            i += 1

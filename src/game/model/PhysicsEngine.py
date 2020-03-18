@@ -33,7 +33,7 @@ class PhysicsEngine(Physics):
         Returns:
             targetSpeed (int) : A correct target speed for this bot.
         """
-        maxSpeed = float(self._ruleset["SpeedMultiplier"]) * bot.maxSpeed
+        maxSpeed = float(self._ruleset["SpeedMultiplier"]) * bot.getMaxSpeed()
 
         if targetSpeed > maxSpeed:
             targetSpeed = maxSpeed

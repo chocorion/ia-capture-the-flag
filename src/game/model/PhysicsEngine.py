@@ -209,11 +209,11 @@ class PhysicsEngine(Physics):
             y = 0
             x += blockSizeFactored
 
-    def sees(self, bot1, bot2):
-        if Physics.distance(bot1.x, bot2.x, bot1.y, bot2.y) > bot1.viewDistance:
+    def sees(self, bot1, gameObject):
+        if Physics.distance(bot1.x, gameObject.x, bot1.y, gameObject.y) > bot1.viewDistance:
             return False
 
-        deltaAngle = Physics.getAngle(bot1.x,bot1.y,bot2.x,bot2.y) - bot1.angle
+        deltaAngle = Physics.getAngle(bot1.x,bot1.y,gameObject.x,gameObject.y) - bot1.angle
 
         if deltaAngle > 180:
             deltaAngle = deltaAngle - 360
@@ -223,4 +223,4 @@ class PhysicsEngine(Physics):
         if abs(deltaAngle) > bot1.fov:
             return False
             
-        return self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)
+        return self.viewBlocked(bot1.x, bot1.y, gameObject.x, gameObject.y)

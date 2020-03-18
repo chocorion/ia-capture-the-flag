@@ -177,7 +177,7 @@ class PhysicsEngine(Physics):
                 error += dx
                 n -= 1
                 
-        return False
+        return True
 
     def createCollisionMap(self, name, padding):
 
@@ -223,4 +223,4 @@ class PhysicsEngine(Physics):
         if abs(deltaAngle) > bot1.fov:
             return False
             
-        return True#self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)
+        return self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)

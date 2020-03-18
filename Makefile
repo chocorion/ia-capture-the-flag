@@ -15,3 +15,6 @@ runAstar:
 
 runBehavior:
 	bash -c "cd src/game; ./Game.py ai.playerTest.myLittlePlayer ai.playerTest.myLittlePlayer"
+
+runRotate:
+	bash -c "cd src/game; ./Game.py ai.playerTest.rotatePlayer ai.playerTest.rotatePlayer"

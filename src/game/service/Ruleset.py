@@ -19,6 +19,7 @@ class Ruleset:
                 'RotationMultiplier' : 1,
                 'StartCountdownSeconds' : 3,
                 'ThinkTimeMs' : 16,
+                'BotShootCooldown': 1000,
             },
         }
 

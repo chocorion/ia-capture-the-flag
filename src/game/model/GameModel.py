@@ -95,6 +95,7 @@ class GameModel(Model):
 
                 (x, y) = self._map.GetRandomPositionInSpawn(team, 36)
                 self._teams[teamId]["bots"][botId] = RegularBot(team, x, y)
+                self._teams[teamId]["bots"][botId].setCooldown(self.stopwatch.GetTimeMs())
 
             
             self._playerProcesses[teamId] = PlayerProcess(self, teamId, self._players[teamId])
@@ -263,26 +264,26 @@ class GameModel(Model):
                 actions = bin(data["bots"][botId]["actions"])
 
                 if actions[0]: # SHOOT
-                    # bot's cooldown ?
-
-                    targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
-                    targetY = bot_old_y + math.sin(math.radians(bot_old_angle)) * 10000 
                     
+                    if self.stopwatch.GetTimeMs() - self._teams[teamId]["bots"][botId].getCooldown() > int(self._ruleset["BotShootCooldown"]):
+                        self._teams[teamId]["bots"][botId].setCooldown(self.stopwatch.GetTimeMs())
+                        targetX = bot_old_x + math.cos(math.radians(bot_old_angle)) * 10000 # Default shoot length, param it later
+                        targetY = bot_old_y + math.sin(math.radians(bot_old_angle)) * 10000 
 
-                    # First opti : only check bots in front of the bot
-                    (shootedBot, (end_x, end_y)) = self._engine.getShootedBot(
-                        bot_old_x,
-                        bot_old_y,
-                        targetX,
-                        targetY,
-                        self.getBots(1 if int(teamId) == 2 else 2)
-                    )
-                    # print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
+                        # First opti : only check bots in front of the bot
+                        (shootedBot, (end_x, end_y)) = self._engine.getShootedBot(
+                            bot_old_x,
+                            bot_old_y,
+                            targetX,
+                            targetY,
+                            self.getBots(1 if int(teamId) == 2 else 2)
+                        )
+                        # print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
 
-                    self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
+                        self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
 
-                    if shootedBot != None:
-                        print("{} shoot !".format(shootedBot))
+                        # if shootedBot != None:
+                            # print("{} shoot !".format(shootedBot))
                 if actions[1]: # DROP_FLAG
                     pass
             # except:

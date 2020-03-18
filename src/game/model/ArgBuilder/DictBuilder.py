@@ -38,7 +38,7 @@ class DictBuilder(ArgBuilder):
             "currentPosition" : (bot.x, bot.y, bot.angle, bot.speed),
             "life": bot.health,
             "flag": bot.flag(),
-            "cooldown": bot.cooldown()
+            "cooldown": bot.getCooldown() # TODO n'a pas trop de sens pour le moment
         }
         self._currentBotId += 1
 

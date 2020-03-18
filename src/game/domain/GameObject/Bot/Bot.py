@@ -42,6 +42,7 @@ class Bot(GameObject):
 
         # self.hitbox = list() # list of vertices, example:  ((x1,y1),(x2,y2),(x3,y3)) is a triangle
         self.color = None
+        self.cooldown = 0
         ###
 
     def pickUp(self, gameObject):
@@ -74,5 +75,8 @@ class Bot(GameObject):
         
         return flag
 
-    def cooldown(self):
-        return 0
+    def getCooldown(self):
+        return self.cooldown
+
+    def setCooldown(self, cooldown):
+        self.cooldown = cooldown

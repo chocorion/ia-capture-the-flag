@@ -329,7 +329,7 @@ class PygameView(View):
         for shoot_index in range(len(self.shoots)):
             (((start_x, start_y), (end_x, end_y), team), nbDisplay) = self.shoots[shoot_index]
 
-            if nbDisplay > 5:
+            if nbDisplay > 2:
                 pygame.draw.line(
                     self._window,
                     pygame.Color(255, 255, 255),
@@ -339,7 +339,6 @@ class PygameView(View):
 
                 to_remove.append(self.shoots[shoot_index])
 
-        print("Cleaning {} shoots...".format(len(to_remove)))
         for i in to_remove:
             self.shoots.remove(i)
 

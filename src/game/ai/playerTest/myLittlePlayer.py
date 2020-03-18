@@ -103,8 +103,6 @@ class myPlayer(Player):
             dest = self._botData["bots"][botId]["destination"]
 
             shoot = random.randint(0, 1000) % 10 == 0
-            if shoot:
-                print("SHOOT")
 
             response["bots"][botId] = {
                 "targetPosition": (

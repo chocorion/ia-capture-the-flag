@@ -239,7 +239,7 @@ class GameModel(Model):
         # Interpret players orders
         for teamId in self.teamsData.keys():
             if(self.teamsData[teamId] == None):
-                print("Did not get a response from player {}".format(teamId))
+                print("At {}ms (turn {}) : Did not get a response from player {}".format(self.stopwatch.PeekDeltaTimeMs(),self.turn,teamId))
                 self._teamFails[teamId] += 1
                 self._teamMissedTicks[teamId] += 1
                 continue

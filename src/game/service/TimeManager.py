@@ -86,9 +86,6 @@ class TimeManager:
             slept = msWait - deltaTime
             time.sleep(slept/1000)
             deltaTime = msWait
-
-
-        print("Tickrate: {} tick/s ({:2d}% time usage)".format(round(1000/deltaTime,2),round((msWait-slept)/msWait*100)), end='\r')
         
         return deltaTime
 

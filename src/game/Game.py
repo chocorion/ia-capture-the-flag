@@ -2,7 +2,7 @@
 
 import sys
 
-from ui.PygameFactory import PygameFactory
+from ui.CLIFactory import CLIFactory
 from model import *
 from service import *
 from service.Physics import *
@@ -15,10 +15,10 @@ class Game:
         Ruleset.Initialize()
 
         Physics.SetInstance(PythonPhysics())
-
+    
         self.Model      = GameModel(Player1, Player2)
 
-        uiFactory = PygameFactory(self.Model)
+        uiFactory = CLIFactory(self.Model)
 
         self.View       = uiFactory.getView()
         self.Controller = uiFactory.getController()

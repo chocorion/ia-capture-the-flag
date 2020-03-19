@@ -273,8 +273,15 @@ class PhysicsEngine(Physics):
                 
         return None
 
+
     def getShootedBot(self, x, y, angle, shootLength, bots):
         """
+        Parameters:
+            x (int) : x coord of origin
+            y (int) : y coord of irigin
+            ange (int) : angle of the shoot in degrees
+            shootLength (int) : shoot length in model coord
+            bots (list()) : list of bots
         Return :
             (bot, (x, y)): bot shooted, could be none, and the pos.
         """
@@ -316,9 +323,9 @@ class PhysicsEngine(Physics):
             
             return botsToCheck[minBotIndex]
 
-        # else, must return impact point
 
-        targetX = x + math.cos(math.radians(angle)) * shootLength # Default shoot length, param it later
+        # else, must return impact point
+        targetX = x + math.cos(math.radians(angle)) * shootLength
         targetY = y + math.sin(math.radians(angle)) * shootLength 
         
 

@@ -26,7 +26,7 @@ class GameModel(Model):
         countdownremaining (int) : time in milliseconds since end of start countdownremaining.
     """
 
-    def __init__(self, Player1, Player2, map_file = './maps/map_01.txt'):
+    def __init__(self, Player1, Player2, map_file = './maps/map_00.txt'):
         """
         Initialize game data.
   

@@ -3,6 +3,8 @@ from service.Config import Config
 from domain.Map import Map
 from domain.GameObject import Bot
 
+import math
+
 class PhysicsEngine(Physics):
     """
     Methods used to apply physics to the game world
@@ -229,11 +231,54 @@ class PhysicsEngine(Physics):
 
 
 
-    def getShootedBot(self, x, y, targetX, targetY, bots):
+    def getShootedBot(self, x, y, angle, shootLength, bots):
         """
         Return :
             (bot, (x, y)): bot shooted, could be none, and the pos.
         """
+ 
+        botsToCheck = list()
+
+        for bot in bots:
+            if Physics.angularDistance(angle, Physics.getAngle(x, y, bot.x, bot.y)) >= 90:
+                continue
+
+            distanceToBot = Physics.distance(x, y, bot.x, bot.y)
+            if distanceToBot > shootLength:
+                continue
+
+            # Nearest point of impact
+            impactPointX = x + math.cos(math.radians(angle)) * distanceToBot
+            impactPointY = y + math.sin(math.radians(angle)) * distanceToBot 
+
+            if bot.isIn(impactPointX, impactPointY):
+                if not self.viewBlocked(x, y, impactPointX, impactPointY):
+                    # Can't stop here, an other bot can be nearest
+                    botsToCheck.append((bot, (impactPointX, impactPointY)))
+
+
+        n = len(botsToCheck)
+        if n == 1:
+            return botsToCheck[0]
+        
+        elif n > 1:
+            minDist = Physics.distance(x, y, botsToCheck[0][1][0], botsToCheck[0][1][1])
+            minBotIndex = 0
+
+            for i in range(2, n):
+                newDist = Physics.distance(x, y, botsToCheck[i][1][0], botsToCheck[i][1][1])
+
+                if newDist < minDist:
+                    minDist = newDist
+                    minBotIndex = i
+            
+            return botsToCheck[minBotIndex]
+
+        # else, must return impact point
+
+        targetX = x + math.cos(math.radians(angle)) * shootLength # Default shoot length, param it later
+        targetY = y + math.sin(math.radians(angle)) * shootLength 
+        
 
         dx = abs(targetX - x)
         dy = abs(targetY - y)
@@ -258,10 +303,6 @@ class PhysicsEngine(Physics):
             
             if self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].solid:
                 return (None, (currentX, currentY))
-
-            for bot in bots.values():
-                if bot.isIn(currentX, currentY):
-                    return (bot, (currentX, currentY))
 
             lastX = currentX
             lastY = currentY

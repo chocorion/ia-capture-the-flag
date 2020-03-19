@@ -191,11 +191,20 @@ class GameModel(Model):
                 for enemy in self._teams[str(1 if teamId == 2 else 1)]["bots"].values():
                     
                     if self._engine.sees(bot,enemy):
-                        seen.append(enemy)
+                        seen.append({ 
+                            "type": type(enemy).__name__,
+                            "currentPosition" : (enemy.x, enemy.y, enemy.angle, enemy.speed),
+                            "life": enemy.health,
+                            "flag": enemy.flag(),
+                            "cooldown": enemy.cooldown(),
+                            })
                 for categ in self._map.objects.values():
                     for obj in categ:
                         if self._engine.sees(bot,obj):
-                            seen.append(obj)
+                            seen.append({
+                            "type": type(obj).__name__,
+                            "currentPosition" : (obj.x, obj.y),
+                            })
                 
                 self._argBuilder.addBot(self._teams[teamId]["bots"][botId], botId, seen)
 

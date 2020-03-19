@@ -7,8 +7,10 @@ class Effect(GameObject):
     """
 
     def __init__(self, x, y):
-        super().__init__(x * Map.BLOCKSIZE, y * Map.BLOCKSIZE)
+        super().__init__(x * Map.BLOCKSIZE - Map.BLOCKSIZE // 2, y * Map.BLOCKSIZE - Map.BLOCKSIZE // 2)
         self.duration = 0
+        self.used = False
+        self.pickable = False
         self.category = "Effect"
         
     def apply(self, bot):

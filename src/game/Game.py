@@ -2,7 +2,7 @@
 
 import sys
 
-from ui.CLIFactory import CLIFactory
+from ui import *
 from model import *
 from service import *
 from service.Physics import *
@@ -18,7 +18,7 @@ class Game:
     
         self.Model      = GameModel(Player1, Player2)
 
-        uiFactory = CLIFactory(self.Model)
+        uiFactory = PygameFactory(self.Model)
 
         self.View       = uiFactory.getView()
         self.Controller = uiFactory.getController()

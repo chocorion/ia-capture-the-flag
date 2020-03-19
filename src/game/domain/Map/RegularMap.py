@@ -1,7 +1,7 @@
 from domain.Map import Map
 from domain.GameObject.Block import *
 from domain.GameObject.Flag import Flag
-from domain.GameObject.PowerUp import SpeedBoost
+from domain.GameObject.PowerUp import *
 from random import *
 
 class RegularMap(Map):

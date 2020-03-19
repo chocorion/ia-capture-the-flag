@@ -9,7 +9,8 @@ class RegularBot(Bot):
     def __init__(self, player, x, y):
         super().__init__(player, x, y)
 
-        self.health = 100
+        self.maxHealth = 100
+        self.health = self.maxHealth
         
         self.angle = 0
         self.radius = 36 # Default radius of a regular bot

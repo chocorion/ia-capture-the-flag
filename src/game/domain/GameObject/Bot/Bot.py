@@ -30,6 +30,7 @@ class Bot(GameObject):
         self.heldItems = list()
 
         ### Redefine these to create a custom bot
+        self.maxHealth = None
         self.health = None
         self.angle = None
         self.player = player

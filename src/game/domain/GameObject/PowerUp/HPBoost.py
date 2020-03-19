@@ -1,20 +1,21 @@
 from domain.GameObject.GameObject import GameObject
 from domain.GameObject.Effect import Effect
 
-class SpeedBoost(Effect):
+class HPBoost(Effect):
     """
-    Applies a speed boost to a bot
+    Heals a bot
     """
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.duration = 3000
-        self.multiplier = 1.5
+        self.duration = 0
+        self.boost = 50
         
     def apply(self, bot):
         if not self.used:
-            bot.speedmultiplier = bot.speedmultiplier + (self.multiplier - 1)
+            newHP = bot.health + self.boost
+            bot.health = bot.maxHealth if newHP >= bot.maxHealth else newHP
             self.used = True
         
     def wearOut(self, bot):
-        bot.speedmultiplier = bot.speedmultiplier - (self.multiplier - 1)
+        pass

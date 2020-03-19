@@ -95,11 +95,12 @@ class PygameView(View):
 
             self._displayMap() 
                 
+        self._displayEffects()
         self._displayBots()
         self._displayFlags()
         self._displayCountdown()
         self._displayGameOver()
-
+        
         debug_message = ""
         display_debug = False
 
@@ -148,6 +149,80 @@ class PygameView(View):
         """
         if self._model.game_over and self._model.winner != None:
             self._displayOutlinedText("game_over", "Red wins !" if self._model.winner == 1 else "Blue wins !", 5, (255,0,0,255) if self._model.winner == 1 else (0,0,255,255))
+
+    def _displayEffects(self):
+        """
+        Displays effect objects on the map
+        """
+        for effect in self._map.objects["Effect"]:
+            if not effect.used:
+                if type(effect).__name__ == "SpeedBoost":
+                    rx = effect.x  * self._multFactor
+                    ry = effect.y  * self._multFactor
+                    points = [
+                        (rx + self._cellSize * 0.25,ry - self._cellSize * 0.45),
+                        (rx,ry - self._cellSize * 0.05),
+                        (rx + self._cellSize * 0.45,ry - self._cellSize * 0.05),
+                        (rx - self._cellSize * 0.2,ry + self._cellSize * 0.45),
+                        (rx,ry + self._cellSize * 0.05),
+                        (rx - self._cellSize * 0.45,ry + self._cellSize * 0.05),
+                        (rx + self._cellSize * 0.25,ry - self._cellSize * 0.45),
+                    ]
+                    
+                    pygame.draw.polygon(
+                        self._surface,
+                        (255,255,0,255),
+                        points
+                    )
+                elif type(effect).__name__ == "HPBoost":
+                    rx = effect.x  * self._multFactor
+                    ry = effect.y  * self._multFactor
+                    points = [
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                        (rx + self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                        (rx + self._cellSize * 0.1,ry - self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.45,ry - self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.45,ry + self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.1,ry + self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.1,ry + self._cellSize * 0.45),
+                        (rx - self._cellSize * 0.1,ry + self._cellSize * 0.45),
+                        (rx - self._cellSize * 0.1,ry + self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.45,ry + self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.45,ry - self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                    ]
+                    
+                    pygame.draw.polygon(
+                        self._surface,
+                        (0,255,0,255),
+                        points
+                    )
+                elif type(effect).__name__ == "RegenBase":
+                    rx = effect.x  * self._multFactor
+                    ry = effect.y  * self._multFactor
+                    points = [
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                        (rx + self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                        (rx + self._cellSize * 0.1,ry - self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.45,ry - self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.45,ry + self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.1,ry + self._cellSize * 0.1),
+                        (rx + self._cellSize * 0.1,ry + self._cellSize * 0.45),
+                        (rx - self._cellSize * 0.1,ry + self._cellSize * 0.45),
+                        (rx - self._cellSize * 0.1,ry + self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.45,ry + self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.45,ry - self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.1),
+                        (rx - self._cellSize * 0.1,ry - self._cellSize * 0.45),
+                    ]
+                    
+                    pygame.draw.polygon(
+                        self._surface,
+                        (0,255,255,255),
+                        points
+                    )
+
 
     def _displayOutlinedText(self, id, text, outline, color):
         """

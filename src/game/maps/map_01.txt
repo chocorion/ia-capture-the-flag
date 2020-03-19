@@ -10,10 +10,13 @@ height: 9
 #  22                                                            DD       #
 #            d                                                            #
 ###########################################################################
-SpeedBoost: 45,3
+SpeedBoost: 44,3
 SpeedBoost: 45,2
 SpeedBoost: 43,4
-SpeedBoost: 45,5
-SpeedBoost: 45,6
-SpeedBoost: 45,7
+SpeedBoost: 42,5
+SpeedBoost: 43,6
+SpeedBoost: 44,7
 SpeedBoost: 45,8
+HPBoost: 20,3
+HPBoost: 20,7
+RegenBase: 49,5

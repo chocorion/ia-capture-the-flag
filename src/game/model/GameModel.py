@@ -26,7 +26,7 @@ class GameModel(Model):
         countdownremaining (int) : time in milliseconds since end of start countdownremaining.
     """
 
-    def __init__(self, Player1, Player2, map_file = './maps/map_00.txt'):
+    def __init__(self, Player1, Player2, map_file = './maps/map_01.txt'):
         """
         Initialize game data.
   
@@ -269,7 +269,6 @@ class GameModel(Model):
                     if self.stopwatch.GetTimeMs() - self._teams[teamId]["bots"][botId].getCooldown() > int(self._ruleset["BotShootCooldown"]):
                         self._teams[teamId]["bots"][botId].setCooldown(self.stopwatch.GetTimeMs())
 
-                        # First opti : only check bots in front of the bot
                         (shootedBot, (end_x, end_y)) = self._engine.getShootedBot(
                             bot_old_x,
                             bot_old_y,
@@ -277,7 +276,9 @@ class GameModel(Model):
                             10000,
                             self.getBots(1 if int(teamId) == 2 else 2).values()
                         )
-                        # print("Shoot from ({}:{}) to ({}:{})".format(bot_old_x, bot_old_y, end_x, end_y))
+
+                        # if (shootedBot != None):
+                        #     print("Bot {} was shooted !".format(shootedBot))
 
                         self.shoots.append(((bot_old_x, bot_old_y), (end_x, end_y), bot.player))
 

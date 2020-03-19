@@ -19,6 +19,6 @@ class myPlayer(Player):
             
             target = (currentPosition[0] + math.cos(math.radians((currentPosition[2] + 5))) * 100, currentPosition[1] + math.sin(math.radians((currentPosition[2] + 5))) * 100 , 0)
             
-            returnData["bots"][botId] = { "targetPosition" : target, "actions" : 0 }
+            returnData["bots"][botId] = { "targetPosition" : target, "actions" : 1 }
 
         return returnData

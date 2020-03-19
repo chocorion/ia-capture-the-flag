@@ -162,7 +162,7 @@ class PhysicsEngine(Physics):
         for i in range(n, 0, -1):
             
             if not self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].transparent:
-                return False
+                return True
 
             lastX = currentX
             lastY = currentY
@@ -180,7 +180,7 @@ class PhysicsEngine(Physics):
                 error += dx
                 n -= 1
                 
-        return True
+        return False
 
     def createCollisionMap(self, name, padding):
 
@@ -226,7 +226,7 @@ class PhysicsEngine(Physics):
         if abs(deltaAngle) > bot1.fov:
             return False
             
-        return self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)
+        return not self.viewBlocked(bot1.x, bot1.y, bot2.x, bot2.y)
 
 
 

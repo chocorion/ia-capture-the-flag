@@ -21,7 +21,7 @@ class ArgBuilder(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def addBot(self, bot):
+    def addBot(self, bot, seen):
         """
         Add a new bot to the argument.
 

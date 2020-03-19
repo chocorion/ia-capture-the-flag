@@ -230,6 +230,48 @@ class PhysicsEngine(Physics):
 
 
 
+    def getImpactPoint(self, x, y, targetX, targetY):
+        dx = abs(targetX - x)
+        dy = abs(targetY - y)
+
+        currentX = x
+        currentY = y
+
+        lastX = x
+        lastY = y
+
+        n = int(1 + dx + dy)
+
+        xInc = 1 if (targetX > x) else -1
+        yInc = 1 if (targetY > y) else -1
+
+        error = dx - dy
+
+        dx *= 2
+        dy *= 2
+        
+        for i in range(n, 0, -1):
+            
+            if self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].solid:
+                return (currentX, currentY)
+
+            lastX = currentX
+            lastY = currentY
+
+            if error > 0:
+                currentX += xInc
+                error -= dy
+            elif error < 0:
+                currentY += yInc
+                error += dx
+            elif error == 0:
+                currentX += xInc
+                currentY += yInc
+                error -= dy
+                error += dx
+                n -= 1
+                
+        return None
 
     def getShootedBot(self, x, y, angle, shootLength, bots):
         """
@@ -252,7 +294,7 @@ class PhysicsEngine(Physics):
             impactPointY = y + math.sin(math.radians(angle)) * distanceToBot 
 
             if bot.isIn(impactPointX, impactPointY):
-                if not self.viewBlocked(x, y, impactPointX, impactPointY):
+                if self.getImpactPoint(x, y, impactPointX, impactPointY) == None:
                     # Can't stop here, an other bot can be nearest
                     botsToCheck.append((bot, (impactPointX, impactPointY)))
 
@@ -280,44 +322,9 @@ class PhysicsEngine(Physics):
         targetY = y + math.sin(math.radians(angle)) * shootLength 
         
 
-        dx = abs(targetX - x)
-        dy = abs(targetY - y)
+        impact = self.getImpactPoint(x, y, targetX, targetY)
 
-        currentX = x
-        currentY = y
-
-        lastX = x
-        lastY = y
-
-        n = int(1 + dx + dy)
-
-        xInc = 1 if (targetX > x) else -1
-        yInc = 1 if (targetY > y) else -1
-
-        error = dx - dy
-
-        dx *= 2
-        dy *= 2
+        if impact == None:
+            return (None, (targetX, targetY))
         
-        for i in range(n, 0, -1):
-            
-            if self._map.blocks[int(currentX // self._map.BLOCKSIZE)][int(currentY // self._map.BLOCKSIZE)].solid:
-                return (None, (currentX, currentY))
-
-            lastX = currentX
-            lastY = currentY
-
-            if error > 0:
-                currentX += xInc
-                error -= dy
-            elif error < 0:
-                currentY += yInc
-                error += dx
-            elif error == 0:
-                currentX += xInc
-                currentY += yInc
-                error -= dy
-                error += dx
-                n -= 1
-                
-        return (None, (targetX, targetY))
+        return (None, impact)

@@ -1,0 +1,22 @@
+\section{Description du projet}
+
+Ce projet a pour but la réalisation d'un framework pour un jeu de capture de drapeaux, et la réalisation d'IA pour y jouer.
+Le jeu est un capture the flag à deux équipes, ayant chacune le même nombre de bots.
+\newline
+
+Chaque équipe évolue sur une carte dont elle a connaissance dès le départ. Tous les bots d'une même équipe commencent dans une zone commune, la zone de départ, et ont pour objectif de ramener le drapeau de couleur adverse dans leur zone de dépôt.
+\newline
+
+Chaque bot dispose d'un champ de vision, qui lui permet de détecter des éléments positionnés dans la carte (en particulier les bots adverses). Le champ de vision des bots d'une même équipe est partagé, c'est-à-dire qu'un bot peut voir tout ce que les autres bots de son équipe voient. Les bots peuvent attaquer les membres de l'équipe adverse afin de ralentir leur progression. Si un bot meurt avec le drapeau, il le pose à terre.
+\newline
+
+Les IA devront piloter ces bots en temps réel, sur une carte en 2D, en implémentant des stratégies d'équipe.
+
+
+\section{Analyse de l'existant}
+    
+Il y a un existant codé en Java pour le moteur de jeu, mais la manière dont il est implémenté ne convient pas au client. En effet, ce moteur repose sur un modèle vectoriel, dans lequel il est plus compliqué d'ajouter des fonctionnalités et de modifier la physique du jeu. C'est pourquoi le client a recommencé l'écriture du moteur en python, en se basant cette fois sur un fonctionnement par "tuile". Mais ce nouveau moteur n'est pas terminé à ce jour. \newline 
+
+La plupart des projets similaires sont des ajouts à deux jeux déjà existant. Par exemple, nous avons trouvé une IA de DeepMind\cite{Jaderberg859} pour le jeu capture the flag, qui se repose sur le jeu Quake. Nous ne pouvons utiliser un jeu existant, car le framework doit pouvoir être facilement réutilisable par des étudiants pour un possible projet dans le cadre de leurs cours. \newline
+
+Suite à nos recherches, nous avons découvert l'existence d'un challenge en ligne datant de 2012 nommé iasandbox.com. Le but de ce challenge était de réaliser une Intelligence Artificielle distribuée pour un moteur de jeu déjà fourni et relié par un serveur. \\Les participants devaient respecter une interface, et implémenter un ou plusieurs bots afin de les faire collaborer et affronter d'autres challengers. Malheureusement, ce site n'est plus accessible suite à un abandon. Nous avons pu trouver des archives web du site, mais le moteur de jeu n'était plus accessible au téléchargement. \\

@@ -1,0 +1,62 @@
+\documentclass[french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{babel}
+\usepackage{tocloft}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{float}
+
+\addbibresource{biblio.bib}
+
+\cftsetindents{section}{0em}{2em}
+\cftsetindents{subsection}{0em}{2em}
+
+\renewcommand\cfttoctitlefont{\hfill\Large\bfseries}
+\renewcommand\cftaftertoctitle{\hfill\mbox{}}
+\begin{document}
+
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\center
+\textsc{\LARGE
+Université de bordeaux
+} \\[1cm]
+
+\HRule \\[0.2cm]
+{ \huge \bfseries Mémoire Projet de Programmation \\[0.15cm] }
+{ \bfseries IA pour un jeu de Capture the Flag temps réel en Python\\[0.15cm] }
+\HRule \\[1.5cm]
+Robin Navarro, Adrien Boitelle, Yann Blanchet\\Alexis Perignon, Alexis Flazinska
+\\[1cm]
+\today \\ [3cm]
+\includegraphics[scale=0.3]{data/illustration.png}{\\openai challenge}
+\end{titlepage}
+
+
+\newpage
+\Large
+\tableofcontents
+
+\normalsize
+\newpage
+\include{intro}
+\newpage
+\include{definitions}
+\newpage
+\include{besoins}
+\newpage
+\include{architecture}
+\newpage
+\include{tests}
+\newpage
+\include{conclusion}
+
+
+\section{Bibliographie}
+\printbibliography[heading=none]
+\nocite{*}
+\end{document}

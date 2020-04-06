@@ -25,11 +25,20 @@
 
             
         \item Proposer une interface pour qu'un humain puisse jouer contre une IA. \\
-            Priorité : Conditionnel \\
+            Priorité : Conditionnel. \\
             L'interface doit permettre au joueur de sélectionner plusieurs bots, bouger les bots vers une position sélectionnée en cliquant. \\
             Pour faciliter le jeux, les bots doivent tirer automatiquement sur les adversaires qu'ils rencontrent. \\
             Pour tester une interface humaine, dans un premier temps nous vérifierons que dès qu'un bot détecte un bot ennemi dans son champ de vision celui-ci attaque bien automatiquement: un scénario simple serait de mettre un bot contrôlé par l'interface humaine dans le champ de vision d'un autre bot, et bien vérifier qu'il y a attaque.\\
             Il faudra aussi tester le déplacement des bots en cliquant à des positions aléatoires et en vérifiant que les bots ont bien reçu l'ordre de déplacement. \\ 
+            
+        \item Proposer une interface pour modifier au cours d'une partie l'arbre de comportement d'une équipe. \\
+            Priorité : Optionnel. \\
+            L'interface doit permettre à l'utilisateur de modifier en temps réel l'arbre de comportement utilisé par son IA,\\
+            afin de voir rapidement les répercutions d'un changement de comportement. \\
+            Des noeuds doivent pouvoir être inter-changés, supprimés, ajoutés. \\
+            
+            Pour tester, il faut modifier un arbre de comportement en passant par le contrôleur qu'utiliserait le joueur en condition normal,\\
+            et vérifier que l'arbre de comportement pointé par l'IA possède bien les modifications demandées par le contrôleur.\\
 
     \end{itemize}
 
@@ -114,7 +123,6 @@
                 \item Gérer les collision entre le projectile et les éléments de la zone de jeu (par exemple les murs).\\
             \end{itemize}
 
-        \newpage
         \item Gérer la santé des bots.\\
             Priorité : Conditionnel
             \begin{itemize}
@@ -153,7 +161,7 @@
             \end{itemize}
     \end{itemize}
 
-
+\newpage
 \subsection{Besoins non fonctionnels}
 \subsubsection{Besoins utilisateur}
     \begin{itemize}
@@ -184,13 +192,13 @@
             \end{itemize}
         
         \item Le moteur de jeu doit être capable de traiter efficacement les réponses des IA.\\
-            Contrainte, difficulté technique :  La mise à jour de l'état du jeu selon les réponses doit permettre un affichage à 30 fps.\\
+            Contrainte, difficulté technique :  La mise à jour de l'état du jeu selon les réponses doit permettre un affichage à 30 fps, sur un ordinateur possédant un processeur i5 minimum 3 threads (donc 2 cores hyperthreadés ou 3 cores minimum), et 4Go de ram.\\
             Risques et parades : L'affichage peut perdre de sa fluidité.\\
             Pour tester, on peut donner au moteur des réponses aléatoires mais correctes. Le test doit durer longtemps pour vérifier que le moteur tient dans la durée, sans perte de performances.\\
         
     \end{itemize}
     
-    
+\newpage
 \subsection{Justifications}
 
 Pour l'algorithme de pathfinding, nous avons choisi A* car c'est un algorithme performant et très utilisé dans l'industrie du jeu vidéo, il possède une bonne complexité, $\mathcal{O}(n + m\ log(n))$, $n$ étant le nombre de sommets et $m$ le nombre d'arêtes du graphe représentant le terrain de jeu. De plus, on peut changer l'heuristique pour que les bots puissent s'adapter aux différentes situations (éviter des zones de danger, aller au plus vite vers le drapeau, etc.). \newline

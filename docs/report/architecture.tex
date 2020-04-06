@@ -3,7 +3,12 @@
 
 Notre architecture est composée de cinq packages qui permettent à deux logiques distinctes de se compléter : Le moteur de jeu et l'IA.\\
 
+Le moteur de jeu est composé des packages Model, Ui, Service et Domain.\\
+L'ia est composé principalement du package AI, mais peut utiliser les objets se trouvant dans les packages Domain et Service.\\
+
 Le moteur repose en grande partie sur le pattern Model/View/Controller.\\
+
+Nous avons voulu, en architecturant cette application, que le maximum de chose soient remplaçables. Par exemple, il est facile de changer la bibliothèque d'affichage, ici pygame, par n'importe quelle autre. Il est de même facile de changer l'implémentation des méthodes gérant la physique du jeu, si celles-ci doivent par exemple être implémentée dans un autre langage pour gagner en performances.\\
 
 % Mettre une vue d'ensemble de l'architecture avant de rentrer dans les sous-parties ?
 
@@ -86,7 +91,7 @@ Tout d'abord, l'architecture pour les codes relatifs à l'IA est décomposée en
     \\
 \end{itemize}{}
 
-\subsection{Behavior Tree}
+\subsubsection{Behavior Tree}
 
 \begin{figure}[H]
     \centering

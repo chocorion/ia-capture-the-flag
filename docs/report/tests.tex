@@ -2,8 +2,38 @@
 % analyse du fonctionnement du logiciel, description des tests et discussions de leur résultats, explication des problèmes, défauts, et bugs.
 
 \subsection{Moteur}
+Pour le moteur, nous avons réalisé des tests unitaires. Ceux-ci se découpent en plusieurs parties:\\
+\begin{itemize}
+\item Les tests de la physique, vérifiant que nos formules retournent les résultats auxquels nous nous attendons lorsque nous les utilisons. Ceux-ci sont incomplets car nous n'utilisons plus certains formules dans le code suite à des modifications.\\
 
+\item Les tests du modèle, limités car les bugs sont en général surtout observables depuis l'interface graphique. Ils consistent à vérifier que l'initialisation du modèle et des processus de joueurs se déroule correctement, que les tours se déroulent comme attendu et que le chronomètre du jeu soit correctement interprété.\\
+
+\item Les tests de construction d'argument, utiles pour garder la cohérence dans les communications entre IA et moteur : critique pour que les parties se déroulent normalement et que l'implémentation des IA soit sans surprises.\\
+\end{itemize}
+
+Au niveau du profilage des performances, nous utilisons \textit{cProfile}, qui nous permet de connaître quelle partie de code nous prend le plus de temps.\\
+Par exemple, nous pouvons voir que \textit{getImpactPoint} et \textit{getShootedBot} prennent une part importante du temps dans la physique du jeu.\\
+
+\texttt{
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)\\
+     1229    0.022   0.000    26.205    0.021  GameModel.py:113(tick)\\
+      189    0.850    0.004    0.850    0.004  PhysicsEngine.py:233(getImpactPoint)\\
+      189    0.006    0.000    0.867    0.005  PhysicsEngine.py:277(getShootedBot)\\
+}
+
+Pour tester les cas extrêmes, nous avons modifié le terrain à l'ajout de nouvelles fonctionnalités afin de couvrir le plus de situations. Comme nous n'avons trouvé aucun cas de la sorte en nous mettant à la place des utilisateurs, nous pensons que notre gestion est suffisamment solide pour être équitable.
+
+\newpage
 \subsection{Intelligence Artificielle}
-Les tests de l'ia sont découpé en deux parties. Nous avons tout d'abord les tests du code utilisé par les ia, c'est à dire l'implémentation des behaviors trees, et ensuite les tests du comportement de l'ia. Nous avons commencé par les premiers, les seconds devant attendre que le moteur soit terminé pour être réalisés correctement. \\
+Les tests de l'ia sont découpés en deux parties. Nous avons tout d'abord les tests du code utilisé par les ia, c'est à dire l'implémentation des behaviors trees, et ensuite les tests du comportement de l'ia. Nous avons commencé par les premiers, les seconds devant attendre que le moteur soit terminé pour être réalisés correctement. \\
 
-Les tests des behaviors trees sont composé uniquement de tests unitaire sur chacun des noeuds, et des tests sur le bon déroulement de la méthode \textit{tick()} sur des compositions de ces noeuds.
+Les tests des behaviors trees sont composé uniquement de tests unitaire sur chacun des noeuds, et des tests sur le bon déroulement de la méthode \textit{tick()} sur des compositions de ces noeuds.\\
+Après avoir testé unitairement les noeuds, nous avons créé un nouveau joueur, \textit{myLittlePlayer}, pour tester l'intégration de ce système dans le reste de notre application. Nous mettons en place un comportement simple : L'ia trouve un chemin jusqu'au drapeau adverse, y envoie ses bots. Ensuite, elle cherche un chemin jusqu'à la zone de dépôt, et y envoie ses bots.\\
+Nous n'avons pour le moment pas rencontré de bug avec l'utilisation de notre implémentation des arbres de comportement.\\
+
+Pour les tests de comportement, nous mettons en place différents scénarios.\\
+Pour le moment, seul des scénarios simples sont utilisé. Deux équipes sont présentes dans le jeu,
+le résultat attendu est que l'une des équipes gagne.\\
+
+Deux problèmes ressortent de ce test: La gestion des chemins amène parfois les bots à se bloquer dans les murs, et la prise d'item ne se fait pas correctement. Les bots passent parfois juste à côté des drapeaux, sans passer dessus.\\
+Ces problèmes viennent cependant de l'ia en elle même, et non de l'implémentation des behaviors trees ou du pathfinding. Nous n'avons donc pas passé beaucoup de temps dessus, nous avons préféré continué à ajouter des fonctionnalités.

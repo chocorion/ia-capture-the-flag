@@ -1,3 +1,4 @@
+\newpage
 \section{Conclusion}
 % Description de ce qu'il y aurait encore à faire, extensions (et comment les réaliser)
 
@@ -9,12 +10,26 @@
 %- comportement des ia plus développé\\
 %- arbre de comportement commun à une équipe\\
 %- modification en temps réel de l'arbre de comportement d'un équipe\\
-Nous n'avons pas encore fini ce projet, il reste en effet plusieurs tâches à effectuer.\\
+Nous n'avons pas entièrement fini ce projet, il reste en effet plusieurs tâches à effectuer.\\
 
-Du côté de l'intelligence artificielle, le plus gros du travail reste à faire. Il faut en effet utiliser les \textit{behavior trees} pour créer des comportements plus complexe.\\
+Du côté de l'intelligence artificielle, le plus gros du travail reste à faire. Il faut en effet utiliser les \textit{behavior trees} pour créer des comportements plus complexes.\\
 Tous les éléments permettant la réalisation de l'ia sont déjà réalisés. Il ne reste plus qu'à créer les méthodes pour les feuilles, et mettre en place un comportement avec les noeuds de structures existants.\\
 Il faut également ajouter la gestion du temps à l'aide du paramètre dt dans les noeuds.\\
+Plus de scénarios de tests doivent être réalisés. \\
 
 
-Du côté du moteur, plusieurs chose restent à faire.
-Tout d'abord l'intégration du joueur humain. Il faut ajouter dans le contrôleur les actions nécessaire au contrôle d'une équipe, et ensuite traduire ces actions en paramètres pour envoyer au modèle.
+
+
+Le moteur est suffisant pour accueillir des terrains variés, des parties entre IA et des évolutions futures. Voici ce que nous aurions cependant aimé terminer :\\
+
+Tout d'abord l'intégration du joueur humain. Il faut ajouter dans le contrôleur les actions nécessaires au contrôle d'une équipe, et ensuite traduire ces actions en paramètres pour les envoyer au modèle.\\
+
+Un fonctionnalité que nous pensions nécessaire était de représenter graphiquement le champ de vision en prenant en compte les obstacles. Après consultation avec le client, il s'est avéré que cela n'était pas important, nous avons donc basculé sur une gestion plus basique et moins gourmande qu'il nous a proposé en réunion.\\
+
+Ensuite, il est possible de rajouter des bonus capables d'affecter les bots de multiple manières. Actuellement, il en existe trois : Un bonus de vitesse, un soin instantanée et une plate-forme de régénération progressive des points de vie. Ces bonus servent en partie à montrer quelles possibilités sont offertes par l'implémentation, avec un minimum de code.\\
+
+Le client nous a précisé que l'ajout d'une mécanique de jeu "unique" et "originale" serait un grand plus, d'où ces bonus qui permettent d'en rajouter une. Nous n'avons cependant pas eu d'inspiration pour en trouver une à part un bonus qui agrandit le champ de vision en taille ou en diamètre. Cela nous semble original, mais difficile de savoir si cela est suffisament intéressant comparé au déséquilibrage et à la difficulté à gérer les IA.\\
+
+Malgré ces fonctionnalités manquantes, nous sommes fiers de notre travail. Le client semble être convaincu et nous avons atteint les objectifs essentiels, ce qui semblait compromis notamment à cause des difficultés accrues à nous organiser dans cette période.
+
+\newpage
